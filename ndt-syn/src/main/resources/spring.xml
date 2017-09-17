@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tool="http://www.springframework.org/schema/tool" xmlns:cache="http://www.springframework.org/schema/cache"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd"
+>
+
+	<!-- annotation support -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.jk.ndt.etl">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="prop"/>
+	</bean>
+
+	<bean id="dataSource" destroy-method="close" class="com.alibaba.druid.pool.DruidDataSource" init-method="init">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="initialSize" value="${jdbc.pool.initialSize}"/>
+		<property name="maxActive" value="${jdbc.pool.maxActive}"/>
+		<property name="minIdle" value="${jdbc.pool.minIdle}"/>
+		<property name="validationQuery" value="${jdbc.pool.validationQuery}"/>
+		<property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}"/>
+		<property name="testWhileIdle" value="${jdbc.pool.testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}"/>
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}"/>
+		<property name="poolPreparedStatements" value="${jdbc.pool.poolPreparedStatements}"/>
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${jdbc.pool.maxPoolPreparedStatementPerConnectionSize}"/>
+	</bean>
+
+	<!-- mybatis -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath*:mybatis/*Mapper.xml"/>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 搜索DAO接口代理实现接口 -->
+		<property name="basePackage" value="com.jk.ndt.etl.dao"/>
+	</bean>
+
+<!-- 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"> -->
+<!-- 		<constructor-arg ref="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
+
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="create*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="do*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<aop:config proxy-target-class="true">
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.jk.ndt.etl.service.*.*Service.*(..))"/>
+		
+	</aop:config>
+	
+	
+	<!--开启这个配置，spring才能识别@Scheduled注解  -->
+	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>  
+    <task:scheduler id="qbScheduler" pool-size="10"/>
+
+	<!-- 自定义的Shiro Filter-->
+	<bean id="simplePermFilter" class="com.jk.ndt.etl.extend.EtlPermissionsAuthorizationFilter">
+
+	</bean>
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+<!--		<property name="loginUrl" value="/system/user/toLogin" />
+		<property name="successUrl" value="/user/list2" />
+		<property name="unauthorizedUrl" value="/login3" />-->
+		<property name="filters">
+			<map>
+				<entry key="perms" value-ref="simplePermFilter"/>
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				/api/auth/session=anon
+				/api/user/session=anon
+ 				/resources/**=anon
+			</value>
+		</property>
+	</bean>
+
+	<!-- 自定义Realm -->
+	<bean id="myRealm" class="com.jk.ndt.etl.controller.MyRealm"/>
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm"/>
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- 开启Shiro注解
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>-->
+
+	<cache:annotation-driven  cache-manager="cacheManager" />
+	<!-- cacheManager工厂类 -->
+	<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		  p:configLocation="classpath:ehcache.xml" />
+	<!-- 声明cacheManager -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		  p:cacheManager-ref="cacheManagerFactory" />
+
+
+
+</beans>

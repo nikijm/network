@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.ndt.etl.dao.presystem.MBusinessProcessSyncDao">
+
+    <resultMap type="com.jk.ndt.etl.entity.presystem.MBusinessProcessSync" id="mBusinessProcessSync">    
+        <result column="AD_CLIENT_ID" property="adClientId"/>    
+        <result column="AD_ORG_ID" property="adOrgId"/>    
+        <result column="M_BUSINESSPROCESSSYNC_ID" property="mBusinessProcesssyncId"/>    
+        <result column="M_BUSINESSSYNC_ID" property="mBusinesssyncId"/>   
+        <result column="NODE_ID" property="nodeId"/>
+        <result column="RECORD_ID" property="recordId"/> 
+        <result column="REQUESTTYPE" property="requestType"/>    
+        <result column="DOCUMENTNO" property="documentNo"/>    
+        <result column="TRANSACTIONID" property="transactionId"/>    
+        <result column="NODECODE" property="nodeCode"/>   
+        <result column="NODENAME" property="nodeName"/>
+        <result column="OPERATORCODE" property="operatorCode"/> 
+        <result column="OPERATORNAME" property="operatorName"/>    
+        <result column="DOCACTION" property="docAction"/>    
+        <result column="ACTIONDESCRIPTION" property="actionDescription"/>    
+        <result column="REQUEST" property="request"/>   
+        <result column="RESPONSE" property="response"/>
+        <result column="DOCSTATUS" property="docStatus"/> 
+        <result column="PROCESSING" property="processing"/>    
+        <result column="PROCESSED" property="processed"/>    
+        <result column="CREATED" property="created"/>    
+        <result column="CREATEDBY" property="createdBy"/>   
+        <result column="ISACTIVE" property="isActive"/>
+        <result column="UPDATED" property="updated"/> 
+        <result column="UPDATEDBY" property="updatedBy"/> 
+    </resultMap> 
+    
+    <!--添加-->
+    <insert id="saveMBusinessProcessSync" parameterType="com.jk.ndt.etl.entity.presystem.MBusinessProcessSync">
+
+        insert into M_BusinessProcessSync
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="adClientId != null and adClientId !=''" >
+                AD_CLIENT_ID,
+            </if>
+            <if test="adOrgId != null and adOrgId !=''" >
+                AD_ORG_ID,
+            </if>
+            <if test="mBusinessProcesssyncId != null and mBusinessProcesssyncId !=''" >
+                M_BUSINESSPROCESSSYNC_ID,
+            </if>
+            <if test="mBusinesssyncId != null and mBusinesssyncId !=''" >
+                M_BUSINESSSYNC_ID,
+            </if>
+            <if test="nodeId != null and nodeId !=''" >
+                NODE_ID,
+            </if>
+            <if test="recordId != null and recordId !=''" >
+                RECORD_ID,
+            </if>
+            <if test="requestType != null and requestType !=''" >
+                REQUESTTYPE,
+            </if>
+            <if test="documentNo != null and documentNo !=''" >
+                DOCUMENTNO,
+            </if>
+            <if test="transactionId != null and transactionId !=''" >
+                TRANSACTIONID,
+            </if>
+            <if test="nodeCode != null and nodeCode !=''" >
+                NODECODE,
+            </if>
+            <if test="nodeName != null and nodeName !=''" >
+                NODENAME,
+            </if>
+            <if test="operatorCode != null and operatorCode !=''" >
+                OPERATORCODE,
+            </if>
+            <if test="operatorName != null and operatorName !=''" >
+                OPERATORNAME,
+            </if>
+            <if test="docAction != null and docAction !=''" >
+                DOCACTION,
+            </if>
+            <if test="actionDescription != null and actionDescription !=''" >
+                ACTIONDESCRIPTION,
+            </if>
+            <if test="request != null and request !=''" >
+                REQUEST,
+            </if>
+            <if test="response != null and response !=''" >
+                RESPONSE,
+            </if>
+            <if test="docStatus != null and docStatus !=''" >
+                DOCSTATUS,
+            </if>
+            <if test="processing != null and processing !=''" >
+                PROCESSING,
+            </if>
+            <if test="processed != null and processed !=''" >
+                PROCESSED,
+            </if>
+            <if test="created != null and created !=''" >
+                CREATED,
+            </if>
+            <if test="createdBy != null and createdBy !=''" >
+                CREATEDBY,
+            </if>
+            <if test="isActive != null and isActive !=''" >
+                ISACTIVE,
+            </if>
+            <if test="updated != null and updated !=''" >
+                UPDATED,
+            </if>
+            <if test="updatedBy != null and updatedBy !=''" >
+                UPDATEDBY,
+            </if>            
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="adClientId != null and adClientId !=''" >
+                #{adClientId},
+            </if>
+            <if test="adOrgId != null and adOrgId !=''" >
+                #{adOrgId},
+            </if>
+            <if test="mBusinessProcesssyncId != null and mBusinessProcesssyncId !=''" >
+                #{mBusinessProcesssyncId},
+            </if>
+            <if test="mBusinesssyncId != null and mBusinesssyncId !=''" >
+                #{mBusinesssyncId},
+            </if>
+            <if test="nodeId != null and nodeId !=''" >
+                #{nodeId},
+            </if>
+            <if test="recordId != null and recordId !=''" >
+                #{recordId},
+            </if>
+            <if test="requestType != null and requestType !=''" >
+                #{requestType},
+            </if>
+            <if test="documentNo != null and documentNo !=''" >
+                #{documentNo},
+            </if>
+            <if test="transactionId != null and transactionId !=''" >
+                #{transactionId},
+            </if>
+            <if test="nodeCode != null and nodeCode !=''" >
+                #{nodeCode},
+            </if>
+            <if test="nodeName != null and nodeName !=''" >
+                #{nodeName},
+            </if>
+            <if test="operatorCode != null and operatorCode !=''" >
+                #{operatorCode},
+            </if>
+            <if test="operatorName != null and operatorName !=''" >
+                #{operatorName},
+            </if>
+            <if test="docAction != null and docAction !=''" >
+                #{docAction},
+            </if>
+            <if test="actionDescription != null and actionDescription !=''" >
+                #{actionDescription},
+            </if>
+            <if test="request != null and request !=''" >
+                #{request},
+            </if>
+            <if test="response != null and response !=''" >
+                #{response},
+            </if>
+            <if test="docStatus != null and docStatus !=''" >
+                #{docStatus},
+            </if>
+            <if test="processing != null and processing !=''" >
+                #{processing},
+            </if>
+            <if test="processed != null and processed !=''" >
+                #{processed},
+            </if>
+            <if test="created != null and created !=''" >
+                #{created},
+            </if>
+            <if test="createdBy != null and createdBy !=''" >
+                #{createdBy},
+            </if>
+            <if test="isActive != null and isActive !=''" >
+                #{isActive},
+            </if>
+            <if test="updated != null and updated !=''" >
+                #{updated},
+            </if>
+            <if test="updatedBy != null and updatedBy !=''" >
+                #{updatedBy},
+            </if> 
+        </trim>
+    </insert>
+    
+    <select id="getNTopOneUnProcessedM"  resultType="map" resultMap="mBusinessProcessSync">
+        SELECT * FROM 
+        (select * from M_BUSINESSPROCESSSYNC where PROCESSED = 'N' and DOCSTATUS = '1') 
+        WHERE ROWNUM = 1
+    </select>
+    
+    <update id="updateMBusinessProcessSync" parameterType="com.jk.ndt.etl.entity.presystem.MBusinessProcessSync">
+		update M_BusinessProcessSync
+		<set>
+			<if test="processed != null and processed !=''" >
+			    PROCESSED = #{processed},
+			</if>
+			<if test="updated != null and updated !=''" >
+			    UPDATED = #{updated},
+			</if>
+		</set>
+		<where>
+			M_BUSINESSPROCESSSYNC_ID = #{mBusinessProcesssyncId}
+		</where>
+	</update>
+</mapper>

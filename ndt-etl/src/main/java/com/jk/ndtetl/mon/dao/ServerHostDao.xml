@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.mon.dao.ServerHostDao">
+
+	<!-- 通过ip获取主机信息 -->
+	<select id="getServerHostListByIp" parameterType="String"
+		resultType="ServerHost">
+		select
+		ID,IPADDRESS,MACADDRESS,CPUSIZE,MEMORYSIZE,DISKSIZE,DESCRIPTION from
+		OM_SERVER
+		where IPADDRESS=#{ipAddress}
+	</select>
+	<!-- 查询可用的主机 -->
+	<select id="listServerhostInfoWithStatu" resultType="ServerHost">
+		SELECT
+		ID,IPADDRESS,USERNAME,PASSWORD,TABLENAME,IDENTIFICATION,DESCRIPTION,SERVERNOTE,STATU
+		FROM OM_SERVER WHERE STATU=1 ORDER BY ID
+	</select>
+	<!-- 查询所有的主机 -->
+	<select id="listServerhostInfoNotStatu" resultType="ServerHost">
+		SELECT
+		ID,IPADDRESS,USERNAME,PASSWORD,TABLENAME,IDENTIFICATION,DESCRIPTION,SERVERNOTE,STATU
+		FROM OM_SERVER ORDER BY ID
+	</select>
+	<!-- 查询主机信息 -->
+	<select id="getServerhostInfo" parameterType="Integer"
+		resultType="ServerHost">
+		select
+		ID,IPADDRESS,MACADDRESS,CPUSIZE,MEMORYSIZE,DISKSIZE,STATU,USERNAME,PASSWORD,TABLENAME,IDENTIFICATION,DESCRIPTION,SERVERNOTE
+		from OM_SERVER where ID=#{serverId}
+	</select>
+    <!-- 删除主机信息 -->
+	<delete id="deleteServerHostInfo" parameterType="Integer">
+		delete from
+		OM_SERVER where ID=#{id}
+	</delete>
+    <!-- 插入主机信息 -->
+	<insert id="insertServerHost" parameterType="ServerHost">
+		Insert into OM_SERVER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ipaddress !=null">
+				IPADDRESS,
+			</if>
+			<if test="macaddress !=null">
+				MACADDRESS,
+			</if>
+			<if test="cpusize !=null">
+				CPUSIZE,
+			</if>
+			<if test="memorysize !=null">
+				MEMORYSIZE,
+			</if>
+			<if test="disksize !=null">
+				DISKSIZE,
+			</if>
+			<if test="description !=null">
+				DESCRIPTION,
+			</if>
+			<if test="identification !=null">
+				IDENTIFICATION,
+			</if>
+			<if test="tablename !=null">
+				TABLENAME,
+			</if>
+			<if test="username !=null">
+				USERNAME,
+			</if>
+			<if test="password !=null">
+				PASSWORD,
+			</if>
+			<if test="statu !=null">
+				STATU,
+			</if>
+			<if test="serverNote !=null">
+				SERVERNOTE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ipaddress !=null">
+				#{ipaddress},
+			</if>
+			<if test="macaddress !=null">
+				#{macaddress},
+			</if>
+			<if test="cpusize !=null">
+				#{cpusize},
+			</if>
+			<if test="memorysize !=null">
+				#{memorysize},
+			</if>
+			<if test="disksize !=null">
+				#{disksize},
+			</if>
+			<if test="description !=null">
+				#{description},
+			</if>
+			<if test="identification !=null">
+				#{identification},
+			</if>
+			<if test="tablename !=null">
+				#{tablename},
+			</if>
+			<if test="username !=null">
+				#{username},
+			</if>
+			<if test="password !=null">
+				#{password},
+			</if>
+			<if test="statu !=null">
+				#{statu},
+			</if>
+			<if test="serverNote !=null">
+				#{serverNote},
+			</if>
+		</trim>
+	</insert>
+
+    <!-- 修改主机信息 -->
+	<update id="updateServerhostInfo" parameterType="ServerInfo">
+		update OM_SERVER
+		<set>
+			<if test="ipaddress !=null">
+				IPADDRESS=#{ipaddress},
+			</if>
+			<if test="macaddress !=null">
+				MACADDRESS=#{macaddress},
+			</if>
+			<if test="username !=null">
+				USERNAME=#{username},
+			</if>
+			<if test="password !=null">
+				PASSWORD=#{password},
+			</if>
+			<if test="cpusize !=null">
+				CPUSIZE=#{cpusize},
+			</if>
+			<if test="memorysize !=null">
+				MEMORYSIZE=#{memorysize},
+			</if>
+			<if test="disksize !=null">
+				DISKSIZE=#{disksize},
+			</if>
+			<if test="description !=null">
+				DESCRIPTION=#{description},
+			</if>
+			<if test="identification !=null">
+				IDENTIFICATION=#{identification},
+			</if>
+			<if test="serverNote !=null">
+				SERVERNOTE=#{serverNote},
+			</if>
+			<if test="statu !=null">
+				STATU=#{statu},
+			</if>
+		</set>
+		where ID = #{id}
+	</update>
+    <!-- 创建表 -->
+	<update id="createTable" parameterType="MonitorTableInfo">
+		<![CDATA[
+			CREATE TABLE ${tableName}(
+			"ID" NUMBER(20,0) NOT NULL ENABLE, 
+		]]>
+		<![CDATA[
+			"${serverId}" NUMBER(20,0),
+		]]>
+		<![CDATA[
+			"${cpuusage}" NUMBER(20,0),
+		]]>
+		
+		<![CDATA[
+			"${memoryusage}" NUMBER(20,0),
+		]]>
+		<![CDATA[
+			"${diskusage}" NUMBER(20,0),
+		]]>
+		<![CDATA[
+			"${createtime}" VARCHAR2(40
+			BYTE) NULL, 
+		]]>
+		<![CDATA[
+			"${calculate}" NUMBER(20,0),
+		]]>
+        <![CDATA[
+ 	        PRIMARY KEY ("ID"))  
+ 	        LOGGING NOCOMPRESS NOCACHE 
+ 	    ]]>
+	</update>
+	<!-- 创建序列 -->
+	<update id="createSeq" parameterType="MonitorTableInfo">
+	    <![CDATA[
+ 	        CREATE SEQUENCE  ${tableName}_SEQ  
+ 	        MINVALUE 1 
+ 	        MAXVALUE 999999999 
+ 	        INCREMENT BY 1 
+ 	        START WITH 1 
+ 	        CACHE 20 
+ 	        ORDER  
+ 	        CYCLE
+ 	       ]]>
+	</update>
+	<!-- 创建触发器 -->
+	<update id="createTrigger" parameterType="MonitorTableInfo"
+		statementType="STATEMENT">
+	    <![CDATA[
+ 	        create or replace trigger ${tableName}_ID  
+			before insert
+			on ${tableName}
+			for each row
+			when(new.ID is null)
+			begin
+			select ${tableName}_SEQ.nextval into:new.ID from dual;
+			end ;
+ 	       ]]>
+	</update>
+
+</mapper>

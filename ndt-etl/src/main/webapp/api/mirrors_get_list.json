@@ -1,0 +1,32 @@
+[
+  {
+    "name":"etl_mirror_business",
+    "columns":
+    [
+      {
+        "name":"org_name"
+      },
+      {
+        "name":"id_no"
+      },
+      {
+        "name":"phone_no"
+      }
+    ]
+  },
+  {
+    "name":"etl_mirror_organization",
+    "columns":
+    [
+      {
+        "name":"org_name"
+      },
+      {
+        "name":"id_no"
+      },
+      {
+        "name":"phone_no"
+      }
+    ]
+  }
+]

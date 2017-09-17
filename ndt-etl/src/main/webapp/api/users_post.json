@@ -1,0 +1,15 @@
+{
+  "request": {
+    "name": "bing573",
+    "password": "P9DKz4b7uE9mwXZrA9Vv8FYmP64hJ2GP",
+    "is_active": true,
+    "phone": "12383293921",
+    "email": "bing@outlook.com",
+    "roles": [
+      1,
+      2
+    ],
+    "id": 5,
+    "created_at": "2017-04-03 13:21:22"
+  }
+}

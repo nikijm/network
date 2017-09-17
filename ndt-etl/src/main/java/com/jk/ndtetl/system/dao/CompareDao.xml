@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    机构列表管理
+    朱生
+    2017年6月9日 09:13:40
+-->
+<mapper namespace="com.jk.ndtetl.system.dao.CompareDao">
+
+    <!--查询比较两张表数据-->
+    <select id="listCompareAll" resultType="java.util.LinkedHashMap">
+        <![CDATA[
+
+            select A.ownercode ,l.id leftCode,l.name as leftname,l.email leftemail, o.id as rightCode, o.address rightAddress,o.phone rightPhone
+            from
+             (
+                  select distinct ownercode from
+                  (
+                  select id as ownercode from ${tableName1}
+                  UNION ALL
+                  select id as ownercode from ${tableName2}
+                  )
+              )  A
+            left join compare_table1 l on  l.id = A.ownercode
+            left join compare_table2 o on  o.id = A.ownercode
+        ]]>
+    </select>
+
+</mapper>

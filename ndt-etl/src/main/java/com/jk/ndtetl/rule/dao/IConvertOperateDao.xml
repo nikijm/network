@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.rule.dao.IConvertOperateDao">
+
+	
+	
+
+	<!-- 获取所有的日志信息 -->
+	<select id="getCleanDataByParam" parameterType="com.jk.ndtetl.dbmeta.TableDef" resultType="java.util.LinkedHashMap">
+		select * from ${tableName}
+	</select>
+	
+	<insert id="saveConvertData" parameterType="com.jk.ndtetl.rule.ConvertEntity" >
+        INSERT INTO ${tableName} 
+        ( "ID",
+        <foreach collection="targetColumns" item="column" close=" ) " separator=",">
+           "${column.columnName}"
+        </foreach>
+        <foreach collection="resourcesColumns" open="values (" item="data" close=" ) " separator=",">
+           "${data.columnValue}"
+        </foreach>
+	</insert>
+
+</mapper>

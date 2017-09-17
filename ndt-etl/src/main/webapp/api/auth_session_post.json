@@ -1,0 +1,38 @@
+{
+  "request": {
+    "username": "einstein",
+    "password": "dkdfkaddfas"
+  },
+  "token": "6G2eDBT3Q73r9286",
+  "expired_in": 7200,
+  "user": {
+    "id": 1,
+    "username": "einstein",
+    "roles": [
+      {
+        "id": 1,
+        "name": "超级管理员",
+        "permissions": [
+          {
+            "key": "user",
+            "name": "用户",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "role",
+            "name": "角色",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "permission",
+            "name": "权限",
+            "available_operations": "c u r d",
+            "is_active": true
+          }
+        ]
+      }
+    ]
+  }
+}

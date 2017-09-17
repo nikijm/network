@@ -1,0 +1,43 @@
+{
+  "request": {
+    "name": "bing573",
+    "password": "P9DKz4b7uE9mwXZrA9Vv8FYmP64hJ2GP",
+    "is_active": true,
+    "phone": "12383293921",
+    "email": "bing@outlook.com",
+    "roles": [
+      2,
+      3,
+      4
+    ]
+  },
+  "id": 5,
+  "roles": [
+    {
+      "id": 1,
+      "name": "超级管理员",
+      "permissions": [
+        {
+          "key": "user",
+          "name": "用户",
+          "available_operations": "c u r d",
+          "is_active": true
+        },
+        {
+          "key": "role",
+          "name": "角色",
+          "available_operations": "c u r d",
+          "is_active": true
+        },
+        {
+          "key": "permission",
+          "name": "权限",
+          "available_operations": "c u r d",
+          "is_active": true
+        }
+      ]
+    }
+  ],
+  "is_active": false,
+  "created_at": "2017-04-03 13:21:22"
+}

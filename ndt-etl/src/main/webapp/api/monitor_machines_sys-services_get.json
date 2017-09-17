@@ -1,0 +1,13 @@
+[
+  {
+    "request": {
+      "{id}": 1
+    },
+    "name": "Tomcat",
+    "state": "running"
+  },
+  {
+    "name": "Redis",
+    "status": "running"
+  }
+]

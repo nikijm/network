@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.rule.dao.IRuleUseDao">
+
+	<!-- 通过ID获取日志信息 -->
+	<select id="getById" parameterType="int" resultMap="ruleUseMap">
+		SELECT
+		  etl_rule_set_id,
+		  etl_table_id,
+		  etl_column_id,
+		  etl_rule_id,
+		  seqno,
+		  etl_table_target_id,
+		  etl_column_target_id,
+		  isactive,
+		  created,
+		  createdby,
+		  updated,
+		  updatedby,
+		  etl_op
+		FROM
+		  ETL_RULEUSE
+		WHERE
+		  ETL_RULE_SET_ID=#{id}
+	</select>
+	<!-- 获取所有的日志信息 -->
+	<select id="listAll" resultMap="ruleUseMap">
+		SELECT
+			etl_rule_set_id,
+			etl_table_id,
+			etl_column_id,
+			etl_rule_id,
+			seqno,
+			etl_table_target_id,
+			etl_column_target_id,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby,
+			etl_op
+		FROM
+		    ETL_RULEUSE
+	</select>
+
+	<select id="getRulesByTable" resultMap="ruleResultMap">
+		SELECT
+		    ru.etl_rule_set_id,
+		    ru.etl_table_id,
+		    ru.etl_column_id,
+		    ru.etl_table_target_id,
+		    ru.etl_column_target_id,
+		    ru.etl_rule_id,
+		    (SELECT  ce.columnname FROM etl_column ce WHERE ce.etl_column_id = ru.etl_column_id ) as sourceColumnName,
+		    (SELECT ce.columnname FROM etl_column ce WHERE ce.etl_column_id = ru.etl_column_target_id) as targetColumnName,
+		    
+		    rs.name,
+		    rs.rules,
+		    rs.ETL_RULE_ID ruleSuitId
+		FROM
+		    etl_ruleuse ru
+		LEFT JOIN etl_rulesuit rs ON ru.etl_rule_id = rs.etl_rule_id
+		WHERE
+		    ru.etl_table_id = #{sourceTableId}
+		AND ru.etl_table_target_id = #{targetTableId}
+	</select>
+	<resultMap type="RuleUse" id="ruleResultMap">
+        <id property="id" column="ETL_RULE_SET_ID" />
+        <result property="etlTableId" column="etl_table_id" />
+        <result property="etlTableTargetId" column="etl_table_target_id" />
+        <result property="etlColumnId" column="etl_column_id" />
+        <result property="etlColumnTargetId" column="etl_column_target_id" />
+        <result property="columnName" column="sourceColumnName" />
+        <result property="etlCoulumnTargetName" column="targetColumnName" />
+        <association property="ruleSuit" column="etl_rule_id"
+            javaType="RuleSuit">
+			<id property="id" column="ruleSuitId"/>
+            <result property="name" column="name" />
+            <result property="rules" column="rules" />
+        </association>
+    </resultMap>
+    
+    
+	<select id="listRuleUseByTables" resultMap="ruleUseMapping">
+
+		SELECT
+			er.etl_rule_set_id,
+			er.etl_table_id,
+			er.etl_column_id,
+			(SELECT  ce.columnname from etl_column ce WHERE ce.etl_column_id = er.etl_column_id ) as cache_column, 
+			er.etl_table_target_id, 
+			er.etl_column_target_id,
+			(SELECT ce.columnname from etl_column ce WHERE ce.etl_column_id = er.etl_column_target_id) as clean_column,
+			er.etl_rule_id,
+			et.name,
+			et.rules
+		FROM 
+		    etl_ruleuse er, etl_rulesuit et
+		WHERE 
+		    et.etl_rule_id = er.etl_rule_id and er.etl_table_id = #{sourceTableId} and er.etl_table_target_id = #{targetTableId}
+
+	</select>
+
+	<!-- 获取所有的日志信息 -->
+	<select id="listRuleSuitByTableId" parameterType="com.jk.ndtetl.rule.RuleUse"
+		resultMap="ruleUseMapTWO">
+		SELECT
+			u.ETL_RULE_SET_ID,
+			u.ETL_TABLE_ID,
+			u.ETL_COLUMN_ID,
+			u.SEQNO,
+			u.ETL_TABLE_TARGET_ID,
+			u.ETL_COLUMN_TARGET_ID,
+			u.ISACTIVE,
+			u.CREATED,
+			u.CREATEDBY,
+			u.UPDATED,
+			u.UPDATEDBY,
+			u.ETL_OP ,
+			u.ETL_RULE_ID,
+			s.SEQUENCE,
+			s.NAME,
+			s.DESCRIPTION,
+			s.RULES
+		FROM
+		    ETL_RULEUSE u LEFT JOIN ETL_RULESUIT s ON u.ETL_RULE_ID = s.ETL_RULE_ID
+		WHERE
+		    ETL_TABLE_ID = #{etlTableId} AND ETL_TABLE_TARGET_ID = #{etlTableTargetId}
+	</select>
+
+
+	<!-- 获取所有的日志信息 -->
+	<select id="listRuleByTableIdAndColumnId" resultMap="ruleUseMap">
+		SELECT
+			etl_rule_set_id,
+			etl_table_id,
+			etl_column_id,
+			etl_rule_id,
+			seqno,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby,
+			etl_op
+		FROM
+		    ETL_RULEUSE
+	</select>
+	<!-- 分页查询日志信息 -->
+	<select id="listByPage" parameterType="BasePage" resultMap="ruleUseMap">
+		SELECT
+			etl_rule_set_id,
+			etl_table_id,
+			etl_column_id,
+			etl_rule_id,
+			etl_op,
+			etl_table_target_id,
+			etl_column_target_id,
+			seqno,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby
+		FROM
+		    ETL_RULEUSE
+		    <include refid="whereSql"/>
+		ORDER BY etl_rule_set_id DESC
+	</select>
+	<sql id="whereSql">
+		<where>
+			<if test="param != null and param.ruleSuitId != null">
+			and etl_rule_id=#{param.ruleSuitId}
+			</if>
+		</where>
+	</sql>
+	<resultMap type="RuleUse" id="ruleUseMap">
+        <id property="id" column="ETL_RULE_SET_ID" />
+        <result property="etlTableId" column="ETL_TABLE_ID" />
+        <result property="etlColumnId" column="ETL_COLUMN_ID" />
+        <result property="etlTableTargetId" column="ETL_TABLE_TARGET_ID" />
+        <result property="etlColumnTargetId" column="ETL_COLUMN_TARGET_ID" />
+        <result property="ruleSuitId" column="ETL_RULE_ID" />
+        <result property="seqNo" column="SEQNO" />
+        <result property="isActive" column="ISACTIVE" />
+        <result property="created" column="CREATED" />
+        <result property="createdBy" column="CREATEDBY " />
+        <result property="updated" column="UPDATED" />
+        <result property="updatedBy" column="UPDATEDBY" />
+        <result property="etlOp" column="ETL_OP" />
+    </resultMap>
+    <resultMap type="RuleUse" id="ruleUseMapping">
+        <id property="id" column="ETL_RULE_SET_ID" />
+        <result property="etlTableId" column="ETL_TABLE_ID" />
+        <result property="etlColumnId" column="ETL_COLUMN_ID" />
+        <result property="columnName" column="CACHE_COLUMN" />
+        <result property="etlTableTargetId" column="ETL_TABLE_TARGET_ID" />
+        <result property="etlColumnTargetId" column="ETL_COLUMN_TARGET_ID" />
+        <result property="etlCoulumnTargetName" column="CLEAN_COLUMN" />
+        <association property="ruleSuit" column="etl_rule_id"
+            javaType="RuleSuit">
+            <id property="id" column="etl_rule_id"/>
+            <result property="name" column="name" />
+            <result property="rules" column="rules" />
+        </association>
+    </resultMap>
+	
+
+	<resultMap type="RuleUse" id="ruleUseMapTWO">
+		<id property="id" column="ETL_RULE_SET_ID" />
+		<result property="etlTableId" column="ETL_TABLE_ID" />
+		<result property="etlColumnId" column="ETL_COLUMN_ID" />
+		<result property="etlTableTargetId" column="ETL_TABLE_TARGET_ID" />
+		<result property="etlColumnTargetId" column="ETL_COLUMN_TARGET_ID" />
+		<result property="seqNo" column="SEQNO" />
+		<result property="isActive" column="ISACTIVE" />
+		<result property="created" column="CREATED" />
+		<result property="createdBy" column="CREATEDBY " />
+		<result property="updated" column="UPDATED" />
+		<result property="updatedBy" column="UPDATEDBY" />
+		<result property="etlOp" column="ETL_OP" />
+		<association property="ruleSuit" column="ETL_RULE_ID"
+			javaType="RuleSuit">
+			<id property="id" column="ETL_RULE_ID" />
+			<result property="sequence" column="SEQUENCE" />
+			<result property="name" column="NAME" />
+			<result property="description" column="DESCRIPTION" />
+			<result property="rules" column="RULES" />
+		</association>
+	</resultMap>
+
+
+	<!-- 插入日志信息 -->
+	<insert id="save" parameterType="RuleUse" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ETL_RULE_SET_ID">
+        <![CDATA[
+            INSERT INTO ETL_RULEUSE 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ETL_RULE_SET_ID,
+			<if test="etlTableId != null">
+				ETL_TABLE_ID,
+			</if>
+			<if test="etlColumnId != null">
+				ETL_COLUMN_ID,
+			</if>
+			<if test="ruleSuitId != null">
+				ETL_RULE_ID,
+			</if>
+			<if test="seqNo != null">
+				SEQNO,
+			</if>
+			<if test="isActive != null">
+				ISACTIVE,
+			</if>
+			<if test="created != null">
+				CREATED,
+			</if>
+			<if test="createdBy != null">
+				CREATEDBY,
+			</if>
+			<if test="updated != null">
+				UPDATED,
+			</if>
+			<if test="updatedBy != null">
+				UPDATEDBY,
+			</if>
+			<if test="etlOp != null">
+				ETL_OP,
+			</if>
+			<if test="etlTableTargetId != null">
+				ETL_TABLE_TARGET_ID,
+			</if>
+			<if test="etlColumnTargetId != null">
+				ETL_COLUMN_TARGET_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			ETL_RULEUSE_SEQ.NEXTVAL,
+			<if test="etlTableId != null"> #{etlTableId}, </if>
+			<if test="etlColumnId != null"> #{etlColumnId}, </if>
+			<if test="ruleSuitId != null"> #{ruleSuitId},</if>
+			<if test="seqNo != null"> #{seqNo}, </if>
+			<if test="isActive != null">#{isActive},</if>
+			<if test="created != null"> #{created}, </if>
+			<if test="createdBy != null"> #{createdBy}, </if>
+			<if test="updated != null"> #{updated}, </if>
+			<if test="updatedBy != null"> #{updatedBy}, </if>
+			<if test="etlOp != null">#{etlOp},</if>
+			<if test="etlTableTargetId != null"> #{etlTableTargetId},</if>
+			<if test="etlColumnTargetId != null"> #{etlColumnTargetId}, </if>
+		</trim>
+	</insert>
+
+
+	<!-- 批量插入数据 -->
+	<insert id="batchSave" parameterType="java.util.List">
+        <![CDATA[
+            INSERT INTO ETL_RULEUSE (
+				etl_table_id,
+				etl_column_id,
+				etl_rule_id,
+				seqno,
+				isactive,
+				created,
+				createdby,
+				etl_op,
+				etl_table_target_id,
+				etl_column_target_id
+				)
+        ]]>
+		<foreach collection="list" item="item" index="index"
+			separator="union all">
+				(select
+					#{item.etlTableId},
+					#{item.etlColumnId},
+					#{item.ruleSuitId},
+					#{item.seqNo},
+					#{item.isActive},
+					#{item.created},
+					#{item.createdBy},
+					#{item.etlOp},
+					#{item.etlTableTargetId},
+					#{item.etlColumnTargetId}
+				from dual)
+		</foreach>
+	</insert>
+
+	<!-- 修改主机信息 -->
+	<update id="update" parameterType="int">
+		UPDATE ETL_RULEUSE
+		<set>
+			<if test="etlTableId != null">etl_table_id=#{etlTableId},</if>
+			<if test="etlColumnId != null">etl_column_id=#{etlColumnId},</if>
+			<if test="ruleSuitId != null">etl_rule_id=#{ruleSuitId},</if>
+			<if test="seqNo != null">seqno=#{seqNo},</if>
+			<if test="isActive != null">isactive=#{isActive},</if>
+			<if test="updated != null">updated=#{updated},</if>
+			<if test="updatedBy != null">updatedby=#{updatedBy},</if>
+			<if test="etlOp != null">etl_op=#{etlOp},</if>
+			<if test="etlTableTargetId != null">etl_table_target_id=#{etlTableTargetId},</if>
+			<if test="etlColumnTargetId != null">etl_column_target_id=#{etlColumnTargetId},</if>
+		</set>
+		     WHERE etl_rule_set_id = #{id}
+	</update>
+
+	<!-- 根据id删除 -->
+	<delete id="deleteByIds" parameterType="java.lang.String">
+		<![CDATA[
+            DELETE FROM
+                etl_ruleuse
+            WHERE
+                etl_rule_set_id IN (${_parameter})
+        ]]>
+	</delete>
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            DELETE FROM 
+                etl_ruleuse 
+            WHERE 
+                etl_rule_set_id=#{id}
+        ]]>
+	</delete>
+
+	<!-- 根据id删除 -->
+	<delete id="deleteRuleUseByTableId" parameterType="RuleUse">
+        <![CDATA[
+            DELETE FROM 
+                etl_ruleuse 
+            WHERE 
+                etl_table_id=#{etlTableId} and etl_table_target_id=#{etlTableTargetId}
+        ]]>
+	</delete>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tool="http://www.springframework.org/schema/tool" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+
+	<!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+	<!-- 注解式开发 @Transation -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+	
+	<!-- 事务通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="create*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="do*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <!-- 使用aop切入点配置事务 -->
+    <aop:config proxy-target-class="true">
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.jk.ndtetl.*.service.*Service.*(..))"/>
+    </aop:config>
+
+</beans>

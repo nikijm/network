@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.dbmeta.dao.DataFileDao">
+
+	<!-- 查询用户当日上传的文件数量 -->
+	<select id="getFileNumFromTodayByUserId" parameterType="int"
+		resultType="int">
+        <![CDATA[
+			SELECT
+			    "COUNT" ("COUNT"(0))
+			FROM
+			    ETL_DATAFILE
+            WHERE
+                UPLOAD_USER = #{userId} AND trunc(CREATED) = trunc(sysdate)
+			GROUP BY 
+			    SHA1
+        ]]>
+	</select>
+	<!-- 根据sha1查询数据 -->
+	<select id="getBySha1" parameterType="string" resultType="DataFile">
+        <![CDATA[
+          SELECT
+              d.etl_datafile_id,
+              d.sha1
+          FROM
+              ETL_DATAFILE d
+		  WHERE
+			  d.sha1 = #{sha1}
+        ]]>
+	</select>
+	<!-- 根据id查询数据 -->
+	<select id="getById" parameterType="int" resultMap="dataFileResultMap">
+        <![CDATA[
+          SELECT
+              d.etl_datafile_id,
+              d.filename,
+              d.path,
+              d.source_org_code,
+              d.unid,
+              d.status_upload,
+              d.status_cache,
+              d.status_clean,
+              d.status_convert,
+              d.status_validate,
+              d.action,
+              d.status,
+              d.message,
+              d.upload_date,
+              d.sha1,
+              d.sheet_index,
+              d.sheet_startrow,
+              d.header,
+              d.isactive,
+              d.created,
+              d.createdby,
+              d.updated,
+              d.updatedby,
+              
+              ft.etl_file_type_id,
+              ft.name ftName,
+              ft.fields_align,
+              
+              u.etl_user_id,
+              u.name uName
+          FROM
+              ETL_DATAFILE d
+          LEFT JOIN ETL_DATAFILE_TYPE ft ON ft.etl_file_type_id=d.etl_file_type_id
+          LEFT JOIN ETL_USER u ON d.upload_user=u.etl_user_id
+		  WHERE
+		      d.etl_datafile_id = #{id}
+        ]]>
+	</select>
+
+	<select id="getDataFile" parameterType="int" resultMap="dataFileOpeResultMap">
+        <![CDATA[
+        SELECT d.etl_datafile_id,
+       d.filename,
+       d.source_org_code,
+       d.unid,
+       d.status_upload,
+       d.status_cache,
+       d.status_clean,
+       d.status_convert,
+       d.status_validate,
+       
+       ft.etl_file_type_id,
+       ft.name as ftName,
+       ft.tableid_cache,
+       ft.tableid_clean,
+       ft.tableid_convert,
+       ft.tableid_validate,
+       
+       u.etl_user_id,
+       u.name        as uName
+  FROM (select w.* from etl_datafile w where w.etl_datafile_id = #{fileId}) d
+  LEFT JOIN ETL_DATAFILE_TYPE ft
+    ON ft.etl_file_type_id = d.etl_file_type_id
+  LEFT JOIN ETL_USER u
+    ON d.upload_user = u.etl_user_id
+        	        ]]>
+	</select>
+
+
+
+	<!-- 根据id查询数据 -->
+	<select id="getTableById" parameterType="int" resultMap="tableResultMap">
+        <![CDATA[
+          SELECT
+              d.etl_datafile_id,
+              d.filename,
+              d.source_org_code,
+              d.unid,
+              d.status_upload,
+              d.status_cache,
+              d.status_clean,
+              d.status_convert,
+              d.status_validate,
+              
+              ft.etl_file_type_id,
+              ft.name ftName,
+              ft.tableid_cache,
+              ft.tableid_clean,
+              ft.tableid_convert,
+              ft.tableid_validate,
+              
+              t1.etl_table_id t1Id,
+		      t1.name t1Name,
+		      t1.tablename t1TableName,
+		
+		      t2.etl_table_id t2Id,
+		      t2.name t2Name,
+		      t2.tablename t2TableName,
+		
+		      t3.etl_table_id t3Id,
+		      t3.name t3Name,
+		      t3.tablename t3TableName,
+		
+		      t4.etl_table_id t4Id,
+		      t4.name t4Name,
+		      t4.tablename t4TableName
+              
+          FROM
+              ETL_DATAFILE d
+          LEFT JOIN ETL_DATAFILE_TYPE ft ON ft.etl_file_type_id=d.etl_file_type_id
+          LEFT JOIN ETL_TABLE t1 ON ft.tableid_cache = t1.etl_table_id
+          LEFT JOIN ETL_TABLE t2 ON ft.tableid_clean = t2.etl_table_id
+          LEFT JOIN ETL_TABLE t3 ON ft.tableid_convert = t3.etl_table_id
+          LEFT JOIN ETL_TABLE t4 ON ft.tableid_validate = t4.etl_table_id
+		  WHERE
+		      d.etl_datafile_id = #{id}
+        ]]>
+	</select>
+
+
+	<!-- 查询所有 -->
+	<select id="listAll" resultMap="dataFileResultMap">
+        <![CDATA[
+          SELECT
+              d.etl_datafile_id,
+              d.filename,
+              d.path,
+              d.source_org_code,
+              d.unid,
+              d.status_upload,
+              d.status_cache,
+              d.status_clean,
+              d.status_convert,
+              d.status_validate,
+              d.action,
+              d.status,
+              d.message,
+              d.upload_date,
+              d.sha1,
+              d.sheet_index,
+              d.sheet_startrow,
+              d.header,
+              d.isactive,
+              d.created,
+              d.createdby,
+              d.updated,
+              d.updatedby,
+              
+              ft.etl_file_type_id,
+              ft.name ftName,
+              ft.fields_align,
+              
+              u.etl_user_id,
+              u.name uName
+          FROM
+              ETL_DATAFILE d
+          LEFT JOIN ETL_DATAFILE_TYPE ft ON ft.etl_file_type_id=d.etl_file_type_id
+          LEFT JOIN ETL_USER u ON d.upload_user=u.etl_user_id
+          ORDER BY
+              d.etl_datafile_id DESC
+        ]]>
+	</select>
+
+	<!-- 查询缓存就绪状态的文件 -->
+	<select id="listByCacheStatus" parameterType="com.jk.ndtetl.util.QueryParam"
+		resultMap="dataFileResultMap">
+        <![CDATA[
+          SELECT
+              d.etl_datafile_id,
+              d.filename,
+              d.path,
+              d.source_org_code,
+              d.unid,
+              d.status_upload,
+              d.status_cache,
+              d.status_clean,
+              d.status_convert,
+              d.status_validate,
+              d.action,
+              d.status,
+              d.message,
+              d.upload_date,
+              d.sha1,
+              d.sheet_index,
+              d.sheet_startrow,
+              d.header,
+              d.isactive,
+              d.created,
+              d.createdby,
+              d.updated,
+              d.updatedby,
+              
+              ft.etl_file_type_id,
+              ft.name ftName,
+              ft.fields_align,
+              
+              u.etl_user_id,
+              u.name uName
+          FROM
+              ETL_DATAFILE d
+          LEFT JOIN ETL_DATAFILE_TYPE ft ON ft.etl_file_type_id=d.etl_file_type_id
+          LEFT JOIN ETL_USER u ON d.upload_user=u.etl_user_id
+          where d.status_cache = #{param.statusCache}
+          ORDER BY
+              d.etl_datafile_id DESC
+        ]]>
+	</select>
+
+
+	<!-- 查询待处理的文件 -->
+	<select id="listFileToProcess" parameterType="com.jk.ndtetl.util.QueryParam"
+		resultMap="dataFileOpeResultMap">
+		SELECT d.etl_datafile_id,
+		d.filename,
+		d.source_org_code,
+		d.unid,
+		d.status_upload,
+		d.status_cache,
+		d.status_clean,
+		d.status_convert,
+		d.status_validate,
+
+		ft.etl_file_type_id,
+		ft.name as ftName,
+		ft.tableid_cache,
+		ft.tableid_clean,
+		ft.tableid_convert,
+		ft.tableid_validate,
+
+		u.etl_user_id,
+		u.name as uName
+		FROM ETL_DATAFILE d
+		LEFT JOIN ETL_DATAFILE_TYPE ft
+		ON ft.etl_file_type_id =
+		d.etl_file_type_id
+		LEFT JOIN ETL_USER u
+		ON d.upload_user = u.etl_user_id
+		<include refid="whereCondition" />
+		and rownum &lt; 10
+		ORDER BY d.etl_datafile_id DESC
+	</select>
+	<!-- 条件语句 -->
+	<sql id="whereCondition">
+		<where>
+			<if test="param != null and param.statusClean != null">
+				and d.status_clean = #{param.statusClean}
+			</if>
+			<if test="param != null and param.statusConvert != null">
+				and d.status_convert =#{param.statusConvert}
+			</if>
+			<if test="param != null and param.statusValidate != null">
+				and d.status_validate =#{param.statusValidate}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 根据分页条件查询数据 -->
+	<select id="listByPage" resultMap="dataFileResultMap"
+		parameterType="BasePage">
+		SELECT
+			d.etl_datafile_id,
+			d.filename,
+			d.path,
+			d.source_org_code,
+			d.unid,
+			d.status_upload,
+			d.status_cache,
+			d.status_clean,
+			d.status_convert,
+			d.status_validate,
+			d.action,
+			d.status,
+			d.message,
+			d.upload_date,
+			d.sha1,
+			d.sheet_index,
+			d.sheet_startrow,
+			d.header,
+			d.isactive,
+			d.created,
+			d.createdby,
+			d.updated,
+			d.updatedby,
+	
+			ft.etl_file_type_id,
+			ft.name ftName,
+			ft.fields_align,
+	
+			o.etl_org_id,
+			o.code,
+			o.NAME orgName,
+	
+			u.etl_user_id,
+			u.name uName
+		FROM
+		    ETL_DATAFILE d
+		LEFT JOIN ETL_DATAFILE_TYPE ft ON ft.etl_file_type_id=d.etl_file_type_id
+		LEFT JOIN ETL_USER u ON d.upload_user=u.etl_user_id
+		LEFT JOIN ETL_ORG o ON d.source_org_code=o.code
+		<include refid="whereSql" />
+		ORDER BY
+		    d.etl_datafile_id DESC
+	</select>
+	<resultMap type="DataFile" id="dataFileResultMap">
+		<id property="etlDatafileId" column="etl_datafile_id" />
+		<result property="fileName" column="filename" />
+		<result property="path" column="path" />
+		<result property="sourceOrgCode" column="source_org_code" />
+		<result property="orgName" column="orgName" />
+		<result property="unId" column="unid" />
+		<result property="statusUpload" column="status_upload" />
+		<result property="statusCache" column="status_cache" />
+		<result property="statusClean" column="status_clean" />
+		<result property="statusConvert" column="status_convert" />
+		<result property="statusValidate" column="status_validate" />
+		<result property="action" column="action" />
+		<result property="status" column="status" />
+		<result property="message" column="message" />
+		<result property="uploadDate" column="upload_date" />
+		<result property="sha1" column="sha1" />
+		<result property="sheetIndex" column="sheet_index" />
+		<result property="sheetStartRow" column="sheet_startrow" />
+		<result property="header" column="header" />
+		<result property="created" column="created" />
+		<result property="createdBy" column="createdby" />
+		<result property="isActive" column="isactive" />
+		<result property="updated" column="updated" />
+		<result property="updatedBy" column="updatedby" />
+		<!-- 多对一 -->
+		<association property="dataFileType" column="etl_file_type_id" javaType="DataFileType">
+			<id property="etlFileTypeId" column="etl_file_type_id" />
+			<result property="name" column="ftName" />
+			<result property="fieldsAlign" column="fields_align" />
+		</association>
+		<association property="uploadUser" column="upload_user" javaType="User">
+			<id property="id" column="etl_user_id" />
+			<result property="name" column="uName" />
+		</association>
+
+	</resultMap>
+	<resultMap type="DataFile" id="tableResultMap">
+		<id property="etlDatafileId" column="etl_datafile_id" />
+		<result property="fileName" column="filename" />
+		<result property="sourceOrgCode" column="source_org_code" />
+		<result property="unId" column="unid" />
+		<result property="statusUpload" column="status_upload" />
+		<result property="statusCache" column="status_cache" />
+		<result property="statusClean" column="status_clean" />
+		<result property="statusConvert" column="status_convert" />
+		<result property="statusValidate" column="status_validate" />
+		<!-- 多对一 -->
+		<association property="dataFileType" column="etl_file_type_id" javaType="DataFileType">
+			<id property="etlFileTypeId" column="etl_file_type_id" />
+			<result property="name" column="ftName" />
+			<result property="tableCacheId" column="tableid_cache" />
+			<result property="tableCleanId" column="tableid_clean" />
+			<result property="tableConvertId" column="tableid_convert" />
+			<result property="tableValidateId" column="tableid_validate" />
+			<association property="tableCache" column="tableid_cache" javaType="TableDef">
+				<id property="etlTableId" column="t1Id" />
+				<result property="name" column="t1Name" />
+				<result property="tableName" column="t1Tablename" />
+			</association>
+			<association property="tableClean" column="tableid_clean" javaType="TableDef">
+				<id property="etlTableId" column="t2Id" />
+				<result property="name" column="t2Name" />
+				<result property="tableName" column="t2Tablename" />
+			</association>
+			<association property="tableConvert" column="tableid_convert" javaType="TableDef">
+				<id property="etlTableId" column="t3Id" />
+				<result property="name" column="t3Name" />
+				<result property="tableName" column="t3Tablename" />
+			</association>
+			<association property="tableValidate" column="tableid_validate" javaType="TableDef">
+				<id property="etlTableId" column="t4Id" />
+				<result property="name" column="t4Name" />
+				<result property="tableName" column="t4Tablename" />
+			</association>
+		</association>
+	</resultMap>
+
+	<resultMap type="DataFile" id="dataFileOpeResultMap">
+		<id property="etlDatafileId" column="etl_datafile_id" />
+		<result property="fileName" column="filename" />
+		<result property="sourceOrgCode" column="source_org_code" />
+		<result property="unId" column="unid" />
+		<result property="statusUpload" column="status_upload" />
+		<result property="statusCache" column="status_cache" />
+		<result property="statusClean" column="status_clean" />
+		<result property="statusConvert" column="status_convert" />
+		<result property="statusValidate" column="status_validate" />
+		<!-- 多对一 -->
+		<association property="dataFileType" column="etl_file_type_id" javaType="DataFileType">
+			<id property="etlFileTypeId" column="etl_file_type_id" />
+			<result property="name" column="ftName" />
+			<result property="tableCleanId" column="tableid_clean" />
+			<result property="tableCacheId" column="tableid_cache" />
+			<result property="tableConvertId" column="tableid_convert" />
+			<result property="tableValidateId" column="tableid_validate" />
+		</association>
+		<association property="uploadUser" column="upload_user" javaType="User">
+			<id property="id" column="etl_user_id" />
+			<result property="name" column="uName" />
+		</association>
+
+	</resultMap>
+
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="param != null and param.keyword != null and param.keyword != ''">
+				and (lower(d.fileName) like '%'||#{param.keyword}||'%' escape '/'
+				or lower(u.name) like '%'||#{param.keyword}||'%' escape '/')
+			</if>
+			<if test="param != null and param.unCached != null">
+				and (d.status_cache = -1 or d.status_cache = 0)
+			</if>
+			<if test="param != null and param.etlFileTypeId != null">
+				and ft.etl_file_type_id =#{param.etlFileTypeId}
+			</if>
+			<if test="param != null and param.outUserId != null">
+				and u.etl_user_id =#{param.outUserId}
+			</if>
+			<if test="param != null and param.userId != null">
+				and u.etl_user_id =#{param.userId}
+			</if>
+			<if test="param != null and param.statusCache != null">
+				and d.status_cache in (${param.statusCache})
+			</if>
+			<if test="param != null and param.statusClean != null">
+				and d.status_clean in (${param.statusClean})
+			</if>
+			<if test="param != null and param.statusConvert != null">
+				and d.status_convert in (${param.statusConvert})
+			</if>
+			<if test="param != null and param.statusVerify != null">
+				and d.status_validate in (${param.statusVerify})
+			</if>
+			<if test="param != null and param.orgId != null">
+				and o.etl_org_id =#{param.orgId}
+			</if>
+		</where>
+	</sql>
+	<!-- 插入数据 -->
+	<insert id="save" parameterType="DataFile" useGeneratedKeys="true"
+		keyProperty="etlDatafileId" keyColumn="ETL_DATAFILE_ID">
+        <![CDATA[
+            insert into ETL_DATAFILE 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			etl_datafile_id,
+			<if test="dataFileType != null and dataFileType.etlFileTypeId != null">
+				etl_file_type_id,
+			</if>
+			<if test="fileName != null">
+				filename,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="sourceOrgCode != null">
+				source_org_code,
+			</if>
+			<if test="uploadUser != null and uploadUser.id != null">
+				upload_user,
+			</if>
+			<if test="unId != null">
+				unid,
+			</if>
+			<if test="statusUpload != null">
+				status_upload,
+			</if>
+			<if test="statusCache != null">
+				status_cache,
+			</if>
+			<if test="statusClean != null">
+				status_clean,
+			</if>
+			<if test="statusConvert != null">
+				status_convert,
+			</if>
+			<if test="statusValidate != null">
+				status_validate,
+			</if>
+			<if test="action != null">
+				action,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="message != null">
+				message,
+			</if>
+			<if test="uploadDate != null">
+				upload_date,
+			</if>
+			<if test="sha1 != null">
+				sha1,
+			</if>
+			<if test="sheetIndex != null">
+				sheet_index,
+			</if>
+			<if test="sheetStartRow != null">
+				sheet_startrow,
+			</if>
+			<if test="header != null">
+				header,
+			</if>
+			<if test="created != null">
+				created,
+			</if>
+			<if test="createdBy != null">
+				createdBy,
+			</if>
+			<if test="isActive != null">
+				isActive,
+			</if>
+			<if test="updated != null">
+				updated,
+			</if>
+			<if test="updatedBy != null">
+				updatedBy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			ETL_DATAFILE_SEQ.nextVal,
+			<if test="dataFileType != null and dataFileType.etlFileTypeId != null">
+				#{dataFileType.etlFileTypeId},
+			</if>
+			<if test="fileName != null">
+				#{fileName},
+			</if>
+			<if test="path != null">
+				#{path},
+			</if>
+			<if test="sourceOrgCode != null">
+				#{sourceOrgCode},
+			</if>
+			<if test="uploadUser != null and uploadUser.id != null">
+				#{uploadUser.id},
+			</if>
+			<if test="unId != null">
+				#{unId},
+			</if>
+			<if test="statusUpload != null">
+				#{statusUpload},
+			</if>
+			<if test="statusCache != null">
+				#{statusCache},
+			</if>
+			<if test="statusClean != null">
+				#{statusClean},
+			</if>
+			<if test="statusConvert != null">
+				#{statusConvert},
+			</if>
+			<if test="statusValidate != null">
+				#{statusValidate},
+			</if>
+			<if test="action != null">
+				#{action},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="message != null">
+				#{message},
+			</if>
+			<if test="uploadDate != null">
+				#{uploadDate},
+			</if>
+			<if test="sha1 != null">
+				#{sha1},
+			</if>
+			<if test="sheetIndex != null">
+				#{sheetIndex},
+			</if>
+			<if test="sheetStartRow != null">
+				#{sheetStartRow},
+			</if>
+			<if test="header != null">
+				#{header},
+			</if>
+			<if test="created != null">
+				#{created},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy},
+			</if>
+			<if test="isActive != null">
+				#{isActive},
+			</if>
+			<if test="updated != null">
+				#{updated},
+			</if>
+			<if test="updatedBy != null">
+				#{updatedBy},
+			</if>
+		</trim>
+	</insert>
+	<!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_DATAFILE where etl_datafile_id=#{id}
+        ]]>
+	</delete>
+	<!-- 修改，根據id -->
+	<update id="update" parameterType="DataFile">
+        <![CDATA[
+            update ETL_DATAFILE 
+        ]]>
+		<set>
+			<if test="dataFileType != null and dataFileType.etlFileTypeId != null">etl_file_type_id=#{dataFileType.etlFileTypeId},</if>
+			<if test="fileName!=null">filename=#{fileName},</if>
+			<!-- <if test="path!=null">path=#{path},</if> -->
+			<!-- <if test="sourceOrgCode!=null">source_org_code=#{sourceOrgCode},</if> -->
+			<!-- <if test="uploadUser != null and uploadUser.id != null">upload_user=#{uploadUser.id},</if> -->
+			<!-- <if test="unId!=null">unid=#{unId},</if> -->
+			<if test="statusUpload!=null">status_upload=#{statusUpload},</if>
+			<if test="statusCache!=null">status_cache=#{statusCache},</if>
+			<if test="statusClean!=null">status_clean=#{statusClean},</if>
+			<if test="statusConvert!=null">status_convert=#{statusConvert},</if>
+			<if test="statusValidate!=null">status_validate=#{statusValidate},</if>
+			<if test="action!=null">action=#{action},</if>
+			<if test="status!=null">status=#{status},</if>
+			<if test="message!=null">message=#{message},</if>
+			<!-- <if test="uploadDate!=null">upload_date=#{uploadDate},</if> -->
+			<!-- <if test="sha1!=null">sha1=#{sha1},</if> -->
+			<if test="sheetIndex!=null">sheet_index=#{sheetIndex},</if>
+			<if test="sheetStartRow!=null">sheet_startrow=#{sheetStartRow},</if>
+			<if test="header!=null">header=#{header},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+			<if test="updated!=null">updated=#{updated},</if>
+			<if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+
+		<where>
+			etl_datafile_id=#{etlDatafileId}
+		</where>
+	</update>
+
+</mapper>

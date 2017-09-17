@@ -1,0 +1,14 @@
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\dao\CommonMapperTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\dao\access\AccessMapperTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\SpringTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\rule\RegexValidatorTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\converter\FileSaveCodeTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\service\common\CommonServiceTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\DayOfLife.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\rule\ReplaceStringOperationTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\converter\csv\CSVFileConverterTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\converter\excel\excelTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\controller\AdminTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\ehcache\EhcacheSpringTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\service\logs\SheetLogServiceTest.java
+F:\working\code\ndt-etl\src\test\java\com\jk\ndt\etl\service\mirror\MirrorTableServiceTest.java

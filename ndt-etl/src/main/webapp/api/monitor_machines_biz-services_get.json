@@ -1,0 +1,20 @@
+[
+  {
+    "request": {
+      "{id}": 1
+    },
+    "id": "7Ga2hL24DvK9bDwzJJ46kkcj83zsNruN",
+    "name": "数据清洗",
+    "state": "running"
+  },
+  {
+    "id": "eXEcoUsDq3D47z42P46mN8QzmGQfDJ3p",
+    "name": "数据清洗",
+    "state": "running"
+  },
+  {
+    "id": "aVi96R9i9c8WssfG4Fa7kYE3heoChb2u",
+    "name": "数据转化",
+    "state": "down"
+  }
+]

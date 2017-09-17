@@ -1,0 +1,32 @@
+{
+  "columns": [
+    {
+      "name": "身份证号",
+      "validator": {
+        "name": "正则",
+        "params": [
+          "regexstr"
+        ]
+      }
+    }
+  ],
+  "isValid": true,
+  "400": {
+    "isValid": false,
+    "rows": [
+      {
+        "columns": {
+          "A3": "5101823988293334121"
+        },
+        "ID": 1
+      },
+      {
+        "columns": {
+          "A3": "5101823988293334121",
+          "A8": "C12"
+        },
+        "ID": 2
+      }
+    ]
+  }
+}

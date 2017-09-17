@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.common.CommonDao">
+
+    <!-- 设计要求排序,故用java.util.LinkedHashMap -->
+	<select id="listAll" resultType="java.util.LinkedHashMap">
+		<![CDATA[
+            select * from "${tableName}"
+        ]]>
+	</select>
+	<select id="listByIds" resultType="java.util.LinkedHashMap">
+		<![CDATA[
+            select * from "${tableName}" 
+        ]]>
+        <where>
+            id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+                </foreach>
+        </where>
+	</select>
+	
+	<select id="listByPage" resultType="java.util.LinkedHashMap">
+        SELECT * FROM "${tableName}"
+	</select>
+	
+	<select id="listByQueryObj" resultType="java.util.LinkedHashMap">
+        SELECT * FROM "${tableName}"
+        <where>
+            <foreach collection="queryList" item="query">
+                AND ${query.colunmName} ${query.operator} 
+                <choose>
+                    <when test="query.operator == 'in' or query.operator == 'IN'">
+                        <foreach collection="query.param" item="paramItem" open="(" close=")" separator=",">
+                            #{paramItem}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                       #{query.param}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+    </select>
+
+<!-- 	<insert id="saveTableContent" parameterType="com.jk.ndt.etl.converter.model.DataTable"> -->
+<!-- 		<![CDATA[ -->
+<!-- 			insert into "${tableName}" -->
+<!-- 		]]> -->
+<!-- 		<foreach collection="header" item="column" open="(" close=")" -->
+<!-- 			separator=","> -->
+<!-- 			"${column}" -->
+<!-- 		</foreach> -->
+<!-- 		<foreach collection="content" item="row" separator=" union all"> -->
+<!-- 			select -->
+<!-- 			<foreach collection="row" item="cell" separator=","> -->
+<!-- 				'${cell}' -->
+<!-- 			</foreach> -->
+<!-- 			from dual -->
+<!-- 		</foreach> -->
+
+<!-- 	</insert> -->
+
+	<update id="createTable" parameterType="com.jk.ndt.etl.converter.model.DataTable">
+	    <![CDATA[
+			CREATE TABLE "${tableName}"(
+			"ID" NUMBER(20,0) NOT NULL ENABLE, 
+		]]>
+		
+		<foreach collection="header" item="column">
+			"${column}" VARCHAR2(1000
+			BYTE) NULL,
+		</foreach>
+		
+        <![CDATA[
+ 	        PRIMARY KEY ("ID"))  
+ 	        LOGGING NOCOMPRESS NOCACHE 
+ 	      
+ 	    ]]>
+
+	</update>
+	<update id="deleteTable" parameterType="com.jk.ndt.etl.converter.model.DataTable">
+	    <![CDATA[
+	    declare
+            num   number;
+			begin
+			    select count(1) into num from user_tables where table_name = upper('${tableName}') ;
+			    if num > 0 then
+			        execute immediate 'drop table ${tableName}' ;
+			    end if;
+			end;
+		]]>
+
+	</update>
+	<update id="createSeq">
+	    <![CDATA[
+ 	        CREATE SEQUENCE  "${tableName}_SEQ"  
+ 	        MINVALUE 1 
+ 	        MAXVALUE 9999999999999999999999999999 
+ 	        INCREMENT BY 1 
+ 	        START WITH 1 
+ 	        CACHE 20 
+ 	        ORDER  
+ 	        NOCYCLE
+ 	       ]]>
+	</update>
+	<update id="deleteSeq">
+	    <![CDATA[
+	    declare   
+            V_NUM number;   
+
+			BEGIN  
+			    select count(0) into V_NUM from user_sequences where sequence_name = upper('${tableName}_SEQ'); 
+			    if V_NUM > 0 then   
+			    execute immediate 'DROP SEQUENCE  ${tableName}_SEQ';   
+			    end if;
+			END;
+ 	       ]]>
+	</update>
+	<update id="createTrigger" statementType="STATEMENT">
+	    <![CDATA[
+ 	        create or replace trigger ${tableName}_ID  
+			before insert
+			on ${tableName}
+			for each row
+			when(new.ID is null)
+			begin
+			select ${tableName}_SEQ.nextval into:new.ID from dual;
+			end ;
+ 	       ]]>
+	</update>
+    <insert id="saveTableContent" parameterType="com.jk.ndt.etl.converter.model.DataTable">
+            begin
+        <foreach collection="content" item="row" separator=";">
+        insert into "${tableName}" (ID,
+	        <foreach collection="header" item="column"  close=") values"
+	            separator=",">
+	            "${column}"
+	        </foreach>
+	        (${tableName}_SEQ.nextVal,
+            <foreach collection="row" item="cell" separator=","  close=")">
+                '${cell}'
+            </foreach>
+        </foreach>
+            ;end;
+    </insert>
+    
+    <insert id="saveTableContentWithId" parameterType="com.jk.ndt.etl.converter.model.DataTable">
+            begin
+        <foreach collection="content" item="row" separator=";">
+        insert into "${tableName}" 
+            <foreach collection="header" item="column" open="(" close=") values"
+                separator=",">
+                "${column}"
+            </foreach>
+            <foreach collection="row" item="cell" separator="," open="(" close=")">
+                '${cell}'
+            </foreach>
+        </foreach>
+            ;end;
+    </insert>
+</mapper>

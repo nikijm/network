@@ -1,0 +1,11 @@
+{
+  "request":{
+    "{id}":1
+  },
+  "name": "Web服务器",
+  "id": "192.168.0.208",
+  "cpu": "2核 2.8Hz",
+  "memory": "8GB",
+  "disk": "2TB",
+  "state": "running"
+}

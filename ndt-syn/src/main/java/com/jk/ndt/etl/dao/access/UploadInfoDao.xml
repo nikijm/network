@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.access.UploadInfoDao">
+
+	<select id="getById" resultMap="uploadResultMap" parameterType="int">
+        <![CDATA[
+	        select up.id ,up.fileName ,up.path,up.source,up.status,up.sheets_num ,up.upload_date ,up.sha1,up.type,
+	        us.id usId,us.name usName
+	        FROM ETL_UPLOADS up
+	        
+	        LEFT JOIN
+	        ETL_ADMIN us ON us.id=up.user_id
+	        where up.id=#{id}
+        ]]>
+	</select>
+	<select id="getBySha1" parameterType="string" resultType="UploadInfo">
+        <![CDATA[
+            select id,sha1 
+            from ETL_UPLOADS where sha1=#{sha1}
+        ]]>
+	</select>
+	<select id="listAll" resultType="UploadInfo">
+        <![CDATA[
+            select id,fileName,path,source,status,sheets_num sheetsNum,
+            upload_date uploadDate,sha1,type
+            from ETL_UPLOADS
+            order by id desc
+        ]]>
+	</select>
+	<update id="update" parameterType="UploadInfo">
+	    <![CDATA[
+            update ETL_UPLOADS 
+        ]]>
+		<set>
+			<if test="fileName!=null">fileName=#{fileName},</if>
+			<if test="path!=null">path=#{path},</if>
+			<if test="source!=null">source=#{source},</if>
+			<if test="user!=null and user.id!=null">user_id=#{user.id},</if>
+			<if test="status!=null">status=#{status},</if>
+			<if test="sheetsNum!=null">sheets_num=#{sheetsNum},</if>
+			<if test="uploadDate!=null">upload_date=#{uploadDate},</if>
+			<if test="sha1!=null">sha1=#{sha1},</if>
+			<if test="type!=null">type=#{type}</if>
+		</set>
+
+		<where>
+			id=#{id}
+		</where>
+	</update>
+
+	<insert id="save" parameterType="UploadInfo" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ID">
+        <![CDATA[
+            insert into ETL_UPLOADS
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fileName != null">
+				fileName,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="source != null">
+				source,
+			</if>
+			<if test="user!=null and user.id != null">
+				user_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="sheetsNum != null">
+				sheets_num,
+			</if>
+			<if test="uploadDate != null">
+				upload_date,
+			</if>
+			<if test="sha1 != null">
+				sha1,
+			</if>
+			<if test="type != null">
+                type,
+            </if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fileName != null">
+				#{fileName},
+			</if>
+			<if test="path != null">
+				#{path},
+			</if>
+			<if test="source != null">
+				#{source},
+			</if>
+			<if test="user!=null and user.id != null">
+				#{user.id},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="sheetsNum != null">
+				#{sheetsNum},
+			</if>
+			<if test="uploadDate != null">
+				#{uploadDate},
+			</if>
+			<if test="sha1 != null">
+				#{sha1},
+			</if>
+            <if test="type != null">
+                #{type},
+            </if>
+		</trim>
+
+	</insert>
+
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_UPLOADS where id=#{id}
+        ]]>
+	</delete>
+	<select id="listByPage" resultMap="uploadResultMap"
+		parameterType="Page">
+		select up.id ,up.fileName ,up.path ,up.source ,up.status ,up.sheets_num ,
+		up.upload_date ,up.sha1,up.type,
+		us.id usId,us.name usName
+		FROM
+		ETL_UPLOADS up
+
+		LEFT JOIN
+		ETL_ADMIN us ON us.id=up.user_id
+		<include refid="whereSql" />
+		order by up.id desc
+	</select>
+	<resultMap type="UploadInfo" id="uploadResultMap">
+		<id property="id" column="id" />
+		<result property="fileName" column="fileName" />
+		<result property="path" column="path" />
+		<result property="source" column="source" />
+		<result property="status" column="status" />
+		<result property="sheetsNum" column="sheets_num" />
+		<result property="uploadDate" column="upload_date" />
+		<result property="sha1" column="sha1" />
+		<result property="type" column="type" />
+
+		<!-- 多对一 -->
+		<association property="user" column="user_id" javaType="Admin">
+			<id property="id" column="usId" />
+			<result property="name" column="usName" />
+		</association>
+
+		<!-- 一对多 -->
+		<!-- <collection property="sheets" javaType="arraylist" ofType="SheetInfo"> -->
+		<!-- <id property="id" column="sId" /> -->
+		<!-- <result property="status" column="sStatus" /> -->
+		<!-- </collection> -->
+	</resultMap>
+	<sql id="whereSql">
+		<where>
+			<if test="param !=null and param.keyword!=null and param.keyword!=''">
+				and (lower(up.fileName) like '%'||#{param.keyword}||'%' or lower(us.name) like
+				'%'||#{param.keyword}||'%')
+			</if>
+			<if test="param !=null and param.status!=null ">
+			    and up.status =#{param.status}
+			</if>
+			<!-- <if test="beginDate!=null and beginDate!=''"> -->
+			<!-- and o.signTime >= #{beginDate} -->
+			<!-- </if> -->
+			<!-- <if test="endDate!=null and endDate!=''"> -->
+			<!-- and o.signTime &lt; #{endDate} -->
+			<!-- </if> -->
+			<!-- <if test="param.keyword!=null and param.keyword!=''"> -->
+			<!-- and up.fileName =#{param.id} -->
+			<!-- </if> -->
+		</where>
+	</sql>
+</mapper>

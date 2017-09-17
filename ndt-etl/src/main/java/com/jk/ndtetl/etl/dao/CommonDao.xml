@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.etl.dao.CommonDao">
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="isSearchColumns!=null and isSearchColumns.size > 0">
+				<if
+					test="page!=null and page.param!=null and page.param.keyword!=null and page.param.keyword!=''">
+					<foreach collection="isSearchColumns" item="isSearchColumn"
+						open="and (" separator="or " close=")">
+						lower(${isSearchColumn}) like '%'||#{page.param.keyword}||'%' escape '/'
+					</foreach>
+				</if>
+			</if>
+			<if test="page!=null and page.param!=null and page.param.unIds != null and page.param.unIds.size > 0">
+				and datafile_unid in
+				<foreach collection="page.param.unIds" item="unId" open="(" separator="," close=")">
+					#{unId}
+				</foreach>
+			</if>
+			<if test="page!=null and page.param!=null and page.param.unId != null">
+				and datafile_unid = #{page.param.unId}
+			</if>
+			<if test="page!=null and page.param!=null and page.param.result != null">
+				and result = #{page.param.result}
+			</if>
+		</where>
+	</sql>
+	<!-- 判断列是否存在 -->
+	<select id="getColumnNames" resultType="string">
+		SELECT
+		  column_name
+		FROM 
+		  cols
+		WHERE
+		  table_name = UPPER ('${tableName}')
+	</select>
+	<select id="isNewColumnNameAvailable" resultType="int">
+		SELECT
+		  COUNT (0)
+		FROM 
+		  cols
+		WHERE
+		  table_name = UPPER ('${tableName}') AND column_name = UPPER ('${columnName}')
+	</select>
+	<!-- 判断表是否存在 -->
+	<select id="isNewTableNameAvailable" resultType="int">
+		SELECT
+		  COUNT(0)
+		FROM 
+		  user_tables
+		WHERE
+		  table_name = UPPER('${tableName}')
+	</select>
+
+	<!-- 设计要求排序,故用java.util.LinkedHashMap -->
+	<select id="listAll" resultMap="timestampResultMap">
+		<![CDATA[
+            select * from ${tableName}
+            order by id asc
+        ]]>
+	</select>
+	<select id="getCountByUnIdAndResult" resultType="int">
+		<![CDATA[
+            SELECT 
+                count(0) from ${tableName} 
+        ]]>
+        <where>
+            <if test="result != null ">
+                and result = #{result}
+            </if>
+            <if test="unId != null and unId != '' ">
+                and datafile_unid = #{unId}
+            </if>
+        </where>
+	</select>
+	<!-- 查詢多條數据根據多個id -->
+	<select id="listByIds" resultMap="timestampResultMap">
+		<![CDATA[
+            select * from ${tableName} 
+        ]]>
+		<where>
+			id in
+			<foreach collection="ids" item="id" open="(" close=")"
+				separator=",">
+				#{id}
+			</foreach>
+		</where>
+		order by id asc
+	</select>
+	<!-- 根據分頁條件查詢 -->
+	<select id="listByPage" resultMap="timestampResultMap">
+		SELECT * FROM ${tableName}
+		<include refid="whereSql" />
+		order by id asc
+	</select>
+	<resultMap type="java.util.LinkedHashMap" id="timestampResultMap">
+	   <result property="CREATED" column="CREATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	   <result property="UPDATED" column="UPDATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!-- 查询对比数据 -->
+	<select id="getContrastDatas" resultMap="contrastResultMap">
+		SELECT
+		    <trim suffixOverrides=",">
+			    <foreach collection="sourceColumnNames" item="sourceColumn">
+			      s.${sourceColumn} SOURCE${sourceColumn},
+			    </foreach>
+			    <foreach collection="targetColumnNames" item="targetColumn" >
+			      t.${targetColumn} TARGET${targetColumn},
+			    </foreach>
+		    </trim>
+		FROM
+		    ${sourceTableName} s
+		LEFT JOIN ${targetTableName} t ON t .seqno = s.seqno and t.datafile_unid=s.datafile_unid
+		WHERE
+		    s.DATAFILE_UNID = #{unId}
+		ORDER BY s.seqno ASC
+	</select>
+	<resultMap type="java.util.LinkedHashMap" id="contrastResultMap">
+	   <result property="SOURCECREATED" column="SOURCECREATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	   <result property="SOURCEUPDATED" column="SOURCEUPDATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	   <result property="TARGETCREATED" column="TARGETCREATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	   <result property="TARGETUPDATED" column="TARGETUPDATED" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<select id="listByQueryObj" resultMap="timestampResultMap">
+		SELECT * FROM ${tableName}
+		<where>
+			<foreach collection="queryList" item="query">
+				AND "${query.colunmName}" ${query.operator}
+				<choose>
+					<when test="query.operator == 'in' or query.operator == 'IN'">
+						<foreach collection="query.param" item="paramItem" open="("
+							close=")" separator=",">
+							#{paramItem}
+						</foreach>
+					</when>
+					<otherwise>
+						#{query.param}
+					</otherwise>
+				</choose>
+			</foreach>
+		</where>
+	</select>
+
+	<!-- <insert id="saveTableContent" parameterType="com.jk.ndtetl.etl.DataTable"> -->
+	<!-- <![CDATA[ -->
+	<!-- insert into "${tableName}" -->
+	<!-- ]]> -->
+	<!-- <foreach collection="header" item="column" open="(" close=")" -->
+	<!-- separator=","> -->
+	<!-- "${column}" -->
+	<!-- </foreach> -->
+	<!-- <foreach collection="content" item="row" separator=" union all"> -->
+	<!-- select -->
+	<!-- <foreach collection="row" item="cell" separator=","> -->
+	<!-- '${cell}' -->
+	<!-- </foreach> -->
+	<!-- from dual -->
+	<!-- </foreach> -->
+
+	<!-- </insert> -->
+
+
+	<!-- 插入数据 -->
+	<insert id="saveCacheTableContent" parameterType="com.jk.ndtetl.etl.DataTable">
+		begin
+		<foreach collection="content" item="row" separator=";">
+			insert into "${tableName}" (ID,DATAFILE_UNID,SEQNO,
+			<foreach collection="header" item="column" close=") values"
+				separator=",">
+				${column}
+			</foreach>
+			(${tableName}_SEQ.nextVal,#{datafile_unid},
+			<foreach collection="row" item="cell" separator="," close=")" index="idx">
+			    <if test="!unUseColumnNums.contains(idx)">
+                     #{cell}
+                </if>
+			</foreach>
+		</foreach>
+		;end;
+	</insert>
+	<!-- 插入数据 -->
+	<insert id="saveTableContent" parameterType="com.jk.ndtetl.etl.DataTable">
+		begin
+		<foreach collection="content" item="row" separator=";">
+			insert into "${tableName}" (ID,
+			<foreach collection="header" item="column" close=") values" separator=",">
+				${column}
+			</foreach>
+			(${tableName}_SEQ.nextVal,
+			<foreach collection="row" item="cell" separator="," close=")">
+                #{cell}
+			</foreach>
+		</foreach>
+		;end;
+	</insert>
+	<!-- 根据id插入数据 -->
+	<insert id="saveTableContentWithId" parameterType="com.jk.ndtetl.etl.DataTable">
+		begin
+		<foreach collection="content" item="row" separator=";">
+			insert into ${tableName}
+			<foreach collection="header" item="column" open="(" close=") values"
+				separator=",">
+				"${column}"
+			</foreach>
+			<foreach collection="row" item="cell" separator="," open="("
+				close=")">
+				'${cell}'
+			</foreach>
+		</foreach>
+		;end;
+	</insert>
+	<!-- 修改，根據id -->
+	<update id="updateDataById" parameterType="BaseDataEntity">
+        <![CDATA[
+            update ${tableName} 
+        ]]>
+		<set>
+			<if test="result != null">result=#{result},</if>
+			<if test="reason != null">reason=#{reason},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+            <if test="updated!=null">updated=#{updated},</if>
+            <if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+	<update id="updateDataByUnId" parameterType="BaseDataEntity">
+        <![CDATA[
+            update ${tableName} 
+        ]]>
+		<set>
+			<if test="result != null">result=#{result},</if>
+			<if test="reason != null">reason=#{reason},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+            <if test="updated!=null">updated=#{updated},</if>
+            <if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+		<where>
+			datafile_unid=#{datafile_unid}
+		</where>
+	</update>
+	<update id="updateDataByIds">
+        <![CDATA[
+            update ${baseDataEntity.tableName} 
+        ]]>
+		<set>
+			<if test="baseDataEntity.result != null">result=#{baseDataEntity.result},</if>
+			<if test="baseDataEntity.reason != null">reason=#{baseDataEntity.reason},</if>
+			<if test="baseDataEntity.isActive != null">isActive=#{baseDataEntity.isActive},</if>
+            <if test="baseDataEntity.updated != null">updated=#{baseDataEntity.updated},</if>
+            <if test="baseDataEntity.updatedBy != null">updatedBy=#{baseDataEntity.updatedBy}</if>
+		</set>
+		<where>
+		<if test="ids!=null">
+			id in 
+			<foreach collection="ids" item="id" open=" (" close=")" separator=",">
+			     #{id}
+			</foreach>
+		</if>
+		</where>
+	</update>
+    <delete id="deleteByUnId">
+        <![CDATA[
+            delete from ${tableName} where DATAFILE_UNID=#{unId}
+        ]]>
+    </delete>
+    <select id="asda" resultType="java.util.LinkedHashMap">
+        select
+        <foreach collection="dataTable.header" item="hh" index="idx" separator=",">
+                <if test="!unUseColumnNums.contains(idx)">
+                     #{hh}
+                </if>
+        </foreach>
+                
+        from dual
+    </select>
+</mapper>

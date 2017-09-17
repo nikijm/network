@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.transform.TransformDao">
+	<insert id="saveTransformData" parameterType="TransformSheetPO" >
+        INSERT INTO ${target} 
+        <foreach collection="columns" item="column" open=" ( " close=" ) " separator=",">
+            "${column.name}"
+        </foreach>
+        SELECT
+        <foreach collection="columns" item="column" separator=",">
+            "${column.fromColumnName}"
+        </foreach>
+		FROM
+		    ${fromName}
+	</insert>
+</mapper>

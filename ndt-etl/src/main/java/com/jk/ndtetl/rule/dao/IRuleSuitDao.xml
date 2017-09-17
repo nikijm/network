@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.rule.dao.IRuleSuitDao">
+
+	<!-- 通过ID获取日志信息 -->
+	<select id="getById" parameterType="int" resultMap="ruleSuitMap">
+		SELECT
+			etl_rule_id,
+			sequence,
+			name,
+			description,
+			rules,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby
+		FROM
+		    etl_rulesuit
+		WHERE
+		    etl_rule_id=#{id}
+	</select>
+	<!-- 获取所有的日志信息 -->
+	<select id="listAll" resultMap="ruleSuitMap">
+		SELECT
+			etl_rule_id,
+			sequence,
+			name,
+			description,
+			rules,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby
+		FROM
+		    etl_rulesuit
+	</select>
+	<!-- 分页查询日志信息 -->
+	<select id="listByPage" parameterType="BasePage" resultMap="ruleSuitMap">
+		SELECT
+			etl_rule_id,
+			sequence,
+			name,
+			description,
+			rules,
+			isactive,
+			created,
+			createdby,
+			updated,
+			updatedby
+		FROM
+		    etl_rulesuit
+		<where>
+			<if test="param!=null and param.content!=null and param.content!=''">
+				AND DESCRIPTIONLOG like #{param.content} escape '/'
+			</if>
+			<if test="param!=null and param.level!=null">
+				AND LOG_LEVEL = #{param.level}
+			</if>
+		</where>
+		ORDER BY ETL_RULE_ID DESC
+	</select>
+
+	<resultMap type="RuleSuit" id="ruleSuitMap">
+		<id property="id" column="ETL_RULE_ID" />
+		<result property="sequence" column="SEQUENCE" />
+		<result property="name" column="NAME" />
+		<result property="description" column="DESCRIPTION" />
+		<result property="rules" column="RULES" />
+		<result property="isActive" column="ISACTIVE" />
+		<result property="created" column="CREATED" />
+		<result property="createdBy" column="CREATEDBY" />
+		<result property="updated" column="UPDATED" />
+		<result property="updatedBy" column="UPDATEDBY" />
+	</resultMap>
+	<!-- 插入日志信息 -->
+	<insert id="save" parameterType="RuleSuit" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ETL_RULE_ID">
+        <![CDATA[
+            INSERT INTO ETL_RULESUIT 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ETL_RULE_ID,
+			<if test="sequence != null">
+				SEQUENCE,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="rules != null">
+				RULES,
+			</if>
+			<if test="isActive != null">
+				ISACTIVE,
+			</if>
+			<if test="created != null">
+				CREATED,
+			</if>
+			<if test="createdBy != null">
+				CREATEDBY,
+			</if>
+			<if test="updated != null">
+				UPDATED,
+			</if>
+			<if test="updatedBy != null">
+				UPDATEDBY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			ETL_RULESUIT_SEQ.NEXTVAL,
+			<if test="sequence != null">
+				#{sequence},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+			<if test="rules != null">
+				#{rules},
+			</if>
+			<if test="isActive != null">
+				#{isActive},
+			</if>
+			<if test="created != null">
+				#{created},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy},
+			</if>
+			<if test="updated != null">
+				#{updated},
+			</if>
+			<if test="updatedBy != null">
+				#{updatedBy},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 修改主机信息 -->
+	<update id="update" parameterType="int">
+		update etl_rulesuit
+		<set>
+			<if test="sequence != null">
+				sequence=#{sequence},
+			</if>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="description != null">
+				description=#{description},
+			</if>
+			<if test="rules != null">
+				rules=#{rules},
+			</if>
+			<if test="isActive != null">
+				isactive=#{isActive},
+			</if>
+			<if test="created != null">
+				created=#{created},
+			</if>
+			<if test="createdBy != null">
+				createdby=#{createdBy},
+			</if>
+			<if test="updated != null">
+				updated=#{updated},
+			</if>
+			<if test="updatedBy != null">
+				updatedby=#{updatedBy},
+			</if>
+		</set>
+		where etl_rule_id = #{id}
+	</update>
+
+	<!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from etl_rulesuit where etl_rule_id=#{id}
+        ]]>
+	</delete>
+</mapper>

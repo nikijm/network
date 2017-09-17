@@ -1,0 +1,10 @@
+{
+  "request":{
+    "file":"文件",
+    "source":"来自",
+    "type":"应用类型"
+  },
+  "id": 3,
+  "fileName": "xxx.xls",
+  "path": "/uploads/xxx.xls"
+}

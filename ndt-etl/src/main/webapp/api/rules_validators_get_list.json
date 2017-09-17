@@ -1,0 +1,15 @@
+[
+  {
+    "name": "正则验证器",
+    "validatorName": "regexValidator",
+    "paramInputs": [
+      {
+        "name": "验证表达式",
+        "type": "text",
+        "options": null,
+        "value": null
+      }
+    ],
+    "params": null
+  }
+]

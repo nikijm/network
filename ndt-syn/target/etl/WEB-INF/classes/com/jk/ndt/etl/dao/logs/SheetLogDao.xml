@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.logs.SheetLogDao">
+
+	<select id="listAll" resultType="SheetLog">
+        <![CDATA[
+            select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target
+            from ETL_SHEET_LOG sl
+            order by sl.id desc
+        ]]>
+	</select>
+	<select id="listByPage" resultMap="sheetLogResultMap"
+		parameterType="Page">
+		select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target,
+        s.id sId,s.status,
+        us.id usId,us.name
+        from ETL_SHEET_LOG sl
+
+		LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id
+		LEFT JOIN ETL_USER us ON us.id=sl.user_id
+		
+		
+		<include refid="whereSql" />
+		order by sl.id desc
+	</select>
+	<resultMap type="SheetLog" id="sheetLogResultMap">
+		<id property="id" column="id" />
+		<result property="operation" column="operation" />
+		<result property="opDate" column="op_date" />
+		<result property="request" column="request" />
+		<result property="source" column="source" />
+		<result property="target" column="target" />
+
+		<!-- 多对一 -->
+		<association property="sheet" column="sheet_id"
+			javaType="SheetInfo">
+			<id property="id" column="sId" />
+			<result property="status" column="uStatus" />
+		</association>
+		<!-- 多对一 -->
+		<association property="user" column="user_id"
+			javaType="User">
+			<id property="id" column="usId" />
+			<result property="name" column="name" />
+		</association>
+
+	</resultMap>
+	<sql id="whereSql">
+		<where>
+<!-- 			<if test="param.keyword!=null and param.keyword!=''"> -->
+<!-- 				and up.fileName like '%'||#{param.keyword}||'%' -->
+<!-- 			</if> -->
+			<if test="param!=null and param.sheet_id!=null">
+				and s.id =#{param.sheet_id}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="SheetLog" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ID">
+        <![CDATA[
+            insert into ETL_SHEET_LOG
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sheet!=null and sheet.id != null">
+				sheet_id,
+			</if>
+			<if test="user!=null and user.id != null">
+				user_id,
+			</if>
+			<if test="operation != null">
+				operation,
+			</if>
+			<if test="opDate != null">
+				op_date,
+			</if>
+			<if test="request != null">
+				request,
+			</if>
+			<if test="source != null">
+				source,
+			</if>
+			<if test="target != null">
+				target,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sheet!=null and sheet.id != null">
+                #{sheet.id},
+            </if>
+            <if test="user!=null and user.id != null">
+                #{user.id},
+            </if>
+			<if test="operation != null">
+				#{operation},
+			</if>
+			<if test="opDate != null">
+				#{opDate},
+			</if>
+			<if test="request != null">
+				#{request},
+			</if>
+			<if test="source != null">
+				#{source},
+			</if>
+			<if test="target != null">
+				#{target},
+			</if>
+		</trim>
+	</insert>
+
+
+
+</mapper>

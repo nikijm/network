@@ -1,0 +1,60 @@
+{
+  "request":{
+    "page":"页数",
+    "search":"搜索关键字"
+  },
+  "uploads": [
+    {
+      "id": 1,
+      "fileName": "xxx.xls",
+      "path": "/uploads/xxx.xls",
+      "source": "XXX银行",
+      "type": "数据统计",
+      "user": {
+        "id": 3,
+        "name": "mr.x"
+      },
+      "status": "具体状态值待定",
+      "sheetsNum": 4,
+      "uploadDate": "2017-04-03 13:21:22",
+      "sha1": "xxxx",
+      "sheets": []
+    },
+    {
+      "id": 1,
+      "fileName": "xxx.xls",
+      "path": "/uploads/xxx.xls",
+      "source": "XXX银行",
+      "type": "数据统计",
+      "user": {
+        "id": 3,
+        "name": "mr.x"
+      },
+      "status": "具体状态值待定",
+      "sheetsNum": 4,
+      "uploadDate": "2017-04-03 13:21:22",
+      "sha1": "xxxx",
+      "sheets": []
+    },
+    {
+      "id": 1,
+      "fileName": "xxx.xls",
+      "path": "/uploads/xxx.xls",
+      "source": "XXX银行",
+      "type": "数据统计",
+      "user": {
+        "id": 3,
+        "name": "mr.x"
+      },
+      "status": "具体状态值待定",
+      "sheetsNum": 4,
+      "uploadDate": "2017-04-03 13:21:22",
+      "sha1": "xxxx",
+      "sheets": []
+    }
+  ],
+  "paging": {
+    "current": 1,
+    "total": 5
+  }
+}

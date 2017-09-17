@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndt.etl.dao.monitor.ServerInfoDao">
+
+	<resultMap type="ServerInfo" id="serverInfo">
+		<id column="ID" property="id" />
+		<result column="SERVERID" property="serverId" />
+		<result column="CPUUSAGE" property="cpuUsage" />
+		<result column="MEMORYUSAGE" property="memoryUsage" />
+		<result column="DISKUSAGE" property="diskUsage" />
+		<result column="CREATETIME" property="createTime" />
+	</resultMap>
+
+	<insert id="insertServerInfo" parameterType="ServerInfo">
+		insert into ${tablename}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="serverId != null">
+				SERVERID,
+			</if>
+			<if test="cpuUsage != null">
+				CPUUSAGE,
+			</if>
+			<if test="memoryUsage != null">
+				MEMORYUSAGE,
+			</if>
+			<if test="diskUsage != null">
+				DISKUSAGE,
+			</if>
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="calculate != null">
+				CALCULATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			SEQ_SERVERWEB.nextval,
+			<if test="serverId != null">
+				#{serverId},
+			</if>
+			<if test="cpuUsage != null">
+				#{cpuUsage},
+			</if>
+			<if test="memoryUsage != null">
+				#{memoryUsage},
+			</if>
+			<if test="diskUsage != null">
+				#{diskUsage},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="calculate != null">
+				#{calculate},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="getServerInfo" parameterType="com.jk.ndt.etl.entity.monitor.ServerInfoQuery"
+		resultMap="serverInfo">
+		select
+		t.ID,t.SERVERID,t.CPUUSAGE,t.MEMORYUSAGE,t.DISKUSAGE,t.CREATETIME,t.CALCULATE
+		from ${tablename} t
+		<where>
+			<if test="startTime != null and endTime !=null ">
+				t.calculate&gt;#{startTime} and t.calculate&lt;#{endTime}
+			</if>
+		</where>
+		order by ID
+	</select>
+
+	<select id="getOneServerInfo" parameterType="com.jk.ndt.etl.entity.monitor.ServerInfoQuery"
+		resultMap="serverInfo">
+		select
+		t.ID,t.SERVERID,t.CPUUSAGE,t.MEMORYUSAGE,t.DISKUSAGE,t.CREATETIME,t.CALCULATE
+		from ${tablename} t where t.calculate>#{newDateTime}
+	</select>
+
+	<select id="selectServerInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		select COUNT(1) from ${tablename} t
+		<where>
+			<if test="startTime != null and endTime !=null ">
+				t.calculate&gt;#{startTime} and t.calculate&lt;#{endTime}
+			</if>
+		</where>
+	</select>
+	<select id="selectOneServerInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		select COUNT(1) from ${tablename} t where t.calculate>#{newDateTime}
+	</select>
+
+	<select id="getMonitorCpuInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.cpuusage from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorMemoryInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.memoryusage from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorDiskInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.diskusage from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorCpuInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorMemoryInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorDiskInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorCpuInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorMemoryInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+
+	<select id="getMonitorDiskInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select 1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.ID
+	</select>
+</mapper>

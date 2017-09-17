@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.ndt.etl.dao.system.UserDao">
+
+    <resultMap id="userResultMap" type="User">
+        <result column="org_id" property="org_id"/>
+        <result column="id" property="id"/>
+        <result column="description" property="description"/>
+        <result column="email" property="email"/>
+        <result column="IS_ACTIVE" property="is_active"/>
+        <result column="USER_NAME" property="name"/>
+        <result column="password" property="password"/>
+        <result column="USER_PHONE" property="phone"/>
+        <result column="updated_at" property="updated_at"/>
+        <result column="UPDATED_BY" property="updated_by"/>
+        <result column="created_at" property="created"/>
+        <result column="created_by" property="createdby"/>
+    </resultMap>
+
+    <!-- 根据用户名、密码查询用户 -->
+    <select id="getByName" parameterType="java.lang.String" resultType="User">
+         <![CDATA[
+
+           SELECT  u.id,u.name,u.password,u.is_active
+            from etl_user u
+            where u.name=#{_parameter}
+
+        ]]>
+    </select>
+
+    <!-- *****************用户管理-->
+
+    <!--用户列表-->
+    <select id="listUsers" parameterType="User" resultType="User">
+        SELECT u.org_id,u.id,u.email,u.name,u.phone,u.description,u.created_at,u.created_by,u.updated_at
+        ,u.updated_by,u.is_active,a_c.name as created_user,a_u.name as updated_user
+        FROM etl_user u
+        LEFT JOIN etl_admin a_c ON u.created_by=a_c.id
+        LEFT JOIN etl_admin a_u ON u.updated_by=a_u.id
+        WHERE 1=1
+        <if test="name!=null and name !=''">
+            <![CDATA[ and u.name LIKE  CONCAT(CONCAT('%', #{name}),'%')]]>
+        </if>
+        <if test="email!=null and email !=''">
+            <![CDATA[ and u.email LIKE CONCAT(CONCAT('%', #{email}),'%')]]>
+        </if>
+        <if test="phone!=null and phone !=''">
+            <![CDATA[ and u.phone LIKE  CONCAT(CONCAT('%', #{phone}),'%')]]>
+        </if>
+        <if test="created_start !=null and created_start !='' ">
+            <![CDATA[ and u.created_at  >=  #{created_start}  ]]>
+        </if>
+        <if test="created_end !=null and created_end !='' ">
+            <![CDATA[ and u.created_at  <=  #{created_end}  ]]>
+        </if>
+        <if test="updated_start !=null and updated_start !='' ">
+            <![CDATA[ and u.updated_at  >=  #{updated_start}  ]]>
+        </if>
+        <if test="updated_end !=null and updated_end !='' ">
+            <![CDATA[ and u.updated_at  <=  #{updated_end}  ]]>
+        </if>
+        ORDER  BY u.id DESC
+    </select>
+
+    <!--详情-->
+    <select id="getUser" parameterType="java.math.BigDecimal" resultType="User">
+        SELECT u.org_id,u.id,u.email,u.name,u.phone,u.description,u.created_at,u.created_by,u.updated_at
+           ,u.updated_by,u.is_active,u.password,a_c.name as created_user,a_u.name as updated_user
+        FROM etl_user u
+        LEFT  JOIN etl_admin a_c ON  u.created_by=a_c.id
+        LEFT  JOIN etl_admin a_u ON  u.updated_by=a_u.id
+        WHERE u.id=#{_parameter}
+    </select>
+
+    <!--添加-->
+    <insert id="saveUser" parameterType="User" >
+
+        insert into etl_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="org_id != null and org_id!=''" >
+                org_id,
+            </if>
+            <if test="password != null and password!=''" >
+                password,
+            </if>
+            <if test="id != null and id!=''" >
+                id,
+            </if>
+            <if test="email != null and email!=''" >
+                email,
+            </if>
+            <if test="name != null and name!=''" >
+                name,
+            </if>
+            <if test="phone != null and phone!=''" >
+                phone,
+            </if>
+            <if test="description != null and description!=''" >
+                description,
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                created_by,
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                created_at,
+            </if>
+            <if test="is_active != null" >
+                is_active,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="org_id != null and org_id!=''" >
+                #{org_id},
+            </if>
+            <if test="password != null and password!=''" >
+                #{password},
+            </if>
+            <if test="id != null and id!=''" >
+                #{id},
+            </if>
+            <if test="email != null and email!=''" >
+                #{email},
+            </if>
+            <if test="name != null and name!=''" >
+                #{name},
+            </if>
+            <if test="phone != null and phone!=''" >
+                #{phone},
+            </if>
+            <if test="description != null and description!=''" >
+                #{description},
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                #{created_by},
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                #{created_at},
+            </if>
+            <if test="is_active != null" >
+                #{is_active_num},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteUser" parameterType="java.math.BigDecimal">
+       DELETE  FROM etl_user WHERE id=#{_parameter}
+    </delete>
+
+    <!--修改-->
+    <update id="updateUser" parameterType="User">
+
+        update ETL_USER
+        <set>
+            <if test="org_id != null and org_id!=''">
+                org_id=#{org_id},
+            </if>
+            <if test="email != null and email!=''">
+                email=#{email},
+            </if>
+            <if test="name != null and name!=''">
+                name=#{name},
+            </if>
+            <if test="updated_at != null and updated_at!=''">
+                updated_at=#{updated_at},
+            </if>
+            <if test="password != null and password!=''">
+                password=#{password},
+            </if>
+            <if test="updated_by != null and updated_by!=''">
+                updated_by=#{updated_by},
+            </if>
+            <if test="phone != null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="description != null and description!=''">
+                description=#{description},
+            </if>
+            <if test="is_active != null">
+                is_active=#{is_active_num},
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <!--获取序列-->
+    <select id="getUserSequence" resultType="java.math.BigDecimal">
+        select  etl_user_seq.Nextval from dual
+    </select>
+
+
+    <!--判断用户名是否重复-->
+    <select id="getUserByNameOrId" parameterType="User" resultType="User">
+        SELECT * FROM etl_user
+        WHERE  name=#{name}
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
+    </select>
+
+</mapper>

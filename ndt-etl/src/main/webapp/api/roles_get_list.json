@@ -1,0 +1,19 @@
+[
+  {
+    "id":1,
+    "name": "超级管理员",
+    "permissions":[
+      {"key":"user", "name": "用户", "available_operations":"c u r d", "is_active":true},
+      {"key":"role", "name": "角色", "available_operations":"c u r d", "is_active":true},
+      {"key":"permission", "name": "权限", "available_operations":"c u r d", "is_active":true}
+    ]
+  },{
+  "id":2,
+  "name": "数据处理员",
+  "permissions":[
+    {"key":"user", "name": "用户", "available_operations":"c u r d", "is_active":true},
+    {"key":"role", "name": "角色", "available_operations":"c u r d", "is_active":true},
+    {"key":"permission", "name": "权限", "available_operations":"c u r d", "is_active":true}
+  ]
+}
+]

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    resources列表管理，登录admin获取
+    朱生
+    2017年6月9日 09:13:40
+-->
+<mapper namespace="com.jk.ndtetl.system.dao.ResourceDao">
+
+    <resultMap id="resourceResultMap" type="Resource">
+        <result column="etl_resource_id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="key" property="key"/>
+        <result column="isactive" property="isActive"/>
+        <result column="updated" property="updated"/>
+        <result column="updatedby" property="updatedBy"/>
+        <result column="created" property="created"/>
+        <result column="createdby" property="createdBy"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="updated_user" property="updatedUser"/>
+        <result column="available_operations" property="availableOperations"/>
+    </resultMap>
+
+    <!--  *********************角色管理-->
+
+    <!--全部-->
+    <select id="listAllResource" resultMap="resourceResultMap">
+        SELECT etl_resource_id,key,name,available_operations FROM etl_resource
+    </select>
+    <!--列表-->
+    <select id="listResource" parameterType="Resource" resultType="Resource">
+
+        SELECT u.*
+        ,a_c.name as created_user,a_u.name as updated_user
+        FROM etl_resource u
+        LEFT JOIN etl_user a_c ON u.createdby=a_c.etl_user_id
+         LEFT JOIN etl_user a_u ON u.updatedby=a_u.etl_user_id
+        WHERE 1=1
+        <if test="name!=null and name !=''">
+            <![CDATA[ and u.name LIKE  CONCAT(CONCAT('%', #{name}),'%')]]>
+        </if>
+        <if test="description!=null and description !=''">
+            <![CDATA[ and u.description LIKE  CONCAT(CONCAT('%', #{description}),'%')]]>
+        </if>
+        <if test="key!=null and key !=''">
+            <![CDATA[ and u.key LIKE  CONCAT(CONCAT('%', #{key}),'%')]]>
+        </if>
+        <if test="createdStart !=null and createdStart !='' ">
+            <![CDATA[ and u.created  >=  #{createdStart}  ]]>
+        </if>
+        <if test="createdEnd !=null and createdEnd !='' ">
+            <![CDATA[ and u.created  <=  #{createdEnd}  ]]>
+        </if>
+        <if test="updatedStart !=null and updatedStart !='' ">
+            <![CDATA[ and u.updated  >=  #{updatedStart}  ]]>
+        </if>
+        <if test="updatedEnd !=null and updatedEnd !='' ">
+            <![CDATA[ and u.updated  <=  #{updatedEnd}  ]]>
+        </if>
+        <if test="isActive!=null and isActive !=''">
+            <![CDATA[ and u.isactive=#{isActive} ]]>
+        </if>
+        ORDER  BY u.etl_resource_id DESC
+    </select>
+
+    <!--详情-->
+    <select id="getResource" parameterType="java.lang.Integer" resultMap="resourceResultMap">
+        SELECT  * FROM etl_resource r
+        WHERE etl_resource_id=#{id}
+    </select>
+    <!--添加-->
+    <insert id="saveResource" parameterType="Resource" >
+
+        insert into etl_resource
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="description != null and description!=''" >
+                description,
+            </if>
+            <if test="key != null and key!=''" >
+                key,
+            </if>
+            <if test="createdBy != null and createdBy!=''" >
+                createdby,
+            </if>
+            <if test="created != null and created!=''" >
+                created,
+            </if>
+            <if test="isActive != null" >
+                isactive,
+            </if>
+            <if test="id != null and id!=''" >
+                etl_resource_id,
+            </if>
+            <if test="name != null and name!=''" >
+                name,
+            </if>
+            <if test="availableOperations != null and availableOperations!=''" >
+                available_operations,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="description != null and description!=''" >
+                #{description},
+            </if>
+            <if test="key != null and key!=''" >
+                #{key},
+            </if>
+            <if test="createdBy != null and createdBy!=''" >
+                #{createdBy},
+            </if>
+            <if test="created != null and created!=''" >
+                #{created},
+            </if>
+            <if test="isActive != null" >
+                #{isActive},
+            </if>
+            <if test="id != null and id!=''" >
+                #{id},
+            </if>
+            <if test="name != null and name!=''" >
+                #{name},
+            </if>
+            <if test="availableOperations != null and availableOperations!=''" >
+                #{availableOperations},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新-->
+    <update id="updateResource" parameterType="Resource">
+        update etl_resource
+        <set>
+            <if test="name != null and name!=''">
+                name=#{name},
+            </if>
+            <if test="description != null and description!=''">
+                description=#{description},
+            </if>
+            <if test="key != null and key!=''">
+                key=#{key},
+            </if>
+            <if test="isActive != null">
+                isactive=#{isActive},
+            </if>
+            <if test="updated != null and updated!=''">
+                updated=#{updated},
+            </if>
+            <if test="updatedBy != null and updatedBy!=''">
+                updatedby= #{updatedBy},
+            </if>
+            <if test="availableOperations != null and availableOperations!=''" >
+                available_operations= #{availableOperations},
+            </if>
+        </set>
+        where
+        etl_resource_id = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteResource" parameterType="java.lang.Integer">
+        DELETE  FROM etl_resource WHERE etl_resource_id=#{id}
+    </delete>
+
+    <!--判断用户名是否重复-->
+    <select id="getResourceByNameOrId" parameterType="Resource" resultMap="resourceResultMap">
+        SELECT * FROM etl_resource
+        WHERE  name=#{name}
+        <if test="id!=null and id!=''">
+            AND etl_resource_id!=#{id}
+        </if>
+    </select>
+    <!--判断key是否重复-->
+    <select id="getResourceByKey" parameterType="Resource" resultType="int">
+        SELECT COUNT(1) FROM etl_resource
+        WHERE  key=#{name}
+        <if test="id!=null and id!=''">
+            AND etl_resource_id!=#{id}
+        </if>
+    </select>
+
+    <!--获取序列-->
+    <select id="getResourceSequence" resultType="java.lang.Integer">
+        select  etl_resource_seq.Nextval from dual
+    </select>
+
+</mapper>

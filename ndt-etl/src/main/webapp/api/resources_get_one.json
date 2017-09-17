@@ -1,0 +1,23 @@
+[
+  {
+    "key" : "user",
+    "name": "用户",
+    "available_operations": "c r u d"
+  },{
+  "key" : "role",
+  "name": "角色",
+  "available_operations": "c r u d"
+},{
+  "key" : "monitor.config",
+  "name": "监控配置",
+  "available_operations": "c r u d"
+},{
+  "key" : "monitor.dashboard",
+  "name": "监控控制面板",
+  "available_operations": "r"
+},{
+  "key" : "monitor.log",
+  "name": "监控日志",
+  "available_operations": "r"
+}
+]

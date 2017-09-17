@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.ndt.etl.dao.system.AdminDao">
+
+    <resultMap id="adminResultMap" type="Admin">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="created_at" property="created_at"/>
+        <result column="created_by" property="created_by"/>
+        <result column="updated_at" property="updated_at"/>
+        <result column="updated_by" property="updated_by"/>
+        <result column="is_active" property="is_active"/>
+        <result column="notdelete" property="notdelete"/>
+        <collection property="roles" resultMap="roleResultMap" />
+    </resultMap>
+    <resultMap id="roleResultMap" type="Role">
+        <id column="role_id" property="id"/>
+        <result column="role_name" property="name"/>
+        <result column="permissions" property="permissions"/>
+    </resultMap>
+    
+
+
+    <!-- 根据用户名、 密码查询用户 -->
+    <select id="getByName" parameterType="java.lang.String" resultMap="adminResultMap" >
+         <![CDATA[
+           SELECT  a.id,a.name,a.password,a.is_active,r.id role_id,r.name role_name,r.permissions from etl_admin a
+           LEFT JOIN  etl_roles r ON  r.id IN (
+            SELECT role_id FROM  etl_admin_role where admin_id=a.id
+           )
+           where a.name=#{_parameter} AND r.is_active=1
+         ]]>
+    </select>
+
+    <!-- 运维人员相关角色   -->
+    <select id="listRole" parameterType="java.math.BigDecimal" resultType="Role">
+       SELECT  id,name from etl_roles r WHERE  r.id IN (
+            SELECT id FROM  etl_admin_role where role_id=#{_parameter}
+           )
+    </select>
+
+    <select id="listResource" resultType="Resource">
+        SELECT  * FROM  etl_resource
+    </select>
+
+    <!--  *************运维人员管理   -->
+    <!--列表-->
+    <select id="listAdmin" parameterType="Admin" resultMap="adminResultMap">
+
+        SELECT u.id,u.name,u.email,u.phone,u.CREATED_AT,u.CREATED_BY
+        ,u.UPDATED_AT,u.UPDATED_BY,u.IS_ACTIVE
+        ,r.id role_id,r.name role_name,r.permissions
+        FROM etl_admin u
+        LEFT  JOIN  etl_roles r ON r.id IN (
+          SELECT role_id FROM etl_admin_role ar WHERE ar.admin_id=u.id
+        )
+        WHERE 1=1
+        <if test="name!=null and name !=''">
+            <![CDATA[ and u.name LIKE  CONCAT(CONCAT('%', #{name}),'%')]]>
+        </if>
+        <if test="phone!=null and phone !=''">
+            <![CDATA[ and u.phone LIKE CONCAT(CONCAT('%', #{phone}),'%')]]>
+        </if>
+        <if test="email!=null and email !=''">
+            <![CDATA[ and u.email LIKE  CONCAT(CONCAT('%', #{email}),'%')]]>
+        </if>
+        <if test="created_start !=null and created_start !='' ">
+            <![CDATA[ and u.created_at  >=  #{created_start}  ]]>
+        </if>
+        <if test="created_end !=null and created_end !='' ">
+            <![CDATA[ and u.created_at  <=  #{created_end}  ]]>
+        </if>
+        <if test="updated_start !=null and updated_start !='' ">
+            <![CDATA[ and u.updated_at  >=  #{updated_start}  ]]>
+        </if>
+        <if test="updated_end !=null and updated_end !='' ">
+            <![CDATA[ and u.updated_at  <=  #{updated_end}  ]]>
+        </if>
+        AND (u.notdelete!=1 or u.notdelete is null)
+        ORDER  BY u.id DESC
+    </select>
+
+    <!--详情-->
+    <select id="getAdmin" parameterType="java.math.BigDecimal" resultMap="adminResultMap">
+        SELECT a.id,a.name,a.email,a.password,a.phone,a.created_at,a.created_by
+        ,a.updated_at,a.updated_by,a.is_active,a.notdelete
+        ,r.id role_id,r.name role_name,r.permissions
+         FROM ETL_ADMIN a
+        LEFT  JOIN  ETL_ROLES r on r.id IN (
+         SELECT role_id FROM etl_admin_role ur WHERE ur.admin_id=a.id
+        )
+        WHERE  a.id=#{_parameter}
+    </select>
+
+    <!--更新-->
+    <update id="updateAdmin" parameterType="Admin">
+        update etl_admin
+        <set>
+            <if test="password != null and password!=''">
+                password=#{password},
+            </if>
+            <if test="name != null and name!=''">
+                name=#{name},
+            </if>
+            <if test="updated_at != null and updated_at!=''">
+                updated_at=#{updated_at},
+            </if>
+            <if test="email != null and email=''">
+                email=#{email},
+            </if>
+            <if test="updated_by != null and updated_by!=''">
+                updated_by= #{updated_by},
+            </if>
+            <if test="phone != null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="is_active != null">
+                is_active= #{is_active_num},
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <!--添加-->
+    <insert id="saveAdmin" parameterType="Admin">
+
+        insert into etl_admin
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null and name!=''" >
+                name,
+            </if>
+            <if test="password != null and password!=''" >
+                password,
+            </if>
+            <if test="phone != null and phone!=''" >
+                phone,
+            </if>
+            <if test="email != null and email!=''" >
+                email,
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                created_by,
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                created_at,
+            </if>
+            <if test="is_active != null" >
+                is_active,
+            </if>
+            <if test="id != null and id!=''" >
+                id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null and name!=''" >
+                #{name},
+            </if>
+            <if test="password != null and password!=''" >
+                #{password},
+            </if>
+            <if test="phone != null and phone!=''" >
+                #{phone},
+            </if>
+            <if test="email != null and email!=''" >
+                #{email},
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                #{created_by},
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                #{created_at},
+            </if>
+            <if test="is_active != null" >
+                #{is_active_num},
+            </if>
+            <if test="id != null and id!=''" >
+                #{id},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteAdmin" parameterType="java.math.BigDecimal">
+        DELETE   FROM etl_admin WHERE id=#{_parameter}
+    </delete>
+
+    <!--删除admin_role-->
+    <delete id="deleteAdminRoles" parameterType="java.math.BigDecimal">
+        DELETE   FROM etl_admin_role  WHERE  admin_id=#{_parameter}
+    </delete>
+
+
+    <!--获取序列-->
+    <select id="getAdminSequence" resultType="java.math.BigDecimal">
+        select  etl_admin_seq.Nextval from dual
+    </select>
+
+    <!--判断用户名是否重复-->
+    <select id="getAdminByNameOrId" parameterType="Admin" resultType="Admin">
+      SELECT * FROM etl_admin
+      WHERE  name=#{name}
+      <if test="id!=null and id!=''">
+          AND id!=#{id}
+      </if>
+    </select>
+
+    <!--添加所选角色-->
+    <insert id="saveAdminRoles" parameterType="Admin">
+        INSERT INTO etl_admin_role
+        (admin_id,ROLE_ID,CREATED_BY)
+        <foreach item="roleId" index="index" collection="roleIds" separator="union all">
+            (
+            SELECT
+            #{id},#{roleId},#{created_by}
+            FROM DUAL
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

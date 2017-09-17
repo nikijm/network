@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.access.SheetInfoDao">
+
+	<select id="getById" parameterType="int" resultMap="sheetResultMap">
+        <![CDATA[
+            select s.id,s.status,s.columns,
+            up.id upId,up.fileName ,up.path,up.source,up.status uStatus,
+            up.sheets_num ,up.upload_date ,up.sha1,up.type,
+            us.id usId,us.name usName 
+            from ETL_SHEETS s
+            
+            LEFT JOIN
+            ETL_UPLOADS up ON s.upload_id=up.id
+            LEFT JOIN
+            ETL_ADMIN us ON us.id=up.user_id
+            where s.id=#{id}
+        ]]>
+	</select>
+	<select id="getByUploadId" parameterType="int" resultType="SheetInfo">
+        <![CDATA[
+            select id,columns,status 
+            from ETL_SHEETS 
+            where upload_id=#{uploadId}
+        ]]>
+	</select>
+	<select id="listAll" resultType="SheetInfo">
+        <![CDATA[
+            select id,upload_id uploadId,status,columns 
+            from ETL_SHEETS 
+            order by id desc
+        ]]>
+	</select>
+	<select id="listByPage" resultMap="sheetResultMap"
+		parameterType="Page">
+		select s.id,s.status,s.columns,
+		up.id upId,up.fileName ,up.path,up.source,up.status uStatus,
+		up.sheets_num ,up.upload_date ,up.sha1,up.type,
+		us.id usId,us.name usName
+		from ETL_SHEETS s
+
+		LEFT JOIN
+		ETL_UPLOADS up ON s.upload_id=up.id
+		LEFT JOIN
+        ETL_ADMIN us ON us.id=up.user_id
+		<include refid="whereSql" />
+		order by s.id desc
+	</select>
+	<resultMap type="SheetInfo" id="sheetResultMap">
+		<id property="id" column="id" />
+		<result property="status" column="status" />
+		<result property="columns" column="columns" />
+
+		<!-- 多对一 -->
+		<association property="upload" column="upload_id"
+			javaType="UploadInfo">
+			<id property="id" column="upId" />
+			<result property="fileName" column="fileName" />
+			<result property="path" column="path" />
+			<result property="source" column="source" />
+			<result property="status" column="uStatus" />
+			<result property="sheetsNum" column="sheets_num" />
+			<result property="uploadDate" column="upload_date" />
+			<result property="sha1" column="sha1" />
+				<association property="user" column="user_id" javaType="Admin">
+				    <id property="id" column="usId" />
+	                <result property="name" column="usName" />
+				</association>
+		</association>
+
+	</resultMap>
+	<sql id="whereSql">
+		<where>
+			<if test="param!=null and param.keyword!=null and param.keyword!=''">
+				and lower(up.fileName) like '%'||#{param.keyword}||'%'
+			</if>
+			<if test="param!=null and param.status!=null">
+				and s.status =#{param.status}
+			</if>
+			<if test="param!=null and param.status1!=null">
+				and (s.status =#{param.status1} or s.status =#{param.status2})
+			</if>
+			<!-- <if test="beginDate!=null and beginDate!=''"> -->
+			<!-- and o.signTime >= #{beginDate} -->
+			<!-- </if> -->
+			<if test="param!=null and param.id!=null">
+				and s.id =#{param.id}
+			</if>
+			<if test="param!=null and param.upload_id!=null">
+				and up.id =#{param.upload_id}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="SheetInfo" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ID">
+        <![CDATA[
+            insert into ETL_SHEETS 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="upload!=null and upload.id != null">
+				upload_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="columns != null">
+				columns,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="upload!=null and upload.id != null">
+				#{upload.id},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="columns != null">
+				#{columns},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_SHEETS where id=#{id}
+        ]]>
+	</delete>
+	<delete id="deleteByUploadId" parameterType="int">
+        <![CDATA[
+            delete from ETL_SHEETS where upload_id=#{uploadId}
+        ]]>
+	</delete>
+
+	<update id="update" parameterType="SheetInfo">
+        <![CDATA[
+            update ETL_SHEETS 
+        ]]>
+		<set>
+			<if test="status!=null">status=#{status},</if>
+			<if test="upload!=null and upload.id!=null">upload_id=#{upload.id}</if>
+			<if test="columns!=null">columns=#{columns}</if>
+		</set>
+
+		<where>
+			id=#{id}
+		</where>
+	</update>
+
+</mapper>

@@ -1,0 +1,196 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video{
+    margin:0;
+    padding:0;
+    font-size:100%;
+    font-family: 'SF UI Display Light','SF UI Text Light', 'PingFang SC','Lantinghei SC','Helvetica Neue',Helvetica,Arial,Microsoft YaHei,STHeitiSC-Light,simsun,'WenQuanYi Zen Hei','WenQuanYi Micro Hei',"sans-serif";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+body, div,p, pre, span, th, td, h1,h2,h3,h4,h5{
+    color: #4c4c4c;
+}
+.skin-black-light .main-header .navbar, .skin-black-light .main-header>.logo{
+    background-color: #F9F9F9!important;
+    border-bottom:1px solid #ddd!important;
+    font-family: inherit;
+    font-weight: 300;
+}
+.skin-black-light .wrapper, .skin-black-light .main-sidebar, .skin-black-light .left-side{
+    background-color: #fff!important;
+}
+.navbar:before, .navbar-static-top::before{
+    display: inline!important;
+    content:none!important;
+}
+.navbar:after, .navbar-static-top::after{
+    clear:none!important;
+}
+.main{
+    position: relative;
+    min-height: 300px;
+}
+.box.box-info{
+    border-top-color:#eee;
+}
+.box-body{
+    padding:10px 20px;
+}
+.box-header{
+    background-color: #fff;
+}
+.box-title{
+    color:#666;
+    margin-bottom: 10px;
+}
+label, .badge{
+    font-weight: normal!important;
+}
+.sidebar-menu .treeview-menu > li > a{
+    font-size:12px;
+}
+.treeview.active{
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    background-color: #F9F9F9;
+}
+.skin-black-light .sidebar-menu > li >a{
+    color: #666;
+    font-weight: normal!important;
+}
+.skin-black-light .sidebar-menu>li:hover>a, .skin-black-light .sidebar-menu>li.active>a{
+    color: #333;
+}
+.sidebar-menu a.current{
+    background-color: #40A7FF;
+    color:#fff!important;
+    padding-left:20px!important;
+    margin-left:-5px;
+}
+.sidebar-menu a.current i{
+    color: #fff;
+}
+.content-wrapper, .right-side{
+    background:#fff;
+}
+.content{
+    padding:0;
+    background-color:#fff;
+}
+.content-header{
+    padding:0 15px 10px 15px;
+}
+.content-header > .breadcrumb{
+    float:none;
+    position: relative;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    padding:5px;
+    font-size:12px;
+}
+.table>thead>tr>th{
+    border-bottom:1px solid #DDD!important;
+}
+.btn-main{
+    width:100px;
+}
+.btn{
+    border-radius: 2px!important;
+    font-weight: normal!important;
+}
+.btn-primary{
+    background-color: #40A7FF!important;
+    border-color:#4091FF!important;
+}
+.btn-primary:hover{
+    background-color: #4091FF!important;
+}
+.pwdSpan{
+    color:#666;
+}
+.el-pager li.active {
+    border-color: #40A7FF!important;
+    background-color: #40A7FF!important;
+}
+.highcharts-title{
+    font-size:16px!important;
+    font-family: 'SF UI Display Light','SF UI Text Light', 'PingFang SC','Lantinghei SC','Helvetica Neue',Helvetica,Arial,Microsoft YaHei,STHeitiSC-Light,simsun,'WenQuanYi Zen Hei','WenQuanYi Micro Hei',"sans-serif";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.main .overlay{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    bottom:0;
+    -background-color: rgba(100, 100, 100, 0.5);
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+.main .overlay .fa-spin{
+    font-size: 50px;
+    color: #000;
+}
+.table-dashed-border>tbody>tr>td{
+    border-top: 1px dashed #eee!important;
+}
+.table .border-bottom td{
+    border-bottom:1px solid #ddd!important;
+}
+.table-nowrap{
+    table-layout: fixed;
+}
+.table-nowrap>thead>tr>th, .table-nowrap>tbody>tr>td{
+    word-break: keep-all;
+    white-space:nowrap;
+}
+.header-tip{
+    padding:10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.multisection{
+    background-color: #EEE;
+}
+.multisection .box-body{
+    padding:0;
+}
+.multisection section{
+    background:#fff;
+    margin-bottom: 20px;
+    padding:15px 20px;
+    border-bottom:1px solid #ddd;
+  }
+.multisection section:not(:first-child){
+    border-top:1px solid #ddd;
+}
+.multisection section:last-child{
+    margin-bottom: 0;
+}
+.multisection section .box-title{
+    padding:10px;
+    margin:-15px -20px 0 -20px;
+    background: #f9f9f9;
+    margin-bottom: 20px;
+    border-bottom:1px solid #eee;
+}
+.el-select-dropdown__item.selected > span{
+    color:#fff!important;
+}

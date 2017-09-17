@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.jk.ndt.etl.dao.presystem.BusinessSyncDao">
+	<resultMap type="com.jk.ndt.etl.entity.presystem.BusinessSync"
+		id="businessSync">
+		<result column="AD_CLIENT_ID" property="adClientId" />
+		<result column="AD_ORG_ID" property="adOrgId" />
+		<result column="M_BUSINESSSYNC_ID" property="businesssyncId" />
+		<result column="ORGCODE" property="orgCode" />
+		<result column="ORGNAME" property="orgName" />
+		<result column="BUSINESSCODE" property="businessCode" />
+		<result column="BUSINESSNAME" property="businessName" />
+		<result column="WORKFLOWID" property="workflowId" />
+		<result column="WORKFLOWNAME" property="workflowName" />
+		<result column="AD_TABLE_ID" property="adTableId" />
+		<result column="SERVICEURL" property="serviceUrl" />
+		<result column="CREATED" property="created" />
+		<result column="CREATEDBY" property="createdBy" />
+		<result column="UPDATED" property="updated" />
+		<result column="UPDATEDBY" property="updatedBy" />
+		<result column="ISACTIVE" property="isActive" />
+	</resultMap>
+	
+	<select id="getBusinessSyncById"  resultType="map" resultMap="businessSync">
+        SELECT * FROM M_BusinessSync
+        where M_BUSINESSSYNC_ID = #{businesssyncId}
+    </select>
+    
+    <select id="getBusinessSyncByBusinessCode"  resultType="map" resultMap="businessSync">
+        SELECT * FROM M_BusinessSync
+        where BUSINESSCODE = #{businessCode}
+    </select>
+    
+    <select id="getBusinessSyncList"  resultType="map" resultMap="businessSync">
+        SELECT * FROM M_BusinessSync
+    </select>
+</mapper>  

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.ndt.etl.dao.system.RoleDao">
+
+    <resultMap id="roleResultMap" type="Role">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="is_active" property="is_active"/>
+        <result column="description" property="description"/>
+        <result column="permissions" property="permissions"/>
+        <result column="updated_at" property="updated_at"/>
+        <result column="UPDATED_BY" property="updated_by"/>
+        <result column="created_at" property="created"/>
+        <result column="created_by" property="createdby"/>
+
+    </resultMap>
+
+    <!--  *********************角色管理-->
+
+    <!--列表 -->
+    <select id="listRole" parameterType="Role" resultType="Role">
+
+        SELECT u.id,u.name,u.is_active,u.description,u.permissions,u.CREATED_BY
+        ,u.UPDATED_AT,u.UPDATED_BY
+        ,a_c.name as created_user,a_u.name as updated_user
+        FROM etl_roles u
+        LEFT JOIN etl_admin a_c ON u.created_by=a_c.id
+         LEFT JOIN etl_admin a_u ON u.updated_by=a_u.id
+        WHERE 1=1
+        <if test="name!=null and name !=''">
+            <![CDATA[ and u.name LIKE  CONCAT(CONCAT('%', #{name}),'%')]]>
+        </if>
+        <if test="description!=null and description !=''">
+            <![CDATA[ and u.description LIKE  CONCAT(CONCAT('%', #{description}),'%')]]>
+        </if>
+        <if test="created_start !=null and created_start !='' ">
+            <![CDATA[ and u.created_at  >=  #{created_start}  ]]>
+        </if>
+        <if test="created_end !=null and created_end !='' ">
+            <![CDATA[ and u.created_at  <=  #{created_end}  ]]>
+        </if>
+        <if test="updated_start !=null and updated_start !='' ">
+            <![CDATA[ and u.updated_at  >=  #{updated_start}  ]]>
+        </if>
+        <if test="updated_end !=null and updated_end !='' ">
+            <![CDATA[ and u.updated_at  <=  #{updated_end}  ]]>
+        </if>
+        <if test="is_active!=null and is_active !=''">
+            <![CDATA[ and u.is_active=#{is_active} ]]>
+        </if>
+        AND (u.notdelete!=1 or u.notdelete is null)
+        ORDER  BY u.id DESC
+    </select>
+
+    <!--详情-->
+    <select id="getRole" parameterType="java.math.BigDecimal" resultType="Role">
+        SELECT  * FROM etl_roles r
+        WHERE id=#{id}
+    </select>
+
+    <!--添加-->
+    <insert id="saveRole" parameterType="Role" >
+        insert into etl_roles
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="description != null and description!=''" >
+                description,
+            </if>
+            <if test="permissions != null and permissions!=''" >
+                permissions,
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                created_by,
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                created_at,
+            </if>
+            <if test="is_active != null" >
+                is_active,
+            </if>
+            <if test="id != null and id!=''" >
+                id,
+            </if>
+            <if test="name != null and name!=''" >
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="description != null and description!=''" >
+                #{description},
+            </if>
+            <if test="permissions != null and permissions!=''" >
+                #{permissions},
+            </if>
+            <if test="created_by != null and created_by!=''" >
+                #{created_by},
+            </if>
+            <if test="created_at != null and created_at!=''" >
+                #{created_at},
+            </if>
+            <if test="is_active != null" >
+                #{is_active_num},
+            </if>
+            <if test="id != null and id!=''" >
+                #{id},
+            </if>
+            <if test="name != null and name!=''" >
+                #{name},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新-->
+    <update id="updateRole" parameterType="Role">
+        update etl_roles
+        <set>
+            <if test="name != null and name!=''">
+                name=#{name},
+            </if>
+            <if test="description != null and description!=''">
+                description=#{description},
+            </if>
+            <if test="permissions != null and permissions!=''">
+                permissions=#{permissions},
+            </if>
+            <if test="is_active != null">
+                is_active=#{is_active_num},
+            </if>
+            <if test="updated_at != null and updated_at!=''">
+                updated_at=#{updated_at},
+            </if>
+            <if test="updated_by != null and updated_by!=''">
+                updated_by= #{updated_by},
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteRole" parameterType="java.math.BigDecimal">
+        DELETE  FROM etl_roles WHERE id=#{id}
+    </delete>
+
+
+    <!--判断用户名是否重复-->
+    <select id="getRoleByNameOrId" parameterType="Role" resultType="Role">
+        SELECT * FROM etl_roles
+        WHERE  name=#{name}
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
+    </select>
+
+    <!--获取序列-->
+    <select id="getRoleSequence" resultType="java.math.BigDecimal">
+        select  etl_roles_seq.Nextval from dual
+    </select>
+
+    <!--判断角色是否在使用中-->
+    <select id="getAdminRolesCount" parameterType="java.math.BigDecimal" resultType="int">
+        SELECT COUNT (1) FROM etl_admin_role WHERE role_id =#{_parameter}
+    </select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndt.etl.dao.mirror.MirrorTableDao">
+
+	<select id="getById" parameterType="int" resultType="MirrorTable">
+        SELECT
+		    ID,
+		    NAME
+		FROM
+		    ETL_MIRROR_TABLE
+		WHERE
+		    ID = #{id}
+	</select>
+	<select id="listAll" resultMap="MirrorTableResultMap">
+        SELECT
+		    t."ID",
+		    t."NAME",
+		    c."NAME" columnName,
+		    c."ID" columnId
+		FROM
+		    ETL_MIRROR_TABLE t
+		LEFT JOIN ETL_MIRROR_COLUMN C ON c.TABLE_ID = t."ID"
+	</select>
+	<select id="listByPage" resultMap="MirrorTableResultMap" parameterType="Page">
+        SELECT
+		    t."ID",
+		    t."NAME",
+		    c."NAME" columnName,
+		    c."ID" columnId
+		FROM
+		    ETL_MIRROR_TABLE t
+		LEFT JOIN ETL_MIRROR_COLUMN C ON c.TABLE_ID = t."ID"
+	</select>
+	<resultMap type="MirrorTable" id="MirrorTableResultMap">
+         <id property="id" column="ID" />
+         <result property="name" column="NAME" />
+         <!-- 一对多 -->
+         <collection property="columns" ofType="com.jk.ndt.etl.entity.mirror.MirrorColumn" javaType="list">
+            <result column="columnName" property="name"/>
+            <result column="columnId" property="id"/>
+         </collection>
+    </resultMap>
+
+	<insert id="save" parameterType="MirrorTable" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ID" >
+        INSERT INTO ETL_MIRROR_TABLE 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name},
+            </if>
+        </trim>
+	</insert>
+
+	<delete id="deleteById" parameterType="int">
+        DELETE
+		FROM
+		    ETL_MIRROR_TABLE
+		WHERE
+		    ID = #{id}
+	</delete>
+	
+	<update id="update" parameterType="MirrorTable">
+        UPDATE ETL_MIRROR_TABLE
+        <set>
+            <if test="name!=null">
+                Name = #{name},
+             </if>
+        </set>
+        ID = #{id}
+    </update>
+
+</mapper>

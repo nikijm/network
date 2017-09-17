@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="3" failures="0" name="com.jk.ndt.etl.service.logs.SheetLogServiceTest" time="0.027" errors="3" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="E:\Program Files\Java\jdk1.8.0_131\jre\bin"/>
+    <property name="java.vm.version" value="25.131-b11"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="F:\working\code\ndt-etl"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="Service Pack 1"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="F:\working\code\ndt-etl"/>
+    <property name="java.runtime.version" value="1.8.0_131-b11"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="E:\Program Files\Java\jdk1.8.0_131\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\hasee\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 7"/>
+    <property name="classworlds.conf" value="E:\workthings\developtools\workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf5952116365179954811.tmp"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.library.path" value="E:\Program Files\Java\jdk1.8.0_131\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;E:/Program Files/Java/jre1.8.0_131/bin/server;E:/Program Files/Java/jre1.8.0_131/bin;E:/Program Files/Java/jre1.8.0_131/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;E:\Program Files\Java\jdk1.8.0_131\bin;E:\Program Files\Java\jdk1.8.0_131\jre\bin;F:\apache-tomcat-8.0.44\lib;F:\apache-tomcat-8.0.44\bin;E:\Program Files\TortoiseSVN\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;F:\eclipse;;."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="6.1"/>
+    <property name="user.home" value="C:\Users\hasee"/>
+    <property name="user.timezone" value="Asia/Shanghai"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="user.name" value="hasee"/>
+    <property name="java.class.path" value="/F:/eclipse/plugins/org.eclipse.m2e.maven.runtime_1.6.2.20150902-0001/jars/plexus-classworlds-2.5.2.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="E:\Program Files\Java\jdk1.8.0_131\jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -B install"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="zh"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_131"/>
+    <property name="java.ext.dirs" value="E:\Program Files\Java\jdk1.8.0_131\jre\lib\ext;C:\Windows\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="E:\Program Files\Java\jdk1.8.0_131\jre\lib\resources.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\rt.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\sunrsasign.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\jsse.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\jce.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\charsets.jar;E:\Program Files\Java\jdk1.8.0_131\jre\lib\jfr.jar;E:\Program Files\Java\jdk1.8.0_131\jre\classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="F:\working\code\ndt-etl\EMBEDDED"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase classname="com.jk.ndt.etl.service.logs.SheetLogServiceTest" name="testSave" time="0.013">
+    <error message="
+### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### SQL: insert into ETL_SHEET_LOG              ( sheet_id,             user_id,             operation,             op_date,                     target )     values ( ?,                                           ?,                      ?,             ?,                     ? )
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+" type="org.springframework.jdbc.BadSqlGrammarException">org.springframework.jdbc.BadSqlGrammarException: 
+### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### SQL: insert into ETL_SHEET_LOG              ( sheet_id,             user_id,             operation,             op_date,                     target )     values ( ?,                                           ?,                      ?,             ?,                     ? )
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:231)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+	at com.sun.proxy.$Proxy25.insert(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:240)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:51)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:52)
+	at com.sun.proxy.$Proxy36.save(Unknown Source)
+	at com.jk.ndt.etl.service.BaseServiceImpl.save(BaseServiceImpl.java:14)
+	at com.jk.ndt.etl.service.logs.SheetLogServiceTest.testSave(SheetLogServiceTest.java:34)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:72)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:81)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:72)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:216)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:82)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:60)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:67)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:162)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:392)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:385)
+	at oracle.jdbc.driver.T4CTTIfun.processError(T4CTTIfun.java:1018)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:522)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:257)
+	at oracle.jdbc.driver.T4C8Odscrarr.doODNY(T4C8Odscrarr.java:96)
+	at oracle.jdbc.driver.T4CConnection.doDescribeTable(T4CConnection.java:4906)
+	at oracle.jdbc.driver.PhysicalConnection.prepareStatement(PhysicalConnection.java:5702)
+	at com.alibaba.druid.pool.DruidPooledConnection.prepareStatement(DruidPooledConnection.java:482)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.logging.jdbc.ConnectionLogger.invoke(ConnectionLogger.java:54)
+	at com.sun.proxy.$Proxy50.prepareStatement(Unknown Source)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.instantiateStatement(PreparedStatementHandler.java:70)
+	at org.apache.ibatis.executor.statement.BaseStatementHandler.prepare(BaseStatementHandler.java:85)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.prepare(RoutingStatementHandler.java:57)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:73)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:47)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:105)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:71)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:62)
+	at com.sun.proxy.$Proxy49.update(Unknown Source)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:152)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:141)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:358)
+	... 42 more
+</error>
+    <system-out>DEBUG (org.springframework.test.context.support.DirtiesContextTestExecutionListener:117) - After test class: context [DefaultTestContext@138aa3cc testClass = CommonServiceTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@30839e44 testClass = CommonServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]], dirtiesContext [false].
+DEBUG (org.springframework.test.context.junit4.SpringJUnit4ClassRunner:112) - SpringJUnit4ClassRunner constructor called with [class com.jk.ndt.etl.service.logs.SheetLogServiceTest].
+DEBUG (org.springframework.test.context.BootstrapUtils:77) - Instantiating TestContextBootstrapper from class [org.springframework.test.context.support.DefaultTestContextBootstrapper]
+DEBUG (org.springframework.test.context.support.AbstractDelegatingSmartContextLoader:96) - Delegating to GenericXmlContextLoader to process context configuration [ContextConfigurationAttributes@27329d2a declaringClass = &apos;com.jk.ndt.etl.SpringTest&apos;, classes = &apos;{}&apos;, locations = &apos;{classpath*:spring*.xml}&apos;, inheritLocations = true, initializers = &apos;{}&apos;, inheritInitializers = true, name = [null], contextLoaderClass = &apos;org.springframework.test.context.ContextLoader&apos;].
+DEBUG (org.springframework.test.context.support.ActiveProfilesUtils:82) - Could not find an &apos;annotation declaring class&apos; for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.context.support.DefaultTestContextBootstrapper:112) - @TestExecutionListeners is not present for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]: using defaults.
+ INFO (org.springframework.test.context.support.DefaultTestContextBootstrapper:255) - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+ INFO (org.springframework.test.context.support.DefaultTestContextBootstrapper:181) - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@36baa049, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@41184371, org.springframework.test.context.support.DirtiesContextTestExecutionListener@34585ac9, org.springframework.test.context.transaction.TransactionalTestExecutionListener@76a805b7, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@15f35bc3]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:70) - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:82) - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:70) - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:82) - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:70) - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:82) - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.context.support.DependencyInjectionTestExecutionListener:80) - Performing dependency injection for test context [[DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@608b1fd2, testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]]].
+DEBUG (org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate:96) - Retrieved ApplicationContext from cache with key [[MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]].
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor:461) - Autowiring by type from bean name &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos; to bean named &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor:461) - Autowiring by type from bean name &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos; to bean named &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor#0&apos;
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;org.springframework.cache.config.internalCacheAdvisor&apos;
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor#0&apos;
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;org.springframework.cache.config.internalCacheAdvisor&apos;
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@591a4f8e] was not registered for synchronization because synchronization is not active
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:110) - Fetching JDBC Connection from DataSource
+JDBC Connection [oracle.jdbc.driver.T4CConnection@412c995d] will not be managed by Spring
+==&gt;  Preparing: insert into ETL_SHEET_LOG ( sheet_id, user_id, operation, op_date, target ) values ( ?, ?, ?, ?, ? ) 
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@591a4f8e]
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:327) - Returning JDBC Connection to DataSource
+DEBUG (org.springframework.jdbc.support.SQLErrorCodesFactory:199) - Looking up default SQLErrorCodes for DataSource [{
+	CreateTime:&quot;2017-06-07 11:10:27&quot;,
+	ActiveCount:0,
+	PoolingCount:3,
+	CreateCount:3,
+	DestroyCount:0,
+	CloseCount:9,
+	ConnectCount:9,
+	Connections:[
+		{ID:1816468636, ConnectTime:&quot;2017-06-07 11:10:28&quot;, UseCount:0, LastActiveTime:&quot;2017-06-07 11:10:28&quot;},
+		{ID:817490653, ConnectTime:&quot;2017-06-07 11:10:28&quot;, UseCount:0, LastActiveTime:&quot;2017-06-07 11:10:28&quot;},
+		{ID:1093441885, ConnectTime:&quot;2017-06-07 11:10:28&quot;, UseCount:9, LastActiveTime:&quot;2017-06-07 11:10:32&quot;&quot;, CachedStatementCount:3}
+	]
+}
+
+[
+	{
+	ID:1816468636, 
+	poolStatements:[
+		]
+	},
+	{
+	ID:817490653, 
+	poolStatements:[
+		]
+	},
+	{
+	ID:1093441885, 
+	poolStatements:[
+		{hitCount:0,sql:&quot;CREATE TABLE &quot;DEMO4&quot;(
+			&quot;ID&quot; NUMBER(20,0) NOT NULL ENABLE, 
+		 
+		
+		  
+			&quot;name&quot; VARCHAR2(1000
+			BYTE) NULL,
+		  
+			&quot;age&quot; VARCHAR2(1000
+			BYTE) NULL,
+		 
+		
+         
+ 	        PRIMARY KEY (&quot;ID&quot;))  
+ 	        LOGGING NOCOMPRESS NOCACHE&quot;	},
+		{hitCount:0,sql:&quot;CREATE SEQUENCE  &quot;DEMO4_SEQ&quot;  
+ 	        MINVALUE 1 
+ 	        MAXVALUE 9999999999999999999999999999 
+ 	        INCREMENT BY 1 
+ 	        START WITH 1 
+ 	        CACHE 20 
+ 	        ORDER  
+ 	        NOCYCLE&quot;	},
+		{hitCount:0,sql:&quot;begin
+          
+        insert into &quot;DEMO4&quot;
+	         (  
+	            &quot;name&quot;
+	         , 
+	            &quot;age&quot;
+	         ) values 
+	        
+             (  
+                &apos;&apos;
+             , 
+                &apos;&apos;
+             ) 
+         ; 
+        insert into &quot;DEMO4&quot;
+	         (  
+	            &quot;name&quot;
+	         , 
+	            &quot;age&quot;
+	         ) values 
+	        
+             (  
+                &apos;dada&apos;
+             , 
+                &apos;13&apos;
+             ) 
+         
+            ;end;&quot;	}
+		]
+	}
+]]
+DEBUG (org.springframework.jdbc.support.SQLErrorCodesFactory:207) - SQLErrorCodes found in cache for DataSource [com.alibaba.druid.pool.DruidDataSource@3249a1ce]
+DEBUG (org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator:397) - Translating SQLException with SQL state &apos;42000&apos;, error code &apos;942&apos;, message [ORA-00942: �����ͼ������
+]; SQL was [] for task [
+### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### SQL: insert into ETL_SHEET_LOG              ( sheet_id,             user_id,             operation,             op_date,                     target )     values ( ?,                                           ?,                      ?,             ?,                     ? )
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+]
+DEBUG (org.springframework.test.context.support.DirtiesContextTestExecutionListener:85) - After test method: context [DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@608b1fd2, testMethod = testSave@SheetLogServiceTest, testException = org.springframework.jdbc.BadSqlGrammarException: 
+### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### SQL: insert into ETL_SHEET_LOG              ( sheet_id,             user_id,             operation,             op_date,                     target )     values ( ?,                                           ?,                      ?,             ?,                     ? )
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+, mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]], class dirties context [false], class mode [null], method dirties context [false].
+</system-out>
+  </testcase>
+  <testcase classname="com.jk.ndt.etl.service.logs.SheetLogServiceTest" name="testListByPage" time="0.008">
+    <error message="
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve com.jk.ndt.etl.dao.logs.SheetLogDao.listByPage-Inline
+### The error occurred while setting parameters
+### SQL: select count(0) from (select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target,         s.id sId,s.status,         us.id usId,us.name         from ETL_SHEET_LOG sl    LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id   LEFT JOIN ETL_USER us ON us.id=sl.user_id              WHERE  s.id =?       order by sl.id desc) tmp_count
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+" type="org.springframework.jdbc.BadSqlGrammarException">org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve com.jk.ndt.etl.dao.logs.SheetLogDao.listByPage-Inline
+### The error occurred while setting parameters
+### SQL: select count(0) from (select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target,         s.id sId,s.status,         us.id usId,us.name         from ETL_SHEET_LOG sl    LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id   LEFT JOIN ETL_USER us ON us.id=sl.user_id              WHERE  s.id =?       order by sl.id desc) tmp_count
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:231)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+	at com.sun.proxy.$Proxy25.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:119)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:63)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:52)
+	at com.sun.proxy.$Proxy36.listByPage(Unknown Source)
+	at com.jk.ndt.etl.service.BaseServiceImpl.listByPage(BaseServiceImpl.java:41)
+	at com.jk.ndt.etl.service.logs.SheetLogServiceTest.testListByPage(SheetLogServiceTest.java:48)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:72)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:81)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:72)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:216)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:82)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:60)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:67)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:162)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:399)
+	at oracle.jdbc.driver.T4C8Oall.processError(T4C8Oall.java:1059)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:522)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:257)
+	at oracle.jdbc.driver.T4C8Oall.doOALL(T4C8Oall.java:587)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:225)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:53)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForDescribe(T4CPreparedStatement.java:774)
+	at oracle.jdbc.driver.OracleStatement.executeMaybeDescribe(OracleStatement.java:925)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1111)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:4798)
+	at oracle.jdbc.driver.OraclePreparedStatement.execute(OraclePreparedStatement.java:4901)
+	at oracle.jdbc.driver.OraclePreparedStatementWrapper.execute(OraclePreparedStatementWrapper.java:1385)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:62)
+	at com.sun.proxy.$Proxy51.execute(Unknown Source)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:59)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:73)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:60)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:267)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:137)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:96)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:77)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.plugin.Invocation.proceed(Invocation.java:49)
+	at com.github.pagehelper.PageHelper.intercept(PageHelper.java:169)
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:60)
+	at com.sun.proxy.$Proxy49.query(Unknown Source)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:108)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:102)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:358)
+	... 43 more
+</error>
+    <system-out>DEBUG (org.springframework.test.annotation.ProfileValueUtils:70) - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:82) - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.context.support.DependencyInjectionTestExecutionListener:80) - Performing dependency injection for test context [[DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@7c51782d, testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]]].
+DEBUG (org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate:96) - Retrieved ApplicationContext from cache with key [[MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]].
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77bc2e16] was not registered for synchronization because synchronization is not active
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:110) - Fetching JDBC Connection from DataSource
+JDBC Connection [oracle.jdbc.driver.T4CConnection@412c995d] will not be managed by Spring
+==&gt;  Preparing: select count(0) from (select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target, s.id sId,s.status, us.id usId,us.name from ETL_SHEET_LOG sl LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id LEFT JOIN ETL_USER us ON us.id=sl.user_id WHERE s.id =? order by sl.id desc) tmp_count 
+==&gt; Parameters: 86(Integer)
+DEBUG (com.alibaba.druid.pool.PreparedStatementPool:160) - stmt exit cache
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77bc2e16]
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:327) - Returning JDBC Connection to DataSource
+DEBUG (org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator:397) - Translating SQLException with SQL state &apos;42000&apos;, error code &apos;942&apos;, message [ORA-00942: �����ͼ������
+]; SQL was [] for task [
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve com.jk.ndt.etl.dao.logs.SheetLogDao.listByPage-Inline
+### The error occurred while setting parameters
+### SQL: select count(0) from (select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target,         s.id sId,s.status,         us.id usId,us.name         from ETL_SHEET_LOG sl    LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id   LEFT JOIN ETL_USER us ON us.id=sl.user_id              WHERE  s.id =?       order by sl.id desc) tmp_count
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+]
+DEBUG (org.springframework.test.context.support.DirtiesContextTestExecutionListener:85) - After test method: context [DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@7c51782d, testMethod = testListByPage@SheetLogServiceTest, testException = org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve com.jk.ndt.etl.dao.logs.SheetLogDao.listByPage-Inline
+### The error occurred while setting parameters
+### SQL: select count(0) from (select sl.id,sl.operation,sl.op_date,sl.request,sl.source,sl.target,         s.id sId,s.status,         us.id usId,us.name         from ETL_SHEET_LOG sl    LEFT JOIN ETL_SHEETS s ON s.id=sl.sheet_id   LEFT JOIN ETL_USER us ON us.id=sl.user_id              WHERE  s.id =?       order by sl.id desc) tmp_count
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+, mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]], class dirties context [false], class mode [null], method dirties context [false].
+</system-out>
+  </testcase>
+  <testcase classname="com.jk.ndt.etl.service.logs.SheetLogServiceTest" name="testListAll" time="0.006">
+    <error message="
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target             from ETL_SHEET_LOG sl             order by sl.id desc
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+" type="org.springframework.jdbc.BadSqlGrammarException">org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target             from ETL_SHEET_LOG sl             order by sl.id desc
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:231)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+	at com.sun.proxy.$Proxy25.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:119)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:63)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:52)
+	at com.sun.proxy.$Proxy36.listAll(Unknown Source)
+	at com.jk.ndt.etl.service.BaseServiceImpl.listAll(BaseServiceImpl.java:35)
+	at com.jk.ndt.etl.service.logs.SheetLogServiceTest.testListAll(SheetLogServiceTest.java:39)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:72)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:81)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:72)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:216)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:82)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:60)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:67)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:162)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:399)
+	at oracle.jdbc.driver.T4C8Oall.processError(T4C8Oall.java:1059)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:522)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:257)
+	at oracle.jdbc.driver.T4C8Oall.doOALL(T4C8Oall.java:587)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:225)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:53)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForDescribe(T4CPreparedStatement.java:774)
+	at oracle.jdbc.driver.OracleStatement.executeMaybeDescribe(OracleStatement.java:925)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1111)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:4798)
+	at oracle.jdbc.driver.OraclePreparedStatement.execute(OraclePreparedStatement.java:4901)
+	at oracle.jdbc.driver.OraclePreparedStatementWrapper.execute(OraclePreparedStatementWrapper.java:1385)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:62)
+	at com.sun.proxy.$Proxy51.execute(Unknown Source)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:59)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:73)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:60)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:267)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:137)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:96)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:77)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.ibatis.plugin.Invocation.proceed(Invocation.java:49)
+	at com.github.pagehelper.PageHelper.intercept(PageHelper.java:135)
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:60)
+	at com.sun.proxy.$Proxy49.query(Unknown Source)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:108)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:102)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:358)
+	... 43 more
+</error>
+    <system-out>DEBUG (org.springframework.test.annotation.ProfileValueUtils:70) - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.annotation.ProfileValueUtils:82) - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.jk.ndt.etl.service.logs.SheetLogServiceTest]
+DEBUG (org.springframework.test.context.support.DependencyInjectionTestExecutionListener:80) - Performing dependency injection for test context [[DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@57c00115, testMethod = [null], testException = [null], mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]]].
+DEBUG (org.springframework.test.context.DefaultCacheAwareContextLoaderDelegate:96) - Retrieved ApplicationContext from cache with key [[MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]].
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+DEBUG (org.springframework.beans.factory.annotation.InjectionMetadata:85) - Processing injected method of bean &apos;com.jk.ndt.etl.service.logs.SheetLogServiceTest&apos;: AutowiredFieldElement for private com.jk.ndt.etl.service.logs.SheetLogService com.jk.ndt.etl.service.logs.SheetLogServiceTest.sheetLogService
+DEBUG (org.springframework.beans.factory.support.DefaultListableBeanFactory:247) - Returning cached instance of singleton bean &apos;sheetLogService&apos;
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@411a5965] was not registered for synchronization because synchronization is not active
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:110) - Fetching JDBC Connection from DataSource
+JDBC Connection [oracle.jdbc.driver.T4CConnection@412c995d] will not be managed by Spring
+==&gt;  Preparing: select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target from ETL_SHEET_LOG sl order by sl.id desc 
+==&gt; Parameters: 
+DEBUG (com.alibaba.druid.pool.PreparedStatementPool:160) - stmt exit cache
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@411a5965]
+DEBUG (org.springframework.jdbc.datasource.DataSourceUtils:327) - Returning JDBC Connection to DataSource
+DEBUG (org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator:397) - Translating SQLException with SQL state &apos;42000&apos;, error code &apos;942&apos;, message [ORA-00942: �����ͼ������
+]; SQL was [] for task [
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target             from ETL_SHEET_LOG sl             order by sl.id desc
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+]
+DEBUG (org.springframework.test.context.support.DirtiesContextTestExecutionListener:85) - After test method: context [DefaultTestContext@167381c7 testClass = SheetLogServiceTest, testInstance = com.jk.ndt.etl.service.logs.SheetLogServiceTest@57c00115, testMethod = testListAll@SheetLogServiceTest, testException = org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+### The error may exist in com/jk/ndt/etl/dao/logs/SheetLogDao.xml
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select sl.id,sl.operation,sl.op_date opDate,sl.request,sl.source,sl.target             from ETL_SHEET_LOG sl             order by sl.id desc
+### Cause: java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+
+; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: �����ͼ������
+, mergedContextConfiguration = [MergedContextConfiguration@56382bc9 testClass = SheetLogServiceTest, locations = &apos;{classpath*:spring*.xml}&apos;, classes = &apos;{}&apos;, contextInitializerClasses = &apos;[]&apos;, activeProfiles = &apos;{}&apos;, propertySourceLocations = &apos;{}&apos;, propertySourceProperties = &apos;{}&apos;, contextLoader = &apos;org.springframework.test.context.support.DelegatingSmartContextLoader&apos;, parent = [null]]], class dirties context [false], class mode [null], method dirties context [false].
+</system-out>
+  </testcase>
+</testsuite>

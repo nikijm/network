@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.etl.dao.DDLExecutorDao">
+
+    <!-- 创建表，根据表名 -->
+	<update id="createTable" parameterType="com.jk.ndtetl.dbmeta.TableDef">
+	    <![CDATA[
+	    declare
+            num   number;
+            begin
+                select count(0) into num from user_tables where table_name = upper('${tableName}') ;
+                if num = 0 then
+                    execute immediate '
+                    CREATE TABLE ${tableName} (
+			        "ID" NUMBER(20,0) NOT NULL ENABLE, 
+			        "DATAFILE_UNID" NVARCHAR2(40) NOT NULL, 
+			        "SEQNO" NVARCHAR2(20) NULL , 
+			        "RESULT" NUMBER(2,0)  DEFAULT 0 , 
+			        "REASON" NVARCHAR2(20)  NULL , 
+			        "ISACTIVE" CHAR(1) DEFAULT ''Y'', 
+				    "CREATED" TIMESTAMP (6) DEFAULT SYSTIMESTAMP, 
+				    "CREATEDBY" NUMBER(20,0), 
+				    "UPDATED" TIMESTAMP (6), 
+				    "UPDATEDBY" NUMBER(20,0), 
+		]]>
+					<foreach collection="columns" item="column">
+					<choose>
+						<when test="column.dataType == 'DATE'">
+						   ${column.columnName} ${column.dataType} NULL,
+						</when>
+					    <otherwise>
+					       ${column.columnName} ${column.dataType}(${column.fieldLength}) NULL,
+					    </otherwise>
+					</choose>
+					</foreach>
+		
+        <![CDATA[
+		 	        PRIMARY KEY ("ID"))  
+		 	        LOGGING NOCOMPRESS NOCACHE ' ;
+                end if;
+            end; 
+ 	    ]]>
+	</update>
+    <!-- 增加列，根据表名 -->
+	<update id="addColumn">
+        ALTER TABLE ${tableName} add 
+        <foreach collection="columns" item="column" separator="," open="(" close=")">
+            ${column.columnName} ${column.dataType}(${column.fieldLength}) NULL
+        </foreach>
+	</update>
+	
+    <!-- 	删除表，根据表名称 -->
+	<update id="deleteTable" parameterType="com.jk.ndtetl.etl.DataTable">
+	    <![CDATA[
+	    declare
+            num   number;
+			begin
+			    select count(1) into num from user_tables where table_name = upper('${tableName}') ;
+			    if num > 0 then
+			        execute immediate 'drop table ${tableName}' ;
+			    end if;
+			end;
+		]]>
+
+	</update>
+	<update id="createSeq">
+	    <![CDATA[
+	    declare
+            num   number;
+            begin
+                select count(0) into num from user_sequences where sequence_name = upper('${tableName}_SEQ'); 
+                if num = 0 then
+                    execute immediate '
+		 	        CREATE SEQUENCE  ${tableName}_SEQ  
+		 	        MINVALUE 1 
+		 	        MAXVALUE 9999999999999999999999999999 
+		 	        INCREMENT BY 1 
+		 	        START WITH 1 
+		 	        CACHE 20 
+		 	        ORDER  
+		 	        NOCYCLE ' ;
+                end if;
+            end; 
+ 	       ]]>
+	</update>
+	
+    <!-- 	删除序列根据表名称 -->
+	<update id="deleteSeq">
+	    <![CDATA[
+	    declare   
+            V_NUM number;   
+
+			BEGIN  
+			    select count(0) into V_NUM from user_sequences where sequence_name = upper('${tableName}_SEQ'); 
+			    if V_NUM > 0 then   
+			    execute immediate 'DROP SEQUENCE  ${tableName}_SEQ';   
+			    end if;
+			END;
+ 	       ]]>
+	</update>
+	
+    <!-- 	创建触发器 -->
+	<update id="createTrigger" statementType="STATEMENT">
+	    <![CDATA[
+ 	        create or replace trigger ${tableName}_ID  
+			before insert
+			on ${tableName}
+			for each row
+			when(new.ID is null)
+			begin
+			select ${tableName}_SEQ.nextval into:new.ID from dual;
+			end ;
+ 	       ]]>
+	</update>
+	<!-- 复制表结构 -->
+    <update id="copyTable">
+        DECLARE
+		    createSql VARCHAR (4000);
+		    num NUMBER ;
+		BEGIN
+		    SELECT
+		        COUNT (1) INTO num
+		    FROM
+		        user_tables
+		    WHERE
+		        table_name = UPPER ('${target}') ;
+		    IF num = 0 THEN
+		        SELECT
+		            dbms_metadata.get_ddl ('TABLE', '${source}') INTO createSql
+		        FROM
+		            dual ; 
+		        EXECUTE IMMEDIATE "REPLACE" (createSql, '${source}', '${target}') ;
+		    END IF ;
+		END ;
+    </update>
+</mapper>

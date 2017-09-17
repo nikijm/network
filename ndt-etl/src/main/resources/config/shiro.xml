@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tool="http://www.springframework.org/schema/tool"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+
+
+	<!-- 自定义的Shiro Filter -->
+	<bean id="simplePermFilter" class="com.jk.ndtetl.system.EtlPermissionsAuthorizationFilter">
+	</bean>
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="filters">
+			<map>
+				<entry key="perms" value-ref="simplePermFilter" />
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				/api/auth/session=anon
+				/api/user/session=anon
+				/resources/**=anon
+				/api/desktopUrl=anon
+				/api/**=perms
+			</value>
+		</property>
+	</bean>
+
+	<!-- 自定义Realm -->
+	<bean id="myRealm" class="com.jk.ndtetl.system.MyRealm" />
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm" />
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- 开启Shiro注解 -->
+<!-- 	<bean -->
+<!-- 		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" -->
+<!-- 		depends-on="lifecycleBeanPostProcessor" /> -->
+<!-- 	<bean -->
+<!-- 		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor"> -->
+<!-- 		<property name="securityManager" ref="securityManager" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<cache:annotation-driven cache-manager="cacheManager" /> -->
+	<!-- cacheManager工厂类 -->
+<!-- 	<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" -->
+<!-- 		p:configLocation="classpath:ehcache.xml" /> -->
+	<!-- 声明cacheManager -->
+<!-- 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" -->
+<!-- 		p:cacheManager-ref="cacheManagerFactory" /> -->
+
+
+
+
+
+
+
+
+
+
+
+</beans>

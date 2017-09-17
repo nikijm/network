@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.rule.dao.ICleanOperateDao">
+
+	<!-- 获得清理表通过文件的ID -->
+	<select id="getCleanTableByDataFileId" parameterType="int"
+		resultMap="dataFileResultMap">
+		SELECT
+		d.etl_datafile_id,
+		d.filename,
+		d.path,
+		d.source_org_code,
+		d.unid,
+		d.status_upload,
+		d.status_cache,
+		d.status_clean,
+		d.status_convert,
+		d.status_validate,
+		d.action,
+		d.status,
+		d.message,
+		d.upload_date,
+		d.sha1,
+		d.sheet_index,
+		d.sheet_startrow,
+		d.header,
+		d.isactive,
+		d.created,
+		d.createdby,
+		d.updated,
+		d.updatedby,
+
+		ft.etl_file_type_id,
+		ft.name ftName,
+		ft.tableid_cache,
+		ft.tableid_clean,
+        
+        te.etl_table_id,
+		te.tablename,
+       
+		tc.etl_table_id,
+		tc.tablename,
+
+		tt.etl_table_id,
+		tt.tablename,
+
+		tv.ETL_TABLE_ID,
+		tv.tablename
+		FROM
+		etl_datafile d
+		LEFT JOIN etl_datafile_type ft ON ft.etl_file_type_id=d.etl_file_type_id
+		LEFT JOIN etl_table te ON te.etl_table_id=ft.tableid_cache
+		LEFT JOIN etl_table tc ON tc.etl_table_id=ft.tableid_clean
+		LEFT JOIN etl_table tt ON tt.etl_table_id=ft.tableid_convert
+		LEFT JOIN etl_table tv ON tv.etl_table_id=ft.tableid_validate
+		WHERE
+		d.etl_datafile_id = #{id}
+		ORDER BY
+		d.etl_datafile_id DESC
+	</select>
+	
+	<!-- 回滚validate数据通过ID -->
+	<update id="updateValidateDataStatu" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		ISVALIDATE=#{param.status}
+		   </if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+    <!-- 回滚validate数据通过文件-->
+	<update id="updateValidateStatuByTableId" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		ISVALIDATE=#{param.status}
+		   </if>
+		</set>
+		WHERE ETLDATAFILEID = #{etldatafileid}
+	</update>	
+	
+	<!-- 修改验证的状态 -->
+	<update id="updateCleanValidateStatus" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		CLEANVALIDATE=#{param.status}
+		   </if>
+		</set>
+		WHERE ETL_DATAFILE_ID = #{dataFileId}
+	</update>
+	<!-- 修改文件清洗的状态 -->
+	<update id="updateCleanStatus" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		ISCLEAN=#{param.status}
+		   </if>
+		</set>
+		WHERE ETL_DATAFILE_ID = #{dataFileId}
+	</update>
+	<!-- 修改清洗的数据通过ID -->
+	<update id="updateCleanDataStatu" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		ISCLEAN=#{param.status}
+		   </if>
+		</set>
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 修改清洗的数据通过文件的ID -->
+	<update id="updateCleanDataByTableId" parameterType="com.jk.ndtetl.util.QueryParam">
+		UPDATE ${param.tableName}
+		<set>
+		   <if test="param.status != null">
+        		ISCLEAN=#{param.status}
+		   </if>
+		</set>
+		WHERE ETLDATAFILEID = #{etldatafileid}
+	</update>
+	
+
+	<!-- 获取所有的日志信息 -->
+	<select id="getCleanDataByParam" parameterType="com.jk.ndtetl.util.QueryParam" resultMap="cleanRuleMap">
+		select * from ${param.tableName} where etldatafileid=#{param.dataFileId}
+	</select>
+	
+	<!-- 获取所有的日志信息 -->
+	<select id="getCountNoValidate" parameterType="com.jk.ndtetl.util.QueryParam" resultMap="cleanRuleMap">
+		select count(1) from ${param.tableName} where etldatafileid=#{param.unid} and result=-1
+	</select>
+	
+	<!-- 获取所有的日志信息 -->
+	<select id="getCountNoClean" parameterType="com.jk.ndtetl.util.QueryParam" resultMap="cleanRuleMap">
+		select count(1) from ${param.tableName} where etldatafileid=#{param.dataFileId} and isclean<![CDATA[ <> ]]> 1
+	</select>
+	
+	<!-- 获取所有的日志信息 -->
+	<select id="getCountAll" parameterType="com.jk.ndtetl.util.QueryParam" resultMap="cleanRuleMap">
+		select count(1) from ${param.tableName} where etldatafileid=#{param.dataFileId}
+	</select>
+
+
+	<resultMap type="RuleOp" id="cleanRuleMap">
+		<id property="id" column="ETL_OP_IMPL_ID" />
+		<result property="name" column="NAME" />
+		<result property="clz" column="CLZ" />
+		<result property="params" column="PARAMS" />
+		<result property="etlop" column="ETLOP" />
+		<result property="isActive" column="ISACTIVE" />
+		<result property="created" column="CREATED" />
+		<result property="createdBy" column="CREATEDBY" />
+		<result property="updated" column="UPDATED" />
+		<result property="updatedBy" column="UPDATEDBY" />
+	</resultMap>
+
+	<resultMap type="DataFile" id="dataFileResultMap">
+		<id property="etlDatafileId" column="etl_datafile_id" />
+		<result property="fileName" column="filename" />
+		<result property="path" column="path" />
+		<result property="sourceOrgCode" column="source_org_code" />
+		<result property="unId" column="unid" />
+		<result property="statusUpload" column="status_upload" />
+		<result property="statusCache" column="status_cache" />
+		<result property="statusClean" column="status_clean" />
+		<result property="statusConvert" column="status_convert" />
+		<result property="statusValidate" column="status_validate" />
+		<result property="action" column="action" />
+		<result property="status" column="status" />
+		<result property="message" column="message" />
+		<result property="uploadDate" column="upload_date" />
+		<result property="sha1" column="sha1" />
+		<result property="sheetIndex" column="sheet_index" />
+		<result property="sheetStartRow" column="sheet_startrow" />
+		<result property="header" column="header" />
+		<result property="created" column="created" />
+		<result property="createdBy" column="createdby" />
+		<result property="isActive" column="isactive" />
+		<result property="updated" column="updated" />
+		<result property="updatedBy" column="updatedby" />
+		<!-- 一对一 -->
+		<association property="dataFileType" javaType="DataFileType">
+			<id property="etlFileTypeId" column="etl_file_type_id" />
+			<result property="name" column="ftName" />
+			<result property="tableCleanId" column="TABLEID_CLEAN" />
+			<result property="tableConvertId" column="TABLEID_CONVERT" />
+			<!-- 一对一 -->
+			<association property="tableClean" column="TABLEID_CLEAN" javaType="TableDef">
+				<id property="etlTableId" column="ETL_TABLE_ID" />
+				<result property="name" column="NAME" />
+				<result property="tableName" column="TABLENAME" />
+			</association>
+			<association property="tableConvert"  column="TABLEID_CONVERT" javaType="TableDef">
+				<id property="etlTableId" column="ETL_TABLE_ID" />
+				<result property="name" column="NAME" />
+				<result property="tableName" column="TABLENAME" />
+			</association>
+			<association property="tableValidate" column="TABLEID_VALIDATE" javaType="TableDef">
+				<id property="etlTableId" column="ETL_TABLE_ID" />
+				<result property="name" column="NAME" />
+				<result property="tableName" column="TABLENAME" />
+			</association>
+		</association>
+	</resultMap>
+
+</mapper>

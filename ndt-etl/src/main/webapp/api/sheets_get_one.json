@@ -1,0 +1,22 @@
+{
+  "request":{
+    "id":1
+  },
+  "id": 1,
+  "status": "具体状态值待定",
+  "upload": {
+    "id": 1,
+    "fileName": "xxx.xls",
+    "path": "/uploads/xxx.xls",
+    "source": "XXX银行",
+    "type": "数据统计",
+    "user": {
+      "id": 3,
+      "name": "mr.x"
+    },
+    "status": "具体状态值待定",
+    "sheetsNum": 4,
+    "uploadDate": "2017-04-03 13:21:22",
+    "sha1": "xxxx"
+  }
+}

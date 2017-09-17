@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 解决sql传入参数字段为空时找不到对应类型报错-->
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+    <!-- 别名 -->
+    <typeAliases>
+            <typeAlias type="com.jk.ndt.etl.utility.PageData" alias="pd"/>
+            <package name="com.jk.ndt.etl.entity"/>
+    </typeAliases>
+
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<!-- 数据库 -->
+            <property name="dialect" value="oracle"/>
+            <!-- 该参数默认为false -->
+	        <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->
+	        <!-- 和startPage中的pageNum效果一样-->
+            <property name="offsetAsPageNum" value="true"/>
+            <!-- 该参数默认为false -->
+        	<!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+            <property name="rowBoundsWithCount" value="true"/>
+            <!-- 当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果 -->
+            <property name="pageSizeZero" value="true"/>
+        </plugin>
+	</plugins>
+</configuration>

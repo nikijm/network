@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.dbmeta.dao.ColumnDefDao">
+
+	<!-- 根据id查询数据 -->
+	<select id="getById" parameterType="int" resultMap="columnDefResultMap">
+        <![CDATA[
+            SELECT
+                c.etl_column_id,
+                c.columnname,
+                c.data_type,
+                c.field_length,
+                c. name cName,
+                c.description,
+                c.seqno,
+                c.isSearch,
+                c.created,
+                c.createdby,
+                c.isactive,
+                c. UPDATED,
+                c.updatedby,
+                t.etl_table_id,
+                t. NAME tName,
+                t.tablename
+            FROM
+                ETL_COLUMN c
+            LEFT JOIN ETL_TABLE t ON t .etl_table_id = c.etl_table_id
+            WHERE
+                c.etl_column_id = #{id}
+            ORDER BY
+                etl_column_id DESC
+        ]]>
+	</select>
+	<!-- 根据id查询数据 -->
+	<select id="getByTableId" parameterType="int" resultMap="columnDefResultMap">
+        <![CDATA[
+            SELECT
+                c.etl_column_id,
+                c.columnname,
+                c.data_type,
+                c.field_length,
+                c. name cName,
+                c.description,
+                c.seqno,
+                c.isSearch,
+                c.created,
+                c.createdby,
+                c.isactive,
+                c.updated,
+                c.updatedby,
+                
+                t.etl_table_id,
+                t.name tName,
+                t.tablename
+            FROM
+                ETL_COLUMN c
+            LEFT JOIN ETL_TABLE t ON t .etl_table_id = c.etl_table_id
+            WHERE
+                c.etl_table_id = #{id}
+            ORDER BY
+                c.seqno ASC,c.etl_column_id ASC
+        ]]>
+	</select>
+	
+
+	<!-- 查询所有 -->
+	<select id="listAll" resultType="ColumnDef">
+        <![CDATA[
+            SELECT 
+                c.etl_column_id,
+                c.etl_table_id,
+                c.columnname,
+                c.data_type,
+                c.field_length,
+                c.name,
+                c.description,
+                c.seqno,
+                c.isSearch,
+                c.created,
+                c.createdby,
+                c.isactive,
+                c.updated,
+                c.updatedby
+            FROM ETL_COLUMN c
+            
+            ORDER BY etl_column_id DESC
+        ]]>
+	</select>
+
+	<!-- 根据分页条件查询数据 -->
+	<select id="listByPage" resultMap="columnDefResultMap"
+		parameterType="BasePage">
+		  SELECT
+		    c.etl_column_id,
+		    c.columnname,
+		    c.data_type,
+		    c.field_length,
+		    c.name cName,
+		    c.description,
+		    c.seqno,
+		    c.isSearch,
+		    c.created,
+		    c.createdby,
+		    c.isactive,
+		    c.updated,
+		    c.updatedby,
+		    t.etl_table_id,
+		    t.name tName,
+		    t.tablename
+		FROM
+		    ETL_COLUMN c
+		LEFT JOIN ETL_TABLE t ON t .etl_table_id = c.etl_table_id
+		<include refid="whereSql" />
+		ORDER BY c.seqno ASC,c.etl_column_id ASC
+	</select>
+	<resultMap type="ColumnDef" id="columnDefResultMap">
+		<id property="etlColumnId" column="etl_column_id" />
+		<result property="columnName" column="columnname" />
+        <result property="dataType" column="data_type" />
+        <result property="fieldLength" column="field_length" />
+        <result property="name" column="cName" />
+        <result property="description" column="description" />
+        <result property="seqNo" column="seqno" />
+        <result property="isSearch" column="isSearch" />
+        <result property="created" column="created" />
+        <result property="createdBy" column="createdby" />
+        <result property="isActive" column="isactive" />
+        <result property="updated" column="updated" />
+        <result property="updatedBy" column="updatedby" />
+		<!-- 多对一 -->
+		<association property="tableDef" column="etl_table_id" javaType="TableDef">
+			<id property="etlTableId" column="etl_table_id" />
+			<result property="name" column="tName" />
+			<result property="tableName" column="tablename" />
+		</association>
+
+	</resultMap>
+
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="param!=null and param.keyword!=null and param.keyword!=''">
+				and (lower(c.name) like '%'||#{param.keyword}||'%' escape '/'
+				or lower(c.columnName) like '%'||#{param.keyword}||'%' escape '/')
+			</if>
+			<if test="param!=null and param.tableName!=null ">
+				and t.tablename =#{param.tableName}
+			</if>
+			<if test="param!=null and param.columnName!=null">
+				and c.columnname =#{param.columnName}
+			</if>
+		</where>
+	</sql>
+    <!-- 插入数据 -->
+	<insert id="save" parameterType="ColumnDef" useGeneratedKeys="true"
+		keyProperty="etlColumnId" keyColumn="ETL_COLUMN_ID">
+        <![CDATA[
+            insert into ETL_COLUMN 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		        etl_column_id,
+			<if test="tableDef!=null and tableDef.etlTableId != null">
+				etl_table_id,
+			</if>
+			<if test="columnName != null">
+				columnName,
+			</if>
+			<if test="dataType != null">
+				data_type,
+			</if>
+			<if test="fieldLength != null">
+				field_length,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="seqNo != null">
+				seqNo,
+			</if>
+			<if test="isSearch != null">
+				isSearch,
+			</if>
+			<if test="created != null">
+				created,
+			</if>
+			<if test="createdBy != null">
+				createdBy,
+			</if>
+			<if test="isActive != null">
+				isActive,
+			</if>
+			<if test="updated != null">
+				updated,
+			</if>
+			<if test="updatedBy != null">
+				updatedBy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		      ETL_COLUMN_SEQ.nextVal,
+			<if test="tableDef!=null and tableDef.etlTableId != null">
+                #{tableDef.etlTableId},
+            </if>
+            <if test="columnName != null">
+                upper(#{columnName}),
+            </if>
+            <if test="dataType != null">
+                upper(#{dataType}),
+            </if>
+            <if test="fieldLength != null">
+                #{fieldLength},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="seqNo != null">
+                #{seqNo},
+            </if>
+            <if test="isSearch != null">
+                #{isSearch},
+            </if>
+            <if test="created != null">
+                #{created},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy},
+            </if>
+            <if test="isActive != null">
+                #{isActive},
+            </if>
+            <if test="updated != null">
+                #{updated},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy},
+            </if>
+		</trim>
+	</insert>
+    <!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_COLUMN where etl_column_id=#{id}
+        ]]>
+	</delete>
+	<delete id="deleteByTableId" parameterType="int">
+        <![CDATA[
+            delete from ETL_COLUMN where etl_table_id=#{id}
+        ]]>
+	</delete>
+    <!--     修改，根據id -->
+	<update id="update" parameterType="ColumnDef">
+        <![CDATA[
+            update ETL_COLUMN 
+        ]]>
+		<set>
+<!-- 			<if test="tableDef!=null and tableDef.etlTableId!=null">etl_table_id=#{tableDef.etlTableId},</if> -->
+<!-- 			<if test="columnName!=null">columnName=#{columnName},</if> -->
+<!-- 			<if test="dataType!=null">data_type=#{dataType},</if> -->
+<!-- 			<if test="fieldLength!=null">field_length=#{fieldLength},</if> -->
+			<if test="name!=null">name=#{name},</if>
+			<if test="description!=null">description=#{description},</if>
+			<if test="seqNo!=null">seqNo=#{seqNo},</if>
+			<if test="isSearch!=null">isSearch=#{isSearch},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+			<if test="updated!=null">updated=#{updated},</if>
+			<if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+
+		<where>
+			etl_column_id=#{etlColumnId}
+		</where>
+	</update>
+
+</mapper>

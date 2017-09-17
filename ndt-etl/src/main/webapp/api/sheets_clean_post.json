@@ -1,0 +1,17 @@
+{
+  "columns": [
+    {
+      "name": "身份证号",
+      "operations": [
+        {
+          "name": "替换",
+          "params": [
+            "+86",
+            ""
+          ]
+        }
+      ]
+    }
+  ],
+  "isCleaned": true
+}

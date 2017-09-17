@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.dbmeta.dao.BusinessTypeDao">
+
+	<!-- 根据id查询数据 -->
+	<select id="getById" parameterType="int" resultMap="businessTypeResultMap">
+        <![CDATA[
+			SELECT
+			    etl_business_type_id,
+			    name,
+			    created,
+			    createdby,
+			    updated,
+			    updatedby,
+			    isactive
+			FROM
+			    ETL_BUSINESS_TYPE
+			WHERE
+			    etl_business_type_id = #{id}
+        ]]>
+	</select>
+
+	<resultMap type="java.util.Map" id="businessTypeOptionsResultMap">
+		<id property="etlBusinessTypeId" column="etl_business_type_id" />
+		<result property="name" column="name" />
+	</resultMap>
+	<!-- 查询有限字段的返回结果集 -->
+	<select id="listOptionByParam" parameterType="java.util.Map" resultMap="businessTypeOptionsResultMap">
+            SELECT
+                etl_business_type_id,
+                name
+            FROM
+                ETL_BUSINESS_TYPE
+		WHERE 1=1
+		<if test="isActive != null and isActive != ''">
+			and ISACTIVE =#{isActive}
+		</if>
+	</select>
+	<!-- 查询所有 -->
+	<select id="listAll" resultMap="businessTypeResultMap">
+        <![CDATA[
+            SELECT
+                etl_business_type_id,
+                name,
+                created,
+                createdby,
+                updated,
+                updatedby,
+                isactive
+            FROM
+                ETL_BUSINESS_TYPE
+        ]]>
+	</select>
+
+	<!-- 根据分页条件查询数据 -->
+	<select id="listByPage" resultMap="businessTypeResultMap"
+		parameterType="BasePage">
+            SELECT
+                etl_business_type_id,
+                name,
+                created,
+                createdby,
+                updated,
+                updatedby,
+                isactive
+            FROM
+                ETL_BUSINESS_TYPE
+            <include refid="whereSql" />
+            ORDER BY
+                etl_business_type_id DESC
+	</select>
+	<resultMap type="BusinessType" id="businessTypeResultMap">
+		<id property="etlBusinessTypeId" column="etl_business_type_id" />
+        <result property="name" column="name" />
+        <result property="created" column="created" />
+        <result property="createdBy" column="createdby" />
+        <result property="isActive" column="isactive" />
+        <result property="updated" column="updated" />
+        <result property="updatedBy" column="updatedby" />
+	</resultMap>
+
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="param!=null and param.keyword!=null and param.keyword!=''">
+				and (lower(name) like '%'||#{param.keyword}||'%' escape '/')
+			</if>
+			<if test="param!=null and param.name!=null">
+                and name =#{param.name}
+            </if>
+		</where>
+	</sql>
+    <!-- 插入数据 -->
+	<insert id="save" parameterType="BusinessType" useGeneratedKeys="true"
+		keyProperty="etlBusinessTypeId" keyColumn="ETL_BUSINESS_TYPE_ID">
+        <![CDATA[
+            insert into ETL_BUSINESS_TYPE 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		        etl_business_type_id,
+			<if test="name != null">
+				name,
+			</if>
+			<if test="created != null">
+				created,
+			</if>
+			<if test="createdBy != null">
+				createdBy,
+			</if>
+			<if test="isActive != null">
+				isActive,
+			</if>
+			<if test="updated != null">
+				updated,
+			</if>
+			<if test="updatedBy != null">
+				updatedBy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		      ETL_BUSINESS_TYPE_SEQ.nextVal,
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="created != null">
+                #{created},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy},
+            </if>
+            <if test="isActive != null">
+                #{isActive},
+            </if>
+            <if test="updated != null">
+                #{updated},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy},
+            </if>
+		</trim>
+	</insert>
+    <!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_BUSINESS_TYPE where etl_business_type_id=#{id}
+        ]]>
+	</delete>
+    <!--     修改，根據id -->
+	<update id="update" parameterType="BusinessType">
+        <![CDATA[
+            update ETL_BUSINESS_TYPE 
+        ]]>
+		<set>
+			<if test="name !=null">name=#{name},</if>
+			<if test="created!=null">created=#{created},</if>
+			<if test="createdBy!=null">createdBy=#{createdBy},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+			<if test="updated!=null">updated=#{updated},</if>
+			<if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+
+		<where>
+			etl_business_type_id=#{etlBusinessTypeId}
+		</where>
+	</update>
+
+</mapper>

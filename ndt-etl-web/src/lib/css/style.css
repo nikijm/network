@@ -1,0 +1,60 @@
+.pd10 {
+  padding: 10px;
+}
+.pd20 {
+  padding: 20px;
+}
+.ml-10 {
+  margin-left: 100px;
+}
+.text-algin-c {
+  text-align: center;
+}
+.sidebar-menu .treeview-menu > li > a {
+    padding: 8px 5px 8px 15px;
+}
+
+.sidebar-menu .treeview-menu .fa:before {
+    margin-right: 0.5rem;
+}
+
+.box-header {
+  padding: 15px;
+  border-bottom:1px solid #ddd;
+}
+
+.box-header > .box-tools {
+  top: 7px;
+}
+
+.table-fixed {
+  table-layout: fixed;
+}
+
+.tools-button {
+  width: 250px !important;
+}
+
+.table .border-bottom td {
+  border-bottom: 1px solid #aaa;
+}
+
+.sheets-table tr {
+  background: #fff !important;
+}
+.sheets-table tr:hover {
+  background: #f9f9f9 !important;
+}
+.sheets-table th {
+  background: #f9f9f9;
+}
+
+/*.el-form-item__error {
+  position: static !important
+}
+.el-form-item__content {
+  line-height: 15px !important
+}
+.el-radio-group {
+  line-height: 36px !important
+}*/

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndt.etl.dao.monitor.AlarmRuleDao">
+
+
+	<select id="getAlarmRuleList" resultType="AlarmRuleBean">
+		select
+		t.ID,t.NAME,t.MACHINEANDID,t.MONITORRESOURCE,t.ALARMEMAIL,t.CREATEUSER,t.CREATETIME,t.ISUSE,t.USECOUNT,t.RECENTTRIGGER,t.TYPE,t.DESCRIPTIONRULE,t.TRIGGERINTERVAL
+		from monitor_alarm_rules t
+		<where>
+			<if test="machineAndId!=null">
+				t.MACHINEANDID=#{machineAndId}
+			</if>
+			<if test="type!=null">
+				and t.TYPE=#{type}
+			</if>
+			<if test="isUse!=null">
+				and t.ISUSE=#{isUse}
+			</if>
+		</where>
+	</select>
+
+	<select id="listAlarmIdByServerId" parameterType="java.lang.Integer"
+		resultType="AlarmRuleBean">
+		select
+		ID,NAME,MACHINEANDID,MONITORRESOURCE,ALARMEMAIL,CREATEUSER,CREATETIME,ISUSE,USECOUNT,RECENTTRIGGER,TRIGGERINTERVAL,EXPRESSION,TYPE,DESCRIPTIONRULE,EXPRESSIONTYPE
+		from MONITOR_ALARM_RULES where MACHINEANDID=#{machineAndId}
+	</select>
+	<select id="getAlarmRuleById" parameterType="java.lang.Integer"
+		resultType="AlarmRuleBean">
+		select
+		ID,NAME,MACHINEANDID,MONITORRESOURCE,ALARMEMAIL,CREATEUSER,CREATETIME,ISUSE,USECOUNT,RECENTTRIGGER,TYPE,EXPRESSION,EXPRESSIONTYPE,TRIGGERINTERVAL,DESCRIPTIONRULE
+		from MONITOR_ALARM_RULES where ID=#{id} and ISUSE=1
+	</select>
+
+	<select id="getAlarmRuleByIdNotStatus" parameterType="java.lang.Integer"
+		resultType="AlarmRuleBean">
+		select
+		r.ID,NAME,r.MACHINEANDID,r.MONITORRESOURCE,r.ALARMEMAIL,r.CREATEUSER,r.CREATETIME,r.ISUSE,r.USECOUNT,r.RECENTTRIGGER,r.TYPE,r.EXPRESSION,r.EXPRESSIONTYPE,r.TRIGGERINTERVAL,r.DESCRIPTIONRULE,s.DESCRIPTION
+		from MONITOR_ALARM_RULES r inner join OM_SERVER s on
+		r.MACHINEANDID=s.ID
+		where r.ID=#{id}
+	</select>
+
+	<select id="getAlarmRuleByModuleAndType" parameterType="AlarmRuleBean"
+		resultType="AlarmRuleBean">
+		select t.ID,t.MACHINEANDID,t.TYPE from MONITOR_ALARM_RULES t
+		<where>
+			<if test="type!=null">
+				t.TYPE=#{type}
+			</if>
+			<if test="expressionType!=null">
+				and t.EXPRESSIONTYPE=#{expressionType}
+			</if>
+			<if test="machineAndId!=null">
+				and t.MACHINEANDID=#{machineAndId}
+			</if>
+		</where>
+	</select>
+
+	<select id="getAlarmRuleByContent" parameterType="AlarmRuleBean"
+		resultType="AlarmRuleBean">
+		select t.ID,t.MACHINEANDID,t.TYPE from MONITOR_ALARM_RULES
+		t where t.EXPRESSION
+		like '%${content}%'
+	</select>
+
+	<insert id="addOneAlarmRule" parameterType="com.jk.ndt.etl.entity.monitor.AlarmRuleBean"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		Insert into MONITOR_ALARM_RULES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="machineAndId != null">
+				MACHINEANDID,
+			</if>
+			<if test="monitorResource != null">
+				MONITORRESOURCE,
+			</if>
+			<if test="alarmEmail != null">
+				ALARMEMAIL,
+			</if>
+			<if test="createUser != null">
+				CREATEUSER,
+			</if>
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="isUse != null">
+				ISUSE,
+			</if>
+			<if test="useCount != null">
+				USECOUNT,
+			</if>
+			<if test="recentTrigger != null">
+				RECENTTRIGGER,
+			</if>
+			<if test="triggerInterval != null">
+				TRIGGERINTERVAL,
+			</if>
+			<if test="expression != null">
+				EXPRESSION,
+			</if>
+			<if test="expressionType != null">
+				EXPRESSIONTYPE,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="calculate != null">
+				CALCULATE,
+			</if>
+			<if test="descriptionRule != null">
+				DESCRIPTIONRULE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="machineAndId != null">
+				#{machineAndId},
+			</if>
+			<if test="monitorResource != null">
+				#{monitorResource},
+			</if>
+			<if test="alarmEmail != null">
+				#{alarmEmail},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="isUse != null">
+				#{isUse},
+			</if>
+			<if test="useCount != null">
+				#{useCount},
+			</if>
+			<if test="recentTrigger != null">
+				#{recentTrigger},
+			</if>
+			<if test="triggerInterval != null">
+				#{triggerInterval},
+			</if>
+			<if test="expression != null">
+				#{expression},
+			</if>
+			<if test="expressionType != null">
+				#{expressionType},
+			</if>
+			<if test="type != null">
+				#{type},
+			</if>
+			<if test="calculate != null">
+				#{calculate},
+			</if>
+			<if test="descriptionRule != null">
+				#{descriptionRule},
+			</if>
+		</trim>
+	</insert>
+
+
+	<insert id="addServerRuleByRuleId" parameterType="com.jk.ndt.etl.entity.monitor.AlarmRuleBean">
+		Insert into SERVERHOST_RULES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				RULEID,
+			</if>
+			<if test="serverId != null">
+				SERVERID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="serverId != null">
+				#{serverId},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateOneAlarmRule" parameterType="com.jk.ndt.etl.entity.monitor.AlarmRuleBean">
+		update MONITOR_ALARM_RULES
+		<set>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="machineAndId != null">
+				machineAndId=#{machineAndId},
+			</if>
+			<if test="monitorResource != null">
+				monitorResource=#{monitorResource},
+			</if>
+			<if test="alarmEmail != null">
+				alarmEmail=#{alarmEmail},
+			</if>
+			<if test="createUser != null">
+				createUser=#{createUser},
+			</if>
+			<if test="createTime != null">
+				createTime=#{createTime},
+			</if>
+			<if test="isUse != null">
+				isUse=#{isUse},
+			</if>
+			<if test="useCount != null">
+				useCount=#{useCount},
+			</if>
+			<if test="recentTrigger != null">
+				recentTrigger=#{recentTrigger},
+			</if>
+			<if test="triggerInterval != null">
+				triggerInterval=#{triggerInterval},
+			</if>
+			<if test="expression != null">
+				expression=#{expression},
+			</if>
+			<if test="expressionType != null">
+				expressionType=#{expressionType},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="calculate != null">
+				calculate=#{calculate},
+			</if>
+			<if test="descriptionRule != null">
+				descriptionRule=#{descriptionRule},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+
+	<update id="updateAlarmRule" parameterType="com.jk.ndt.etl.entity.monitor.AlarmRuleBean">
+		update MONITOR_ALARM_RULES
+		<set>
+			<if test="recentTrigger != null">
+				RECENTTRIGGER='${recentTrigger}',
+			</if>
+			<if test="useCount != null">
+				USECOUNT=${useCount},
+			</if>
+		</set>
+		<where>
+			ID = ${id}
+		</where>
+	</update>
+
+	<update id="updateAlarmLogs" parameterType="com.jk.ndt.etl.entity.monitor.AlarmLogs">
+		update ALARM_RESOURCE_LOGS
+		<set>
+			<if test="status != null">
+				STATUS=#{status},
+			</if>
+		</set>
+		<where>
+			ID = #{id}
+		</where>
+	</update>
+
+	<insert id="insertAlarmLogs" parameterType="com.jk.ndt.etl.entity.monitor.AlarmLogs"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		Insert into ALARM_RESOURCE_LOGS
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="ruleId != null">
+				RULEID,
+			</if>
+			<if test="alarmType != null">
+				ALARMTYPE,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="ruleId != null">
+				#{ruleId},
+			</if>
+			<if test="alarmType != null">
+				#{alarmType},
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+		</trim>
+	</insert>
+	<select id="getRepeatSendAlarmMailList" resultType="com.jk.ndt.etl.entity.monitor.AlarmLogs">
+		select
+		t.ID,t.RULEID,t.ALARMTYPE,t.DESCRIPTION,t.STATUS
+		from
+		ALARM_RESOURCE_LOGS t where t.STATUS=0
+	</select>
+
+	<delete id="deleteAlarmRule" parameterType="java.lang.Integer">
+		delete from
+		MONITOR_ALARM_RULES where ID=#{id}
+	</delete>
+</mapper>

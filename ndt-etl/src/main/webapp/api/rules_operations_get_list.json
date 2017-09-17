@@ -1,0 +1,40 @@
+[
+  {
+    "name": "替换",
+    "cleanerName": "replaceStringOperation",
+    "paramInputs": [
+      {
+        "name": "查找值",
+        "type": "text",
+        "options": null,
+        "value": null
+      },
+      {
+        "name": "替换值",
+        "type": "text",
+        "options": null,
+        "value": null
+      }
+    ],
+    "params": null
+  },
+  {
+    "name": "插入",
+    "cleanerName": "insertStringOperation",
+    "paramInputs": [
+      {
+        "name": "插入位置",
+        "type": "text",
+        "options": null,
+        "value": null
+      },
+      {
+        "name": "插入值",
+        "type": "text",
+        "options": null,
+        "value": null
+      }
+    ],
+    "params": null
+  }
+]

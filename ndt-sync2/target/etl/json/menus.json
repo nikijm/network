@@ -1,0 +1,23 @@
+[
+{
+"menu_name":"users_list",
+"url":"/etl/api/users",
+"requset_method":"get"
+},{
+  "menu_name":"users_get",
+  "url":"/etl/api/users/?",
+  "requset_method":"get"
+},{
+  "menu_name":"users_save",
+  "url":"/etl/api/users",
+  "requset_method":"post"
+},{
+  "menu_name":"users_update",
+  "url":"/etl/api/users",
+  "requset_method":"put"
+},{
+  "menu_name":"users_child",
+  "url":"/etl/api/meus/?/items",
+  "requset_method":"put"
+}
+]

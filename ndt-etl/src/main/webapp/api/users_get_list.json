@@ -1,0 +1,104 @@
+[
+  {
+    "id": 1,
+    "name": "Paris Buttfied-Addison",
+    "is_active": true,
+    "roles": [
+      {
+        "id": 1,
+        "name": "超级管理员",
+        "permissions": [
+          {
+            "key": "user",
+            "name": "用户",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "role",
+            "name": "角色",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "permission",
+            "name": "权限",
+            "available_operations": "c u r d",
+            "is_active": true
+          }
+        ]
+      }
+    ],
+    "created_at": "2017-04-03 13:21:22",
+    "last_login_ip": "192.168.1.4",
+    "last_login_at": "2017-05-21 13:11:22"
+  },
+  {
+    "id": 2,
+    "name": "Tim Nugent",
+    "roles": [
+      {
+        "id": 1,
+        "name": "超级管理员",
+        "permissions": [
+          {
+            "key": "user",
+            "name": "用户",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "role",
+            "name": "角色",
+            "available_operations": "c u r d",
+            "is_active": true
+          },
+          {
+            "key": "permission",
+            "name": "权限",
+            "available_operations": "c u r d",
+            "is_active": true
+          }
+        ],
+        "is_active": true,
+        "created_at": "2017-04-03 13:21:22",
+        "last_login_ip": "192.168.1.4",
+        "last_login_at": "2017-05-21 13:11:22"
+      },
+      {
+        "id": 3,
+        "name": "David Beckham",
+        "roles": [
+          {
+            "id": 1,
+            "name": "超级管理员",
+            "permissions": [
+              {
+                "key": "user",
+                "name": "用户",
+                "available_operations": "c u r d",
+                "is_active": true
+              },
+              {
+                "key": "role",
+                "name": "角色",
+                "available_operations": "c u r d",
+                "is_active": true
+              },
+              {
+                "key": "permission",
+                "name": "权限",
+                "available_operations": "c u r d",
+                "is_active": true
+              }
+            ],
+            "is_active": true,
+            "created_at": "2017-04-03 13:21:22",
+            "last_login_ip": "192.168.1.4",
+            "last_login_at": "2017-05-21 13:11:22"
+          }
+        ]
+      }
+    ]
+  }
+]

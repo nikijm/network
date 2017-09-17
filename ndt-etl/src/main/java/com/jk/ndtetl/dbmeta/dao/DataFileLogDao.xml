@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.dbmeta.dao.DataFileLogDao">
+
+	<!-- 根据id查询数据 -->
+	<select id="getById" parameterType="int" resultMap="dataFileLogResultMap">
+        <![CDATA[
+			SELECT
+			    dl.etl_datafile_log_id,
+			    dl.etl_datafile_id,
+			    dl.total_num,
+			    dl.success_num,
+			    dl.error_num,
+			    dl.unknown_num,
+			    dl.action,
+			    dl.running,
+			    dl.message,
+			    dl.created,
+			    dl.createdby
+			FROM
+			    ETL_DATAFILE_LOG dl
+		    WHERE
+		        dl.etl_datafile_log_id = #{id}
+		    ORDER BY
+		        dl.etl_datafile_log_id DESC
+        ]]>
+	</select>
+	<select id="getByFileId" parameterType="int" resultMap="dataFileLogResultMap">
+        <![CDATA[
+			SELECT
+			    dl.etl_datafile_log_id,
+			    dl.etl_datafile_id,
+			    dl.total_num,
+			    dl.success_num,
+			    dl.error_num,
+			    dl.unknown_num,
+			    dl.action,
+			    dl.running,
+			    dl.message,
+			    dl.created,
+			    dl.createdby
+			FROM
+			    ETL_DATAFILE_LOG dl
+		    WHERE
+		        dl.etl_datafile_id = #{id}
+		    ORDER BY
+		        dl.etl_datafile_log_id DESC
+        ]]>
+	</select>
+	<select id="getUnKnowNumByFileId" parameterType="int" resultType="int">
+        <![CDATA[
+			SELECT
+                COUNT (unknown_num)
+			FROM
+			    ETL_DATAFILE_LOG dl
+		    WHERE
+		        dl.etl_datafile_id = #{id}
+		    ORDER BY
+		        dl.etl_datafile_log_id DESC
+        ]]>
+	</select>
+	
+
+	<!-- 查询所有 -->
+	<select id="listAll" resultMap="dataFileLogResultMap">
+        <![CDATA[
+            SELECT
+                dl.etl_datafile_log_id,
+                dl.etl_datafile_id,
+                dl.total_num,
+                dl.success_num,
+                dl.error_num,
+                dl.unknown_num,
+                dl.action,
+                dl.running,
+                dl.message,
+                dl.created,
+                dl.createdby
+            FROM
+                ETL_DATAFILE_LOG dl
+            ORDER BY
+                dl.etl_datafile_log_id DESC
+        ]]>
+	</select>
+
+	<!-- 根据分页条件查询数据 -->
+	<select id="listByPage" resultMap="dataFileLogResultMap"
+		parameterType="BasePage">
+		<![CDATA[
+		    SELECT
+                dl.etl_datafile_log_id,
+                dl.etl_datafile_id,
+                dl.total_num,
+                dl.success_num,
+                dl.error_num,
+                dl.unknown_num,
+                dl.action,
+                dl.running,
+                dl.message,
+                dl.created,
+                dl.createdby
+            FROM
+                ETL_DATAFILE_LOG dl
+         ]]>
+            <include refid="whereSql" />
+            ORDER BY
+                dl.etl_datafile_log_id DESC
+	</select>
+	<resultMap type="DataFileLog" id="dataFileLogResultMap">
+		<id property="etlDatafileLogId" column="etl_datafile_log_id" />
+        <result property="etlDatafileId" column="etl_datafile_id" />
+        <result property="totalNum" column="total_num" />
+        <result property="successNum" column="success_num" />
+        <result property="errorNum" column="error_num" />
+        <result property="unknownNum" column="unknown_num" />
+        <result property="action" column="action" />
+        <result property="running" column="running" />
+        <result property="message" column="message" />
+        <result property="created" column="created" />
+        <result property="createdBy" column="createdby" />
+		<!-- 多对一 -->
+<!-- 		<association property="dataFileType" column="etl_file_type_id" javaType="DataFileType"> -->
+<!-- 			<id property="etlFileTypeId" column="etl_file_type_id" /> -->
+<!-- 			<result property="name" column="ftName" /> -->
+<!-- 		</association> -->
+<!-- 		<association property="uploadUser" column="upload_user" javaType="User"> -->
+<!-- 			<id property="id" column="etl_user_id" /> -->
+<!-- 			<result property="name" column="uName" /> -->
+<!-- 		</association> -->
+
+	</resultMap>
+
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="param!=null and param.keyword!=null and param.keyword!=''">
+				and (lower(dl.message) like '%'||#{param.keyword}||'%' escape '/')
+<!-- 				or lower(d.columnName) like '%'||#{param.keyword}||'%' escape '/') -->
+			</if>
+<!-- 			<if test="param!=null and param.id!=null"> -->
+<!-- 				and s.id =#{param.id} -->
+<!-- 			</if> -->
+<!-- 			<if test="param!=null and param.upload_id!=null"> -->
+<!-- 				and up.id =#{param.upload_id} -->
+<!-- 			</if> -->
+		</where>
+	</sql>
+    <!-- 插入数据 -->
+	<insert id="save" parameterType="DataFileLog" useGeneratedKeys="true"
+		keyProperty="etlDatafileLogId" keyColumn="ETL_DATAFILE_LOG_ID">
+        <![CDATA[
+            INSERT INTO ETL_DATAFILE_LOG 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		        etl_datafile_log_id,
+			<if test="etlDatafileId != null">
+		        etl_datafile_id,
+			</if>
+			<if test="totalNum != null">
+				total_num,
+			</if>
+			<if test="successNum != null">
+				success_num,
+			</if>
+			<if test="errorNum != null">
+				error_num,
+			</if>
+			<if test="unknownNum != null">
+				unknown_num,
+			</if>
+			<if test="action != null">
+				action,
+			</if>
+			<if test="running != null">
+				running,
+			</if>
+			<if test="message != null">
+				message,
+			</if>
+			<if test="created != null">
+				created,
+			</if>
+			<if test="createdBy != null">
+				createdBy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		        ETL_DATAFILE_LOG_SEQ.nextVal,
+			<if test="etlDatafileId != null">
+                #{etlDatafileId},
+            </if>
+            <if test="totalNum != null">
+                #{totalNum},
+            </if>
+            <if test="successNum != null">
+                #{successNum},
+            </if>
+            <if test="errorNum != null">
+                #{errorNum},
+            </if>
+            <if test="unknownNum != null">
+                #{unknownNum},
+            </if>
+            <if test="action != null">
+                #{action},
+            </if>
+            <if test="running != null">
+                #{running},
+            </if>
+            <if test="message != null">
+                #{message},
+            </if>
+            <if test="created != null">
+                #{created},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy},
+            </if>
+		</trim>
+	</insert>
+    <!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_DATAFILE_LOG where etl_datafile_log_id=#{id}
+        ]]>
+	</delete>
+
+</mapper>

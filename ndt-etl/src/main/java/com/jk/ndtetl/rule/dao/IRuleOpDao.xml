@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.rule.dao.IRuleOpDao">
+
+     <!-- 通过ID获取日志信息 -->
+	<select id="getById" parameterType="int" resultMap="ruleOpMap">
+		SELECT
+		ETL_OP_IMPL_ID,NAME,CLZ,PARAMS,ETLOP,ISACTIVE,CREATED,CREATEDBY,UPDATED,UPDATEDBY FROM
+		ETL_RULEOP
+		WHERE
+		ETL_OP_IMPL_ID=#{id}
+	</select>
+	 <!-- 获取所有的日志信息-->
+	<select id="listAll" resultMap="ruleOpMap">
+		SELECT
+		ETL_OP_IMPL_ID,NAME,CLZ,PARAMS,ETLOP,ISACTIVE,CREATED,CREATEDBY,UPDATED,UPDATEDBY FROM
+		ETL_RULEOP
+	</select>
+	
+	<!-- 获取规则处理器用操作类型-->
+	<select id="listRuleOpByOpType" parameterType="com.jk.ndtetl.util.QueryParam" resultMap="ruleOpMap">
+		SELECT
+		ETL_OP_IMPL_ID,NAME,CLZ,PARAMS,ETLOP,ISACTIVE,CREATED,CREATEDBY,UPDATED,UPDATEDBY FROM
+		ETL_RULEOP 
+		<where>
+		    <if test="param.opType != null">
+        		 ETLOP=#{param.opType}
+		    </if>
+		</where> 
+	</select>
+	 <!-- 分页查询日志信息
+	<select id="listByPage" parameterType="BasePage" resultMap="logResultMap">
+		SELECT
+		ETL_RULE_SET_ID,ETL_TABLE_ID,ETL_COLUMN_ID,ETL_RULE_ID,SEQNO,ISACTIVE,CREATED,CREATEDBY,UPDATED,UPDATEDBY,ETL_OP FROM
+		ETL_RULEUSE
+		<where>
+			<if test="param!=null and param.content!=null and param.content!=''">
+				AND DESCRIPTIONLOG like  #{param.content} escape '/'
+			</if>
+			<if test="param!=null and param.level!=null">
+				AND LOG_LEVEL = #{param.level}
+			</if>
+		</where>
+		ORDER BY DATE_TIME DESC
+	</select>
+	 -->
+	<resultMap type="RuleOp" id="ruleOpMap">
+		<id property="id" column="ETL_OP_IMPL_ID" />
+		<result property="name" column="NAME" />
+		<result property="clz" column="CLZ" />
+		<result property="params" column="PARAMS" />
+		<result property="etlop" column="ETLOP" />
+		<result property="isActive" column="ISACTIVE" />
+		<result property="created" column="CREATED" />
+		<result property="createdBy" column="CREATEDBY" />
+		<result property="updated" column="UPDATED" />
+		<result property="updatedBy" column="UPDATEDBY" />
+	</resultMap>
+	
+	<resultMap type="TableDef" id="tableDefResultMapTwo">
+		<id property="etlTableId" column="etl_table_id" />
+		<result property="tableName" column="tablename" />
+		<result property="name" column="tName" />
+		<result property="description" column="tDescription" />
+		<result property="category" column="category" />
+		<result property="created" column="created" />
+		<result property="createdBy" column="createdby" />
+		<result property="isActive" column="isactive" />
+		<result property="updated" column="updated" />
+		<result property="updatedBy" column="updatedby" />
+		<!-- 一对多 -->
+		<collection property="columns" javaType="arraylist" ofType="ColumnDef">
+			<id property="etlColumnId" column="etl_column_id" />
+			<result property="columnName" column="columnname" />
+			<result property="dataType" column="data_type" />
+			<result property="fieldLength" column="field_length" />
+			<result property="name" column="cName" />
+			<result property="description" column="cDescription" />
+			<result property="seqNo" column="seqno" />
+			<association property="ruleUse" javaType="com.jk.ndtetl.rule.RuleUse">
+				<id property="id" column="ETL_RULE_SET_ID" />
+				<association property="ruleSuit" javaType="com.jk.ndtetl.rule.RuleSuit">
+					<id property="id" column="ETL_RULE_ID" />
+					<result property="opType" column="OP_TYPE" />
+				</association>
+			</association>
+		</collection>
+	</resultMap>
+     <!-- 插入日志信息 -->
+	<insert id="save" parameterType="com.jk.ndtetl.rule.RuleOp" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="ETL_OP_IMPL_ID">
+        <![CDATA[
+            INSERT INTO ETL_RULEOP 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ETL_OP_IMPL_ID,
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="clz != null">
+				CLZ,
+			</if>
+			<if test="params != null">
+				PARAMS,
+			</if>
+			<if test="etlop != null">
+				ETLOP,
+			</if>
+			<if test="isActive != null">
+				ISACTIVE,
+			</if>
+			<if test="created != null">
+				CREATED,
+			</if>
+			<if test="createdBy != null">
+				CREATEDBY,
+			</if>
+			<if test="updated != null">
+				UPDATED,
+			</if>
+			<if test="updatedBy != null">
+				UPDATEDBY,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			ETL_RULEOP_SEQ.NEXTVAL,
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="clz != null">
+				#{clz},
+			</if>
+			<if test="params != null">
+				#{params},
+			</if>
+			<if test="etlop != null">
+				#{etlop},
+			</if>
+			<if test="isActive != null">
+				#{isActive},
+			</if>
+			<if test="created != null">
+				#{created},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy},
+			</if>
+			<if test="updated != null">
+				#{updated},
+			</if>
+			<if test="updatedBy != null">
+				#{updatedBy},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 修改主机信息 -->
+	<update id="update" parameterType="com.jk.ndtetl.rule.RuleOp">
+		UPDATE ETL_RULEOP
+		<set>
+			<if test="name != null">
+				NAME=#{name},
+			</if>
+			<if test="clz != null">
+				CLZ=#{clz},
+			</if>
+			<if test="params != null">
+				PARAMS=#{params},
+			</if>
+			<if test="etlop != null">
+				ETLOP=#{etlop},
+			</if>
+			<if test="isActive != null">
+				ISACTIVE=#{isActive},
+			</if>
+			<if test="created != null">
+				CREATED=#{created},
+			</if>
+			<if test="createdBy != null">
+				CREATEDBY=#{createdBy},
+			</if>
+			<if test="updated != null">
+				UPDATED=#{updated},
+			</if>
+			<if test="updatedBy != null">
+				UPDATEDBY=#{updatedBy},
+			</if>
+		</set>
+		WHERE ETL_OP_IMPL_ID = #{id}
+	</update>
+	
+	<!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from etl_ruleop where etl_op_impl_id=#{id}
+        ]]>
+	</delete>
+</mapper>

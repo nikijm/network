@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jk.ndtetl.dbmeta.dao.TableDefDao">
+
+	<!-- 根据id查询数据 -->
+	<select id="getById" parameterType="int" resultMap="tableDefResultMap">
+	   <![CDATA[
+	        SELECT
+	            t.etl_table_id,
+	            t.name tName,
+	            t.tablename,
+	            t.description tDescription,
+	            t.category,
+	            t.created,
+	            t.createdby,
+	            t.isactive,
+	            t.updated,
+	            t.updatedby,
+	            
+	            bt.etl_business_type_id btId,
+	            bt.name btName,
+	            
+	            c.etl_column_id,
+	            c.columnname,
+	            c.data_type,
+	            c.field_length,
+	            c.name cName,
+	            c.description cDescription,
+	            c.isSearch,
+	            c.seqno
+	        FROM
+	            ETL_TABLE t 
+	        LEFT JOIN ETL_COLUMN c ON c.etl_table_id = t .etl_table_id
+	        LEFT JOIN ETL_BUSINESS_TYPE bt ON bt.etl_business_type_id = t .etl_business_type_id
+		
+			WHERE t.etl_table_id=#{id}
+	   ]]>
+	</select>
+	<!-- 根据tableName查询数据 -->
+	<select id="getByTableName" parameterType="string" resultMap="tableDefResultMap">
+	   <![CDATA[
+			SELECT
+	            t.etl_table_id,
+	            t.name tName,
+	            t.tablename,
+	            t.description,
+	            t.category,
+	            t.created,
+	            t.createdby,
+	            t.isactive,
+	            t.updated,
+	            t.updatedby,
+	            
+	            bt.etl_business_type_id btId,
+                bt.name btName,
+                
+                c.etl_column_id,
+                c.columnname,
+                c.data_type,
+                c.field_length,
+                c.name cName,
+                c.description cDescription,
+                c.isSearch,
+                c.seqno
+            FROM
+                ETL_TABLE t 
+            LEFT JOIN ETL_COLUMN c ON c.etl_table_id = t .etl_table_id
+            LEFT JOIN ETL_BUSINESS_TYPE bt ON bt.etl_business_type_id = t .etl_business_type_id
+		
+			WHERE tablename=#{tableName}
+	   ]]>
+	</select>
+
+
+	<!-- 查询所有 -->
+	<select id="listAll" resultMap="tableDefResultMap">
+        <![CDATA[
+	        SELECT
+	            t.etl_table_id,
+	            t.name tName,
+	            t.tablename,
+	            t.description tDescription,
+	            t.category,
+	            t.created,
+	            t.createdby,
+	            t.isactive,
+	            t.updated,
+	            t.updatedby,
+            
+                bt.etl_business_type_id btId,
+                bt.name btName,
+                
+                c.etl_column_id,
+                c.columnname,
+                c.data_type,
+                c.field_length,
+                c.name cName,
+                c.description cDescription,
+                c.isSearch,
+                c.seqno
+            FROM
+                ETL_TABLE t 
+            LEFT JOIN ETL_COLUMN c ON c.etl_table_id = t .etl_table_id
+            LEFT JOIN ETL_BUSINESS_TYPE bt ON bt.etl_business_type_id = t .etl_business_type_id
+            
+            ORDER BY etl_table_id DESC
+        ]]>
+	</select>
+
+	<!-- 根据分页条件查询数据 -->
+	<select id="listByPage" resultMap="tableDefResultMap"
+		parameterType="BasePage">
+		SELECT
+		t.etl_table_id,
+		t.name tName,
+		t.tablename,
+		t.description
+		tDescription,
+		t.category,
+		t.created,
+		t.createdby,
+		t.isactive,
+		t.updated,
+		t.updatedby,
+
+		bt.etl_business_type_id btId,
+		bt.name btName,
+
+		c.etl_column_id,
+		c.columnname,
+		c.data_type,
+		c.field_length,
+		c.name cName,
+		c.description cDescription,
+		c.isSearch,
+		c.seqno
+		FROM
+		ETL_TABLE t
+		LEFT JOIN
+		ETL_COLUMN c ON c.etl_table_id = t .etl_table_id
+		LEFT JOIN
+		ETL_BUSINESS_TYPE bt ON bt.etl_business_type_id = t
+		.etl_business_type_id
+		<include refid="whereSql" />
+		ORDER BY t.etl_table_id DESC
+	</select>
+
+
+
+	<resultMap type="TableDef" id="tableDefResultMap">
+		<id property="etlTableId" column="etl_table_id" />
+		<result property="tableName" column="tablename" />
+		<result property="name" column="tName" />
+		<result property="description" column="tDescription" />
+		<result property="category" column="category" />
+		<result property="created" column="created" />
+		<result property="createdBy" column="createdby" />
+		<result property="isActive" column="isactive" />
+		<result property="updated" column="updated" />
+		<result property="updatedBy" column="updatedby" />
+		<association property="businessType" column="etl_business_type_id"
+			javaType="BusinessType">
+			<id property="etlBusinessTypeId" column="btId" />
+			<result property="name" column="btName" />
+		</association>
+		<!-- 一对多 -->
+		<collection property="columns" javaType="arraylist" ofType="ColumnDef">
+			<id property="etlColumnId" column="etl_column_id" />
+			<result property="columnName" column="columnname" />
+			<result property="dataType" column="data_type" />
+			<result property="fieldLength" column="field_length" />
+			<result property="name" column="cName" />
+			<result property="description" column="cDescription" />
+			<result property="seqNo" column="seqno" />
+			<result property="isSearch" column="issearch" />
+			<result property="isActive" column="isactive" />
+		</collection>
+	</resultMap>
+
+
+
+	<!-- 条件语句 -->
+	<sql id="whereSql">
+		<where>
+			<if test="param!=null and param.keyword!=null and param.keyword!=''">
+				and (lower(t.name) like '%'||#{param.keyword}||'%' escape '/'
+				or lower(t.tableName) like '%'||#{param.keyword}||'%' escape '/')
+			</if>
+			<if test="param!=null and param.tableName!=null">
+				and t.tableName =#{param.tableName}
+			</if>
+			<if test="param!=null and param.category!=null">
+				and t.category =#{param.category}
+			</if>
+			<if test="param!=null and param.businessTypeId!=null">
+				and t.etl_business_type_id =#{param.businessTypeId}
+			</if>
+		</where>
+	</sql>
+	<!-- 插入数据 -->
+	<insert id="save" parameterType="TableDef" useGeneratedKeys="true"
+		keyProperty="etlTableId" keyColumn="ETL_TABLE_ID">
+        <![CDATA[
+            insert into ETL_TABLE 
+        ]]>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			etl_table_id,
+			<if test="name != null">
+				name,
+			</if>
+			<if test="tableName != null">
+				tablename,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="category != null">
+				category,
+			</if>
+			<if test="businessType != null and businessType.etlBusinessTypeId != null">
+				etl_business_type_id,
+			</if>
+			<if test="created != null">
+				created,
+			</if>
+			<if test="createdBy != null">
+				createdBy,
+			</if>
+			<if test="isActive != null">
+				isActive,
+			</if>
+			<if test="updated != null">
+				updated,
+			</if>
+			<if test="updatedBy != null">
+				updatedBy,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			ETL_TABLE_SEQ.nextVal,
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="tableName != null">
+				upper(#{tableName}),
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+			<if test="category != null">
+				#{category},
+			</if>
+			<if test="businessType != null and businessType.etlBusinessTypeId != null">
+				#{businessType.etlBusinessTypeId},
+			</if>
+			<if test="created != null">
+				#{created},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy},
+			</if>
+			<if test="isActive != null">
+				#{isActive},
+			</if>
+			<if test="updated != null">
+				#{updated},
+			</if>
+			<if test="updatedBy != null">
+				#{updatedBy},
+			</if>
+		</trim>
+	</insert>
+	<!-- 根据id删除 -->
+	<delete id="deleteById" parameterType="int">
+        <![CDATA[
+            delete from ETL_TABLE where etl_table_id=#{id}
+        ]]>
+	</delete>
+	<!-- 修改，根據id -->
+	<update id="update" parameterType="TableDef">
+        <![CDATA[
+            update ETL_TABLE 
+        ]]>
+		<set>
+			<if test="name!=null">name=#{name},</if>
+			<!-- <if test="tableName!=null">tableName=#{tableName},</if> -->
+			<!-- <if test="category!=null">category=#{category},</if> -->
+			<!-- <if test="businessType != null and businessType.etlBusinessTypeId 
+				!= null"> -->
+			<!-- etl_business_type_id=#{businessType.etlBusinessTypeId}, -->
+			<!-- </if> -->
+			<if test="description!=null">description=#{description},</if>
+			<if test="isActive!=null">isActive=#{isActive},</if>
+			<if test="updated!=null">updated=#{updated},</if>
+			<if test="updatedBy!=null">updatedBy=#{updatedBy}</if>
+		</set>
+
+		<where>
+			etl_table_id=#{etlTableId}
+		</where>
+	</update>
+	<!-- 根据分页条件查询数据 -->
+	<select id="getRuleByTableId" resultMap="getRuleSuitResultMap"
+		parameterType="int">
+		SELECT
+			t.etl_table_id,
+			t.name tName,
+			t.tablename,
+			t.description tDescription,
+			t.category,
+			t.created,
+			t.createdby,
+			t.isactive,
+			t.updated,
+			t.updatedby,
+			c.etl_column_id,
+			c.columnname,
+			c.data_type,
+			c.field_length,
+			c.name cName,
+			c.description cDescription,
+			c.seqno,
+			c.isSearch,
+			u.ETL_COLUMN_TARGET_ID
+		FROM
+		    ETL_TABLE t
+		INNER JOIN
+		    ETL_COLUMN c ON c.etl_table_id = t.etl_table_id
+		INNER JOIN
+		    ETL_RULEUSE u ON u.ETL_COLUMN_TARGET_ID = c.ETL_COLUMN_ID
+		INNER JOIN
+		    ETL_RULESUIT s ON s.ETL_RULE_ID = u.ETL_RULE_ID
+		where
+		    t.etl_table_id=#{id}
+	</select>
+	<resultMap type="TableDef" id="getRuleSuitResultMap">
+		<id property="etlTableId" column="etl_table_id" />
+		<result property="tableName" column="tablename" />
+		<result property="name" column="tName" />
+		<result property="description" column="tDescription" />
+		<result property="category" column="category" />
+		<result property="created" column="created" />
+		<result property="createdBy" column="createdby" />
+		<result property="isActive" column="isactive" />
+		<result property="updated" column="updated" />
+		<result property="updatedBy" column="updatedby" />
+		<!-- 一对多 -->
+		<collection property="columns" javaType="arraylist" ofType="ColumnDef">
+			<id property="etlColumnId" column="etl_column_id" />
+			<result property="columnName" column="columnname" />
+			<result property="dataType" column="data_type" />
+			<result property="fieldLength" column="field_length" />
+			<result property="name" column="cName" />
+			<result property="description" column="cDescription" />
+			<result property="seqNo" column="seqno" />
+			<!-- 一对一 -->
+			<association property="ruleUse" javaType="com.jk.ndtetl.rule.RuleUse">
+				<id property="id" column="ETL_RULE_SET_ID" />
+				<!-- 一对一 -->
+				<association property="ruleSuit" javaType="com.jk.ndtetl.rule.RuleSuit">
+					<id property="id" column="ETL_RULE_ID" />
+					<result property="sequence" column="SEQUENCE" />
+					<result property="description" column="DESCRIPTION" />
+					<result property="rules" column="RULES" />
+				</association>
+			</association>
+		</collection>
+	</resultMap>
+</mapper>

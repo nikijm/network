@@ -1,0 +1,39 @@
+[
+  {
+    "type": "tree",
+    "icon": "fa fa-cloud-upload",
+    "name": "数据上传",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-upload",
+        "name": "文档上传",
+        "route": "/upload",
+        "url": "/api/uploads",
+        "key": "uploads_uploads"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-list",
+        "name": "文档列表",
+        "route": "/uploads",
+        "url": "/api/uploads",
+        "key": "uploads_uploads"
+      }
+    ]
+  },
+  {
+    "name": "其它",
+    "notTree":"notTree",
+    "items": [
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "上传文档专用",
+        "url": "/api/listOrganization",
+        "key": "listOrganization"
+      }
+    ]
+  }
+]

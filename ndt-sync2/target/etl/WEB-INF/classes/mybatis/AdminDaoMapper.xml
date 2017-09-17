@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk.ndt.etl.dao.system.AdminDao">
+
+    <resultMap id="adminResultMap" type="Admin">
+        <result column="admin_id" property="admin_id"/>
+        <result column="admin_name" property="admin_name"/>
+        <result column="admin_email" property="admin_email"/>
+        <result column="admin_password" property="admin_password"/>
+        <result column="admin_phone" property="admin_phone"/>
+        <result column="created_at" property="created_at"/>
+        <result column="created_by" property="created_by"/>
+        <result column="updated_at" property="updated_at"/>
+        <result column="updated_by" property="updated_by"/>
+        <result column="is_active" property="is_active"/>
+        <collection property="roleList" resultMap="roleResultMap" />
+    </resultMap>
+    <resultMap id="roleResultMap" type="Role">
+        <id column="role_id" property="role_id"/>
+        <result column="role_name" property="role_name"/>
+    </resultMap>
+
+    <!-- 根据用户名、密码查询用户 -->
+    <select id="getByName" parameterType="java.lang.String" resultMap="adminResultMap" >
+         <![CDATA[
+           SELECT  a.admin_id,a.admin_name,a.admin_password,r.ROLE_ID,r.ROLE_NAME from etl_admin a
+           LEFT JOIN  etl_roles r ON  r.role_id IN (
+            SELECT role_id FROM  etl_admin_role where admin_id=a.admin_id
+           )
+           where a.admin_name=#{admin_name}
+         ]]>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    机构列表管理
+    朱生
+    2017年6月9日 09:13:40
+-->
+<mapper namespace="com.jk.ndtetl.system.dao.OrganizationDao">
+
+    <resultMap id="orgResultMap" type="Org">
+        <result column="etl_org_id" property="orgId"/>
+        <result column="name" property="name"/>
+        <result column="created" property="created"/>
+        <result column="createdby" property="createdBy"/>
+        <result column="updated" property="updated"/>
+        <result column="updatedby" property="updatedBy"/>
+        <result column="isactive" property="isActive"/>
+        <result column="description" property="description"/>
+        <result column="address" property="address"/>
+        <result column="code" property="code"/>
+        <result column="phone" property="phone"/>
+        <result column="phone2" property="phone2"/>
+        <result column="email" property="email"/>
+        <result column="attn" property="attn"/>
+        <result column="attn_phone" property="attnPhone"/>
+        <result column="attn_phone2" property="attnPhone2"/>
+        <result column="attn_email" property="attnEmail"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="updated_user" property="updatedUser"/>
+    </resultMap>
+
+    <resultMap id="orgOptionsResultMap" type="java.util.Map">
+        <result column="etl_org_id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <!--  *************工具sql   -->
+    <sql id="columnsByUser">
+       ,a_c.name as created_user,a_u.name as updated_user
+    </sql>
+    <sql id="leftByUser">
+         LEFT JOIN etl_user a_c ON u.createdby=a_c.etl_user_id
+        LEFT JOIN etl_user a_u ON u.updatedby=a_u.etl_user_id
+    </sql>
+
+    <!--  *************机构管理   -->
+
+    <!--获取下拉选项内容-->
+    <select id="listOrganizationByParam" parameterType="java.util.Map" resultMap="orgOptionsResultMap">
+      SELECT ETL_ORG_ID ,NAME FROM ETL_ORG
+        <where>
+            <choose>
+                <when test="isActive !=null and isActive !='' ">
+                    and ISACTIVE  =  #{isActive}
+                </when>
+            </choose>
+        </where>
+    </select>
+    <!--根据id获取机构-->
+    <select id="getById" parameterType="java.lang.Integer" resultMap="orgResultMap">
+        SELECT * FROM etl_org
+        WHERE etl_org_id=#{_parameter}
+    </select>
+    <!--列表-->
+    <select id="listOrganization" parameterType="Org" resultMap="orgResultMap">
+
+        SELECT u.*
+        <include refid="columnsByUser"/>
+        FROM etl_org u
+        <include refid="leftByUser"/>
+        <where>
+            <choose>
+                <when test="name!=null and name !=''">
+                    <![CDATA[
+                        and (
+                          u.name LIKE  CONCAT(CONCAT('%', #{name}),'%')
+                          OR u.code LIKE  CONCAT(CONCAT('%', #{code}),'%')
+                        )
+                    ]]>
+                </when>
+                <when test="createdStart !=null and createdStart !='' ">
+                    <![CDATA[ and u.created  >=  #{createdStart}  ]]>
+                </when>
+                <when test="createdEnd !=null and createdEnd !='' ">
+                    <![CDATA[ and u.created  <=  #{createdEnd}  ]]>
+                </when>
+                <when test="updatedStart !=null and updatedStart !='' ">
+                    <![CDATA[ and u.updated  >=  #{updatedStart}  ]]>
+                </when>
+                <when test="updatedEnd !=null and updatedEnd !='' ">
+                    <![CDATA[ and u.updated  <=  #{updatedEnd}  ]]>
+                </when>
+                <when test="isActive !=null and isActive !='' ">
+                    and u.isActive = #{isActive}
+                </when>
+            </choose>
+        </where>
+        ORDER BY u.etl_org_id DESC
+    </select>
+
+    <!--详情-->
+    <select id="getOrganization" parameterType="java.lang.Integer" resultMap="orgResultMap">
+        SELECT u.*
+        <include refid="columnsByUser"/>
+        FROM etl_org u
+        <include refid="leftByUser"/>
+        WHERE u.etl_org_id=#{_parameter}
+    </select>
+    <!--详情-->
+    <select id="getOrganizationByCode" parameterType="java.lang.String" resultMap="orgResultMap">
+        SELECT * from etl_org u
+        WHERE u.CODE=#{_parameter}
+    </select>
+    <!--更新
+
+            <if test="code != null">
+                code=#{code},
+            </if>
+    -->
+    <update id="updateOrganization" parameterType="Org">
+        update etl_org
+        <set>
+            <if test="attnEmail != null">
+                attn_email=#{attnEmail},
+            </if>
+            <if test="attnPhone2 != null">
+                attn_phone2=#{attnPhone2},
+            </if>
+            <if test="attnPhone != null">
+                attn_phone=#{attnPhone},
+            </if>
+            <if test="attn != null and attn!=''">
+                attn=#{attn},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="phone2 != null">
+                phone2=#{phone2},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="address != null">
+                address=#{address},
+            </if>
+            <if test="name != null and name!=''">
+                name=#{name},
+            </if>
+            <if test="updated != null and updated!=''">
+                updated=#{updated},
+            </if>
+            <if test="updatedBy != null and updatedBy!=''">
+                updatedby= #{updatedBy},
+            </if>
+            <if test="isActive != null">
+                isactive= #{isActive},
+            </if>
+            <if test="description != null">
+                description= #{description},
+            </if>
+        </set>
+        where
+        etl_org_id = #{orgId}
+    </update>
+
+    <!--添加-->
+    <insert id="saveOrganization" parameterType="Org">
+        insert into etl_org
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name!=''">
+                name,
+            </if>
+            <if test="createdBy != null and createdBy!=''">
+                createdby,
+            </if>
+            <if test="created != null and created!=''">
+                created,
+            </if>
+            <if test="isActive != null">
+                isactive,
+            </if>
+            <if test="orgId != null and orgId!=''">
+                etl_org_id,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="attnEmail != null">
+                attn_email,
+            </if>
+            <if test="attnPhone2 != null">
+                attn_phone2,
+            </if>
+            <if test="attnPhone != null">
+                attn_phone,
+            </if>
+            <if test="attn != null and attn!=''">
+                attn,
+            </if>
+            <if test="email != null and email!=''">
+                email,
+            </if>
+            <if test="phone2 != null">
+                phone2,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="address != null and address!=''">
+                address,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name!=''">
+                #{name},
+            </if>
+            <if test="createdBy != null and createdBy!=''">
+                #{createdBy},
+            </if>
+            <if test="created != null and created!=''">
+                #{created},
+            </if>
+            <if test="isActive != null">
+                #{isActive},
+            </if>
+            <if test="orgId != null and orgId!=''">
+                #{orgId},
+            </if>
+            <if test="description!= null">
+                #{description},
+            </if>
+            <if test="code != null">
+                #{code},
+            </if>
+            <if test="attnEmail != null">
+                #{attnEmail},
+            </if>
+            <if test="attnPhone2 != null">
+                #{attnPhone2},
+            </if>
+            <if test="attnPhone != null">
+                #{attnPhone},
+            </if>
+            <if test="attn != null and attn!=''">
+                #{attn},
+            </if>
+            <if test="email != null and email!=''">
+                #{email},
+            </if>
+            <if test="phone2 != null">
+                #{phone2},
+            </if>
+            <if test="phone != null">
+                #{phone},
+            </if>
+            <if test="address != null and address!=''">
+                #{address},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteOrganization" parameterType="java.lang.Integer">
+        DELETE   FROM etl_org WHERE etl_org_id=#{_parameter}
+    </delete>
+
+    <!--查询某组织机构下是否存在用户-->
+    <select id="countUserByOrgId" parameterType="java.lang.Integer" resultType="int">
+        SELECT COUNT (1) FROM etl_user WHERE ETL_ORG_ID=#{_parameter}
+    </select>
+
+    <!--获取序列-->
+    <select id="getOrganizationSequence" resultType="java.lang.Integer">
+        select  etl_organization_seq.Nextval from dual
+    </select>
+
+    <!--判断用户名是否重复-->
+    <select id="getOrganizationByNameOrId" parameterType="Org" resultMap="orgResultMap">
+        SELECT * FROM etl_org
+        WHERE name=#{name}
+        <if test="orgId != null and orgId != ''">
+            AND etl_org_id!=#{orgId}
+        </if>
+    </select>
+
+    <!--判断code是否重复-->
+    <select id="getOrganizationByValue" parameterType="Org" resultMap="orgResultMap">
+        SELECT * FROM etl_org
+        WHERE code=#{code}
+        <if test="orgId!=null and orgId!=''">
+            AND etl_org_id!=#{orgId}
+        </if>
+    </select>
+
+</mapper>

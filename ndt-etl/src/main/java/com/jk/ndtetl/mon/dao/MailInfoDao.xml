@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.mon.dao.MailInfoDao">
+
+	<resultMap type="ServerInfo" id="serverInfo">
+		<id column="ID" property="id" />
+		<result column="SERVERID" property="serverId" />
+		<result column="CPUUSAGE" property="cpuUsage" />
+		<result column="MEMORYUSAGE" property="memoryUsage" />
+		<result column="DISKUSAGE" property="diskUsage" />
+		<result column="CREATETIME" property="createTime" />
+	</resultMap>
+     <!-- 获取发送日志的信息 -->
+	<select id="getSendMailInfo" resultType="Email">
+		select MAILHOST,PROTOCOL,ISAUTH,FROMADDRESS,PASSWORD,TOADDRESS from
+		OM_SEND_MAIL_INFO where ISUSE=1
+	</select>
+
+</mapper>

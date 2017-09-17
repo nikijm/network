@@ -1,0 +1,15 @@
+{
+  "target": "etl_mirror_business",
+  "targetId": 1243,
+  "columns": [
+    {
+      "name": "id_no",
+      "from": "身份证号"
+    },
+    {
+      "name": "name",
+      "from": "组织名称"
+    }
+  ],
+  "isTransformed": true
+}

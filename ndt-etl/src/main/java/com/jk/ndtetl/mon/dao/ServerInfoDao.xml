@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.ndtetl.mon.dao.ServerInfoDao">
+
+	<resultMap type="ServerInfo" id="ServerInfoMap">
+		<id column="ID" property="id" />
+		<result column="SERVERID" property="serverId" />
+		<result column="CPUUSAGE" property="cpuUsage" />
+		<result column="MEMORYUSAGE" property="memoryUsage" />
+		<result column="DISKUSAGE" property="diskUsage" />
+		<result column="CREATETIME" property="createTime" />
+	</resultMap>
+	<!-- 插入主机信息 -->
+	<insert id="insertServerInfo" parameterType="ServerInfo">
+		INSERT INTO ${tablename}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="serverId != null">
+				SERVERID,
+			</if>
+			<if test="cpuUsage != null">
+				CPUUSAGE,
+			</if>
+			<if test="memoryUsage != null">
+				MEMORYUSAGE,
+			</if>
+			<if test="diskUsage != null">
+				DISKUSAGE,
+			</if>
+			<if test="createTime != null">
+				CREATETIME,
+			</if>
+			<if test="calculate != null">
+				CALCULATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			OM_SYSINFOWEB_SEQ.nextval,
+			<if test="serverId != null">
+				#{serverId},
+			</if>
+			<if test="cpuUsage != null">
+				#{cpuUsage},
+			</if>
+			<if test="memoryUsage != null">
+				#{memoryUsage},
+			</if>
+			<if test="diskUsage != null">
+				#{diskUsage},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="calculate != null">
+				#{calculate},
+			</if>
+		</trim>
+	</insert>
+	<!-- 获取主机信息 -->
+	<select id="getServerInfo" parameterType="ServerInfoQuery"
+		resultMap="ServerInfoMap">
+		select
+		t.ID,t.SERVERID,t.CPUUSAGE,t.MEMORYUSAGE,t.DISKUSAGE,t.CREATETIME,t.CALCULATE
+		from ${tablename} t
+		<where>
+			<if test="startTime != null and endTime !=null ">
+				t.calculate&gt;#{startTime} and t.calculate&lt;#{endTime}
+			</if>
+		</where>
+		order by ID
+	</select>
+	<!-- 查询主机的条数 -->
+	<select id="selectServerInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		select COUNT(1) from ${tablename} t
+		<where>
+			<if test="startTime != null and endTime !=null ">
+				t.calculate&gt;#{startTime} and t.calculate&lt;#{endTime}
+			</if>
+		</where>
+	</select>
+	<!-- 查询主机的条数 -->
+	<select id="selectOneServerInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		select COUNT(1) from ${tablename} t where
+		t.calculate>#{newDateTime}
+	</select>
+	<!-- 获取监控信息 -->
+	<select id="getMonitorCpuInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.cpuusage from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控信息 -->
+	<select id="getMonitorMemoryInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.memoryusage from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控信息 -->
+	<select id="getMonitorDiskInfo" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select a.diskusage from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控时间 -->
+	<select id="getMonitorCpuInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控时间 -->
+	<select id="getMonitorMemoryInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控时间 -->
+	<select id="getMonitorDiskInfoTime" parameterType="ServerInfoQuery"
+		resultType="String">
+		Select a.createtime from ${tablename} a where not
+		exists(select 1 from
+		${tablename} where createtime=a.createtime and
+		ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and
+		a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控的条数 -->
+	<select id="getMonitorCpuInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select
+		1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控的条数 -->
+	<select id="getMonitorMemoryInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select
+		1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 获取监控的条数 -->
+	<select id="getMonitorDiskInfoCount" parameterType="ServerInfoQuery"
+		resultType="Long">
+		Select COUNT(1) from ${tablename} a where not exists(select
+		1 from
+		${tablename} where createtime=a.createtime and ID&lt;a.ID) and
+		a.calculate&gt;#{startTime} and a.calculate&lt;#{endTime} order by
+		a.calculate
+	</select>
+	<!-- 删除15天以前的监控信息 -->
+	<delete id="deleteMonitorInfoLtFifteen" parameterType="ServerInfo">
+		delete
+		from ${tablename} where calculate&lt;#{calculate}
+	</delete>
+</mapper>

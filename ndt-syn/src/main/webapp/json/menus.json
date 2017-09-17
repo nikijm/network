@@ -1,0 +1,402 @@
+[
+  {
+    "type": "tree",
+    "icon": "fa fa-cloud-upload",
+    "name": "数据上传",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-upload",
+        "name": "文档上传",
+        "route": "/upload",
+        "url": "/api/uploads",
+        "key": "uploads_uploads"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-list",
+        "name": "文档列表",
+        "route": "/uploads",
+        "url": "/api/uploads",
+        "key": "uploads_uploads"
+      }
+    ]
+  },
+  {
+    "type": "tree",
+    "icon": "fa fa-database",
+    "name": "数据处理",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-download",
+        "name": "数据缓存",
+        "route": "/storeSheets",
+        "url": "/api/uploads?filter=uncached",
+        "key": "uploads_uploads"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-filter",
+        "name": "数据清洗",
+        "route": "/cleanSheets",
+        "url": "/api/sheets/?/clean",
+        "key": "sheets_clean"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-refresh",
+        "name": "数据转换",
+        "route": "/transformSheets",
+        "url": "/api/sheets/?/transform",
+        "key": "sheets_transform"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-check-circle",
+        "name": "数据校验",
+        "route": "/compareSheets",
+        "url": "/api/sheets/?/verify",
+        "key": "sheets_verify"
+      }
+    ]
+  },
+  {
+    "type": "tree",
+    "icon": "fa fa-cog",
+    "name": "数据设置",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-plus",
+        "name": "添加规则",
+        "route": "/rule",
+        "url": "/api/rules",
+        "key": "rules"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-list",
+        "name": "规则管理",
+        "route": "/ruleSheet",
+        "url": "/api/rules",
+        "key": "rules"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-pie-chart",
+        "name": "查看报表",
+        "route": "/report",
+        "url": "",
+        "key": "report"
+      }
+    ]
+  },
+  {
+    "type": "tree",
+    "icon": "fa fa-clock-o",
+    "name": "待整合页面",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "工作表详情",
+        "route": "/sheet",
+        "url": "",
+        "key": "sheet"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "清洗操作",
+        "route": "/ClearData",
+        "url": "",
+        "key": "ClearData"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "转换操作",
+        "route": "/transform",
+        "url": "",
+        "key": "transform"
+      }
+    ]
+  },
+  {
+    "type": "tree",
+    "icon": "fa fa-dashboard",
+    "name": "运维",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "控制台",
+        "route": "/dashboard",
+        "url": "/api/serverHost/machines/?/getone",
+        "key": "machine_getone"
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "警报规则",
+        "route": "/rules",
+        "url": "/api/alarmrules",
+        "key": "alarmrules"
+      },
+      {
+        "url": "/api/sheets/?/logs",
+        "key": "sheets_logs",
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "日志",
+        "route": "/logs"
+      },
+      {
+        "url": "",
+        "key": "config",
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "配置",
+        "route": "/config"
+      },
+      {
+        "url": "/api/admins",
+        "key": "admins",
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "用户管理",
+        "route": "/user"
+      },
+      {
+        "url": "/api/roles",
+        "key": "roles",
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "角色管理",
+        "route": "/auth"
+      }
+    ]
+  },
+  {
+    "type": "tree",
+    "icon": "fa fa-book",
+    "name": "示例",
+    "items": [
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "表单",
+        "route": "/form",
+        "key": "form",
+        "url":""
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "列表",
+        "route": "/table",
+        "key": "table",
+        "url":""
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "消息",
+        "route": "/message",
+        "key": "message",
+        "url":""
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "分页",
+        "route": "/pagination",
+        "key": "pagination",
+        "url":""
+      },
+      {
+        "type": "item",
+        "icon": "fa fa-circle-o",
+        "name": "加载失败",
+        "route": "/loadingfailure",
+        "key": "loadingfailure",
+        "url":""
+      }
+    ]
+  },
+  {
+    "name": "其它",
+    "notTree":"notTree",
+    "items": [
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "机器列表",
+        "url": "/api/serverHosts",
+        "key": "serverHost_list"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "服务器信息",
+        "url": "/api/monitor/machines",
+        "key": "machines"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "CPU使用情况",
+        "url": "/api/monitor/machines/?/cpu",
+        "key": "machines_cpu"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "内存使用情况",
+        "url": "/api/monitor/machines/?/memory",
+        "key": "machines_memory"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "磁盘使用情况",
+        "url": "/api/monitor/machines/?/disk",
+        "key": "machines_disk"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "系统服务运行情况",
+        "url": "/api/monitor/machines/?/sys-services",
+        "key": "machines_sys-services"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "业务服务运行情况",
+        "url": "/api/monitor/machines/?/biz-services",
+        "key": "machines_biz-services"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "资源列表",
+        "url": "/api/resources",
+        "key": "resources"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "数据表列表",
+        "url": "/api/uploads/?/sheets",
+        "key": "uploads_sheets"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "解析并缓存上传文档",
+        "url": "/api/uploads/?/cache",
+        "key": "uploads_cache"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "下载上传文档",
+        "url": "/api/uploads/?/download",
+        "key": "uploads_download"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "工作表-Sheet",
+        "url": "/api/sheets",
+        "key": "sheets"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "获取单个工作表的数据",
+        "url": "/api/sheets/?/data",
+        "key": "sheets_data"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "查询单个工作表的数据",
+        "url": "/api/sheets/?/data/query",
+        "key": "sheets_data_query"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "工作表的未清洗前的数据",
+        "url": "/api/sheets/?/originalData",
+        "key": "sheets_originalData"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "数据验证",
+        "url": "/api/sheets/?/validate",
+        "key": "sheets_validate"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "验证器列表",
+        "url": "/api/rules/validators",
+        "key": "rules_validators"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "字符串操作列表",
+        "url": "/api/rules/operations",
+        "key": "rules_operations"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "测试字符串操作",
+        "url": "/api/rules/operations/test",
+        "key": "rules_operations_test"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "镜像业务表列表",
+        "url": "/api/mirrors",
+        "key": "mirrors"
+      },
+      {
+        "type": "item",
+        "icon": "",
+        "route": "",
+        "name": "查询镜像业务表数据",
+        "url": "/api/mirrors/?/query",
+        "key": "mirrors_query"
+      }
+    ]
+  }
+]
